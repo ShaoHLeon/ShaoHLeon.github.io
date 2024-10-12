@@ -58,9 +58,9 @@
     
     
     <entry>
-      <title>friends-links</title>
-      <link href="/friends-links/index.html"/>
-      <url>/friends-links/index.html</url>
+      <title>连接彼此的桥梁</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -69,9 +69,9 @@
     
     
     <entry>
-      <title>连接彼此的桥梁</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>friends-links</title>
+      <link href="/friends-links/index.html"/>
+      <url>/friends-links/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -91,9 +91,9 @@
     
     
     <entry>
-      <title>shuoshuo</title>
-      <link href="/shuoshuo/index.html"/>
-      <url>/shuoshuo/index.html</url>
+      <title>这是我的分类</title>
+      <link href="/my-categories/index.html"/>
+      <url>/my-categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -102,9 +102,9 @@
     
     
     <entry>
-      <title>这是我的分类</title>
-      <link href="/my-categories/index.html"/>
-      <url>/my-categories/index.html</url>
+      <title>shuoshuo</title>
+      <link href="/shuoshuo/index.html"/>
+      <url>/shuoshuo/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
