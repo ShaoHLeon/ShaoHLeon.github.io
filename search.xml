@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>AppImage文件</title>
+      <link href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/"/>
+      <url>/2024/10/11/AppImage%E6%96%87%E4%BB%B6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="什么是AppImage？"><a href="#什么是AppImage？" class="headerlink" title="什么是AppImage？"></a>什么是AppImage？</h2><p><strong>AppImage</strong> 是一种用于在 Linux 上分发应用程序的便携式<mark>打包格式</mark>。与传统的 Linux 软件包（如 <strong>.deb</strong>、**.rpm**）不同，AppImage 是一个自包含的应用程序，打包了所有应用所需的依赖库和文件，允许用户<mark>无需安装</mark>即可运行应用程序。</p><p>以AppImage打包的应用程式，需要的依赖套件都包在一起，下载就是单一档案，点二下就可以执行，不需要安装，也无需考量不同Linux发行版的差异。</p><p>特点：</p><ul><li><p><strong>无需安装</strong>：<br>AppImage 文件不需要安装或管理员权限。下载后，你只需赋予可执行权限，然后直接运行它。它不会改变系统文件或安装额外的依赖库。</p></li><li><p><strong>便携性</strong>：<br>AppImage 文件是自包含的，这意味着它打包了应用程序及其所需的所有依赖项。你可以将它复制到任何地方（USB 驱动器、云盘等），在不同的 Linux 发行版上运行，而不需要重新安装或配置。</p></li><li><p><strong>无依赖性问题</strong>：<br>因为 AppImage 打包了应用所需的所有库和依赖项，用户不必担心库版本冲突或依赖关系未满足的问题。</p></li><li><p><strong>版本独立</strong>：<br>AppImage 文件可以运行在大多数 Linux 发行版上，而不依赖于特定的发行版或版本。你可以在 Ubuntu、Fedora、Arch 等多种发行版上运行相同的 AppImage 文件。</p></li><li><p><strong>不改变系统文件</strong>：<br>AppImage 不会修改系统库或系统目录，也不会安装或升级系统上的其他软件，因此不会破坏现有的系统设置。</p></li><li><p><strong>自动更新和桌面集成</strong>：<br>虽然 AppImage 不会自动安装，但某些 AppImage 文件可以通过第三方工具实现自动更新功能，并与桌面环境进行集成，生成菜单项和快捷方式。</p></li></ul><h2 id="如何安装？"><a href="#如何安装？" class="headerlink" title="如何安装？"></a>如何安装？</h2><p>AppImage 文件通常可以在应用程序官方网站或 <a href="https://www.appimagehub.com/">AppImageHub</a>（一个集中提供 AppImage 文件的网站）下载。</p><ul><li><p><em>方法一</em>：右击.AppImage文件 -&gt; 点击properties -&gt; 点击permissions -&gt; ‘Allow executing file as program’ -&gt; 双击该文件即可</p></li><li><p><em>方法二</em>：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~(文件所在目录)$ chmod +x 文件名.AppImage   # 修改文件权限为可执行文件</span><br></pre></td></tr></table></figure></li></ul><h2 id="创建软件快捷方式"><a href="#创建软件快捷方式" class="headerlink" title="创建软件快捷方式"></a>创建软件快捷方式</h2><p>当执行该AppImage文件后，可以在’&#x2F;tmp’文件夹中查看相关整个文件包（ctl+h显示出来）从中可以提取相关desktop文件和icon。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/share/applications</span><br><span class="line">或者 </span><br><span class="line">cd ~/.local/share/applications</span><br><span class="line">sudo vim 文件名.desktop</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">输入以下内容</span></span><br><span class="line">[Desktop Entry]</span><br><span class="line">Name=</span><br><span class="line">Comment=</span><br><span class="line">Exec=            # .AppImage文件路径</span><br><span class="line">Icon=            # icon路径</span><br><span class="line">Type=Application</span><br><span class="line">StartupNotify=true</span><br><span class="line">Categories=Application;</span><br></pre></td></tr></table></figure><h2 id="如何删除AppImage？"><a href="#如何删除AppImage？" class="headerlink" title="如何删除AppImage？"></a>如何删除AppImage？</h2><p>只需要删除.AppImage文件和<code>~/.local/share/applications</code>or<code>/usr/share/applications</code>中相关的.desktop文件</p><hr><p>参考：</p><p><a href="https://ivonblog.com/posts/linux-appimage-introduction/">Linux AppImage軟體格式安裝方法</a></p><p><a href="https://www.bilibili.com/video/BV1x5411m7eH?vd_source=59c9078be8272e804fcbbcf1da9a9f94">appimage的一些知识</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hexo+Butterfly主题+Github 搭建自己的博客（持续更新中...)</title>
+      <link href="/2024/10/11/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%20%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD...)/"/>
+      <url>/2024/10/11/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%20%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD...)/</url>
+      
+        <content type="html"><![CDATA[<p>本人设备及工具: 20.04-Ubuntu、 Marktext（markdown编辑器）、 Hexo、 Git</p><hr><h2 id="一、安装Node-js"><a href="#一、安装Node-js" class="headerlink" title="一、安装Node.js"></a>一、安装Node.js</h2><ol><li>方式一：Ubuntu apt-get 命令安装</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure><ol start="2"><li>方式二: 二进制源码安装</li></ol><p>官网：(<a href="https://nodejs.org/en/download/prebuilt-binaries">https://nodejs.org/en/download/prebuilt-binaries</a>)</p><p><img src="file:///home/leon/Pictures/Marktext/2024-10-11-00-06-25-image.png?msec=1728611585303"></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar xf  node-v20.18.0-linux-x64.tar.xz       # 解压</span><br><span class="line">cd node-v20.18.0-linux-x64/</span><br><span class="line">./bin/node -v                   # 执行node命令 查看版本 v20.18.0</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立软链接</span></span><br><span class="line">ln -s ./bin/npm   /usr/local/bin/ </span><br><span class="line">ln -s ./bin/node   /usr/local/bin/         </span><br></pre></td></tr></table></figure><ol start="3"><li>版本更新</li></ol><p>安装 Hexo 博客的时候提示 nodejs 版本过低</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">node -v    <span class="comment"># 查看版本</span></span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> npm install n -g  <span class="comment"># 下载用于更新nodejs版本工具</span></span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> n stable     <span class="comment"># 安装最新稳定版本</span></span></span><br></pre></td></tr></table></figure><h2 id="二、安装Hexo"><a href="#二、安装Hexo" class="headerlink" title="二、安装Hexo"></a>二、安装Hexo</h2><p>官网：<a href="https://hexo.io/zh-cn/">Hexo</a></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">npm install hexo-cli -g</span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">hexo init blog         <span class="comment"># ‘blog’ 可替换成自己想取的名字</span></span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">cd</span> blog</span></span><br><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">npm install        <span class="comment"># 时间较长</span></span></span><br><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">hexo server        <span class="comment"># 本地打开博客</span></span></span><br></pre></td></tr></table></figure><h2 id="三、安装配置Butterfly主题"><a href="#三、安装配置Butterfly主题" class="headerlink" title="三、安装配置Butterfly主题"></a>三、安装配置Butterfly主题</h2><p>网站：(<a href="https://github.com/jerryc127/hexo-theme-butterfly">https://github.com/jerryc127/hexo-theme-butterfly</a>)</p><p>1.1 Git克隆</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">git <span class="built_in">clone</span> -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span></span><br></pre></td></tr></table></figure><p>1.2 若网络问题，可以直接将整个文件下载到<code>~/blog/themes/butterfly</code>中</p><ol start="2"><li>修改配置文件</li></ol><blockquote><p>可以使用Vscode</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">vim _config.yml</span></span><br></pre></td></tr></table></figure><p><img src="file:///home/leon/Pictures/Marktext/2024-10-11-00-33-35-image.png?msec=1728611585303"></p><p>修改主题为<code>butterfly</code>并保存退出。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">hexo s</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果出现 extends includes/layout.pug block content include ./includes/mixins/post-ui.pug <span class="comment">#recent-posts.recent-posts +postUI include includes/pagination.pug错误，未安装相关渲染器</span></span></span><br><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus # 时间较长，我是半小时</span><br></pre></td></tr></table></figure><h2 id="四、本地部署到GitHub"><a href="#四、本地部署到GitHub" class="headerlink" title="四、本地部署到GitHub"></a>四、本地部署到GitHub</h2><ol><li>新建github仓库</li></ol><p>1.1 注册登陆<a href="https://github.com/">GitHub</a></p><p>1.2 新建仓库，仓库名字：username.github.io (username是你的github账号名)</p><p><img src="file:///home/leon/Pictures/Marktext/2024-10-11-09-31-35-image.png?msec=1728611585303"></p><p><img src="file:///home/leon/Pictures/Marktext/2024-10-11-09-33-00-202403172331631.png?msec=1728611585303"></p><ol start="2"><li>配置hexo部署插件</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">npm install hexo-deployer-git --save</span></span><br></pre></td></tr></table></figure><ol start="3"><li>修改_config.yml配置文件</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">vim _config.yml</span></span><br></pre></td></tr></table></figure><p><img src="file:///home/leon/Pictures/Marktext/2024-10-11-09-39-49-image.png?msec=1728611585303"></p><ol start="4"><li>部署到GitHub</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">hexo clean</span></span><br><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">hexo generate</span></span><br><span class="line"><span class="meta prompt_">~/blog$ </span><span class="language-bash">hexo deploy</span></span><br></pre></td></tr></table></figure><ol start="5"><li>访问</li></ol><p>username.github.io (username是你的github账号名)</p><hr><p>参考：</p><p><a href="https://www.runoob.com/nodejs/nodejs-install-setup.html">Node.js 安装配置 | 菜鸟教程</a></p><p><a href="https://blog.csdn.net/zzq0523/article/details/122910368">Ubuntu升级nodejs版本_ubuntu nodejs升级-CSDN博客</a></p><p><a href="https://www.bilibili.com/video/BV1q741167PJ?p=2&vd_source=59c9078be8272e804fcbbcf1da9a9f94">Hexo搭建个人博客——系列教程</a></p><p><a href="https://www.laodengai.com/hexo-butterfly-github-blog-20240318/">Hexo+Butterfly主题+Github搭建博客 | 老登AI</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Blog </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2024/10/07/hello-world/"/>
+      <url>/2024/10/07/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+    
+    
+    <entry>
+      <title>friends-links</title>
+      <link href="/friends-links/index.html"/>
+      <url>/friends-links/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>连接彼此的桥梁</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>这是我的标签</title>
+      <link href="/my-tags/index.html"/>
+      <url>/my-tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>这是我的分类</title>
+      <link href="/my-categories/index.html"/>
+      <url>/my-categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>shuoshuo</title>
+      <link href="/shuoshuo/index.html"/>
+      <url>/shuoshuo/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+  
+</search>
