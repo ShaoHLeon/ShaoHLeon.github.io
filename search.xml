@@ -81,17 +81,6 @@
     
     
     <entry>
-      <title>friends-links</title>
-      <link href="/friends-links/index.html"/>
-      <url>/friends-links/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title></title>
       <link href="/css/custom.css"/>
       <url>/css/custom.css</url>
@@ -114,9 +103,9 @@
     
     
     <entry>
-      <title>这是我的标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>friends-links</title>
+      <link href="/friends-links/index.html"/>
+      <url>/friends-links/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -128,6 +117,17 @@
       <title>shuoshuo</title>
       <link href="/shuoshuo/index.html"/>
       <url>/shuoshuo/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>这是我的标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
