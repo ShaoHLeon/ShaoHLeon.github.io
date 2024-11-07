@@ -1,0 +1,383 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>傅里叶变换 | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="膜拜大神：傅里叶分析之掐死教程（完整版）更新于2014.06.06  引言傅里叶变换是信号处理、图像处理和音频分析等领域的核心工具。其起源可追溯到18世纪，数学家约瑟夫·傅里叶通过研究热传导问题提出了傅里叶分析的概念。傅里叶变换的主要作用是将时域信号转换为频域信号，使我们能够分析和处理信号的频率成分。 傅里叶变换的数学基础是复数，它将实数信号转换为复数信号，从而将时域信号分解为多个频率分量。在傅">
+<meta property="og:type" content="article">
+<meta property="og:title" content="傅里叶变换">
+<meta property="og:url" content="http://shaohleon.github.io/2024/10/31/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="膜拜大神：傅里叶分析之掐死教程（完整版）更新于2014.06.06  引言傅里叶变换是信号处理、图像处理和音频分析等领域的核心工具。其起源可追溯到18世纪，数学家约瑟夫·傅里叶通过研究热传导问题提出了傅里叶分析的概念。傅里叶变换的主要作用是将时域信号转换为频域信号，使我们能够分析和处理信号的频率成分。 傅里叶变换的数学基础是复数，它将实数信号转换为复数信号，从而将时域信号分解为多个频率分量。在傅">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM33.jpg">
+<meta property="article:published_time" content="2024-10-31T14:01:00.000Z">
+<meta property="article:modified_time" content="2024-11-07T07:48:35.728Z">
+<meta property="article:author" content="Leon">
+<meta property="article:tag" content="傅里叶变换">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM33.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/10/31/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '傅里叶变换',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-07 15:48:35'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">傅里叶变换</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">傅里叶变换</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-10-31T14:01:00.000Z" title="Created 2024-10-31 22:01:00">2024-10-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-11-07T07:48:35.728Z" title="Updated 2024-11-07 15:48:35">2024-11-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Math/">Math</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>12mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>膜拜大神：<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/19763358">傅里叶分析之掐死教程（完整版）更新于2014.06.06</a></p>
+</blockquote>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>傅里叶变换是信号处理、图像处理和音频分析等领域的核心工具。其起源可追溯到18世纪，数学家约瑟夫·傅里叶通过研究热传导问题提出了傅里叶分析的概念。傅里叶变换的主要作用是<em>将时域信号转换为频域信号</em>，使我们能够分析和处理信号的频率成分。</p>
+<p>傅里叶变换的数学基础是复数，它将实数信号转换为复数信号，从而将时域信号分解为多个频率分量。在傅里叶变换中，我们使用正弦和余弦函数（“正弦波”（Sine Wave））来表示复数信号，从而将信号分解为多个频率分量。</p>
+<h2 id="傅里叶分析的作用"><a href="#傅里叶分析的作用" class="headerlink" title="傅里叶分析的作用"></a>傅里叶分析的作用</h2><p>无论听广播还是看电视，我们一定对一个词不陌生——频道。频道频道，就是频率的通道，不同的频道就是将不同的频率作为一个通道来进行信息传输。</p>
+<p>滤波：从某条曲线中去除一些特定的频率成分。如：$\sin(3x)+\sin(5)$的图像中取出$\sin(3x)$的部分。</p>
+<p>求解微分方程：傅里叶变换则可以让微分和积分在频域中变为乘法和除法。</p>
+<h2 id="频域"><a href="#频域" class="headerlink" title="频域"></a>频域</h2><p>时域分析：以时间作为参照来观察动态世界的方法。</p>
+<p>“你眼中看似落叶纷飞变化无常的世界，实际只是躺在上帝怀中一份早已谱好的乐章。”</p>
+<p>任何周期函数，都可以看作是不同振幅，不同相位正弦波的叠加。</p>
+<p><em>频域信号</em>展示了信号中包含的不同频率成分及其相应的幅度和相位。</p>
+<h1 id="Taylor级数"><a href="#Taylor级数" class="headerlink" title="Taylor级数"></a>Taylor级数</h1><p>Taylor级数是数学中的重要概念，它描述了函数在某个点处的 Taylor 近似。在傅里叶变换中，我们使用 Taylor 级数来表示函数在某个点$x_0$处的傅里叶级数。通过函数在某一点的导数信息来构建函数的局部近似。</p>
+<script type="math/tex; mode=display">f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n \\</script><script type="math/tex; mode=display">= f(x_0) + f'(x_0)(x-x_0) + \frac{f''(x_0)}{2!}(x-x_0)^2 + ...</script><h1 id="三角级数（Fourier级数）"><a href="#三角级数（Fourier级数）" class="headerlink" title="三角级数（Fourier级数）"></a>三角级数（Fourier级数）</h1><h2 id="标准形式"><a href="#标准形式" class="headerlink" title="标准形式"></a>标准形式</h2><p>$f(t)$在$[-\pi, \pi]$是<mark>周期函数</mark>。</p>
+<script type="math/tex; mode=display">f(t) = \frac{a_0}{2} + a_1\cos(0 \cdot t) + a_2\cos(1 \cdot t) + a_3\cos(2 \cdot t) + ...  \\</script><script type="math/tex; mode=display">+ b_1\sin(0 \cdot t) + b_2\sin(1 \cdot t) + b_3\sin(2 \cdot t) + ... \\</script><script type="math/tex; mode=display">= \frac{a_0}{2} + \sum_{n=1}^{\infty} (a_n\cos(n \cdot t) + b_n\sin(n \cdot t))</script><h3 id="三角函数系"><a href="#三角函数系" class="headerlink" title="三角函数系"></a>三角函数系</h3><script type="math/tex; mode=display">\{1, cos(t), sin(t), cos(2t), sin(2t), ...\}</script><p>正交性：</p>
+<script type="math/tex; mode=display">\int_{-\pi}^{\pi} cos(nt)cos(mt)dt = \int_{-\pi}^{\pi} sin(nt)sin(mt)dt = \begin{cases} 0, & n \neq m \\ \pi, & n = m \end{cases}</script><p>三角函数系中任意两个不同的元素之间在$[0, \pi]$的内积为0，所以三角函数系是一个正交系统。(积化和差证明)</p>
+<h3 id="系数求解"><a href="#系数求解" class="headerlink" title="系数求解"></a>系数求解</h3><script type="math/tex; mode=display">\int_{-\pi}^{\pi} f(t) \, dt = \int_{-\pi}^{\pi} \frac{a_0}{2} \, dt => a_0 = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \, dt</script><script type="math/tex; mode=display">\int_{-\pi}^{\pi} f(t)cos(nt) \, dt = \int_{-\pi}^{\pi} a_n \cos^2(nx) \, dt => a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t)cos(nt) \, dt</script><script type="math/tex; mode=display">\int_{-\pi}^{\pi} f(t)sin(nt) \, dt = \int_{-\pi}^{\pi} a_n \sin^2(nt) \, dt => b_n = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t)sin(nt) \, dt</script><h3 id="Dirichlet-条件"><a href="#Dirichlet-条件" class="headerlink" title="Dirichlet 条件"></a>Dirichlet 条件</h3><p>$f_T(t)$,$T=2\pi$,在$[-\pi, \pi]$上，满足：</p>
+<p> 1.连续性，或者只有有限个第一类间断点。<br> 2.只有有限个极值点。</p>
+<p>则$f_T(x)$的和函数 $S(x)=\begin{cases} f(x), &amp; 连续点; \ \frac{f(x-0)+f(x+0)}{2}, &amp; 间断点. \end{cases}$</p>
+<p><mark>傅里叶级数，在时域是一个周期且连续的函数，而在频域是一个非周期离散的函数。</mark></p>
+<h2 id="傅里叶级数的频谱（振幅谱）"><a href="#傅里叶级数的频谱（振幅谱）" class="headerlink" title="傅里叶级数的频谱（振幅谱）"></a>傅里叶级数的频谱（振幅谱）</h2><p>矩形波的叠加形成：随着叠加的递增，所有正弦波中上升的部分逐渐让原本缓慢增加的曲线不断变陡，而所有正弦波中下降的部分又抵消了上升到最高处时继续上升的部分使其变为水平线。</p>
+<p>时域的基本单元：1s</p>
+<p>将一个角频率为$w_0$的正弦波$\cos(w_0t)$看作基础，<em>频域的基本单元</em>；$w_0$</p>
+<p>$\cos(0 \cdot t)$就是一个周期无限长的正弦波，也就是一条直线！所以在频域，0频率也被称为<em>直流分量</em>，在傅里叶级数的叠加中，它仅仅影响全部波形相对于数轴整体向上或是向下而不改变波的形状。</p>
+<p>正弦波就是一个圆周运动在一条直线上的投影。所以频域的基本单元也可以理解为一个始终在旋转的圆在1s内转的圈数。</p>
+<p><img src="https://pic2.zhimg.com/40cf849e55ed95732a60b52d4019d609_b.jpg" alt=""></p>
+<p><strong>关于时间的函数是正弦波在时域上的投影，而正弦波又是一个旋转的圆在直线上的投影。</strong></p>
+<h2 id="傅里叶级数的相位谱"><a href="#傅里叶级数的相位谱" class="headerlink" title="傅里叶级数的相位谱"></a>傅里叶级数的相位谱</h2><p>频谱并没有包含时域中全部的信息。<em>频谱只代表每一个对应的正弦波的振幅是多少，而没有提到相位</em>。</p>
+<p>基础的正弦波：$A \cdot \sin(w \cdot t + \theta)$中，振幅，频率，相位缺一不可，不同相位决定了波的位置。</p>
+<p><img src="https://pica.zhimg.com/07199fc0250791d768771b50c098e26a_b.jpg" alt=""></p>
+<p><img src="https://pic4.zhimg.com/e1985fe86283a7b14d1fc7e11d322fcb_1440w.jpg" alt=""></p>
+<p>$相位差 = \frac{时间差}{周期} \cdot 2\pi$</p>
+<p>投影得到的时间差依次除以所在频率的周期，就得到了如下的相位谱：<br><img src="https://pica.zhimg.com/4695ce06197677bab880cd55b6846f12_1440w.jpg" alt=""></p>
+<h2 id="周期为-T-的信号-f-T-t-的傅里叶级数"><a href="#周期为-T-的信号-f-T-t-的傅里叶级数" class="headerlink" title="周期为$T$的信号$f_T(t)$的傅里叶级数"></a>周期为$T$的信号$f_T(t)$的傅里叶级数</h2><script type="math/tex; mode=display">f(t) = f(t+T)</script><script type="math/tex; mode=display">令 x = \frac{t}{T} \cdot 2\pi , t \in [\frac{-T}{2}, \frac{T}{2}]</script><script type="math/tex; mode=display">f(t) = f(\frac{T}{2\pi} \cdot x) = F(x)</script><script type="math/tex; mode=display">F(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} (a_n\cos(nx) + b_n\sin(nx)) ,</script><p>其中，</p>
+<p>$ a<em>0 = \frac{1}{\pi} \int</em>{-\pi}^{\pi} F(x) \, dx = \frac{2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) \, dt $</p>
+<p>$ a<em>n = \frac{1}{\pi} \int</em>{-\pi}^{\pi} F(x) \cos(nx) \, dx = \frac{2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) \cos(n\frac{2\pi}{T}t) \, dt $</p>
+<p>$ b<em>n = \frac{1}{\pi} \int</em>{-\pi}^{\pi} F(x) \sin(nx) \, dx = \frac{2}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f(t) \sin(n\frac{2\pi}{T}t) \, dt $</p>
+<script type="math/tex; mode=display">令 w_0 = \frac{2\pi}{T} 为基本（角）频率</script><script type="math/tex; mode=display">f_T(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} (a_n\cos(nw_0t) + b_n\sin(nw_0t))</script><p>其中，</p>
+<p>$ a<em>0 = \frac{2}{T} \int</em>{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) \, dt $</p>
+<p>$ a<em>n = \frac{2}{T} \int</em>{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) \cos(nw_0t) \, dt $</p>
+<p>$ b<em>n = \frac{2}{T} \int</em>{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) \sin(nw_0t) \, dt $</p>
+<h2 id="指数形式的傅里叶级数"><a href="#指数形式的傅里叶级数" class="headerlink" title="指数形式的傅里叶级数"></a>指数形式的傅里叶级数</h2><p>因为$\cos(nw_0t) = \frac{e^{jnw_0t}+e^{-jnw_0t}}{2}，\sin(nw_0t) = \frac{e^{jnw_0t}-e^{-jnw_0t}}{2}$，</p>
+<p>所以，</p>
+<script type="math/tex; mode=display">f_T(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} (a_n\frac{e^{jn\omega _0t}+e^{-jn\omega _0t}}{2} + b_n\frac{e^{jn\omega _0t}-e^{-jn\omega _0t}}{2}) = \frac{a_0}{2} + \sum_{n=1}^{\infty} (\frac{a_n - j \cdot b_n}{2} \cdot e^{jn\omega _0t} + \frac{a_n + j \cdot b_n}{2} \cdot e^{-jn\omega _0t})</script><p>因为$\frac{a<em>n - j \cdot b_n}{2} = \frac{1}{T} \int</em>{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) e^{-jn\omega _0t} \, dt$，</p>
+<p>所以，</p>
+<script type="math/tex; mode=display">f_T(t) = \sum_{n=-\infty}^{\infty} \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) e^{-jn\omega _0t} \, dt \cdot e^{-jn\omega _0t}</script><p>其中，</p>
+<p>$\omega _0 = \frac{2\pi}{T}$为基本（角）频率；</p>
+<p>$n$为谐波的编号，表示的是第 $n$ 个正弦波函数的频率分量，用来叠加各个频率分量；</p>
+<p>$C<em>n=\frac{1}{T} \int</em>{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) e^{-jn\omega _0t} \, dt$为傅里叶系数，第 $n$ 个正弦波函数的能量，用来表示第 $n$ 个正弦波函数的振幅。</p>
+<h1 id="傅里叶变换（Fourier-Transformation）"><a href="#傅里叶变换（Fourier-Transformation）" class="headerlink" title="傅里叶变换（Fourier Transformation）"></a>傅里叶变换（Fourier Transformation）</h1><p><mark>傅里叶级数的本质是将一个周期的信号分解成无限多分开的（离散的）正弦波</mark>，但是宇宙似乎并不是周期的。</p>
+<p>傅里叶级数，在时域是一个周期且连续的函数，而在频域是一个离散非周期的函数。</p>
+<p><img src="https://pic3.zhimg.com/419cd0b2e965aca25d5f8a5a6362d728_1440w.jpg" alt=""></p>
+<h2 id="欧拉公式"><a href="#欧拉公式" class="headerlink" title="欧拉公式"></a>欧拉公式</h2><h3 id="虚数i"><a href="#虚数i" class="headerlink" title="虚数i"></a>虚数i</h3><p><img src="https://pic3.zhimg.com/42e1f6dc43e8868b4962f5ba389a5df4_1440w.jpg" alt=""></p>
+<p>在数轴上有一个红色的线段，它的长度是1。当它乘以3的时候，它的长度发生了变化，变成了蓝色的线段，而当它乘以-1的时候，就变成了绿色的线段，或者说线段在数轴上围绕原点旋转了180度。</p>
+<script type="math/tex; mode=display">i^2 = -1</script><p>乘-1其实就是乘了两次 i使线段旋转了180度，那么乘一次 i 呢——答案很简单——旋转了90度。所以，<strong>i就是旋转90度的单位</strong>。</p>
+<p><img src="https://pic3.zhimg.com/3e88e9463e4667e50ebdda51dee88358_1440w.jpg" alt=""></p>
+<p><strong>实数轴与虚数轴共同构成了一个复数的平面，也称复平面。这样我们就了解到，乘虚数i的一个功能——旋转。</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23234701/answer/26017000">复数的物理意义是什么</a></p>
+<h3 id="欧拉公式-1"><a href="#欧拉公式-1" class="headerlink" title="欧拉公式"></a>欧拉公式</h3><script type="math/tex; mode=display">e^{i\theta} = cos(\theta) + i\cdot sin(\theta)</script><script type="math/tex; mode=display">e^{i\pi} + 1 = 0</script><p><img src="https://pic2.zhimg.com/974efc6a99e06dcd623193e960ccbe93_1440w.jpg" alt=""><br>在复平面上做圆周运动的点，随着时间的改变，在时间轴上就成了一条螺旋线。如果只看它的实数部分，也就是螺旋线在左侧的投影，就是一个最基础的余弦函数。而右侧的投影则是一个正弦函数。</p>
+<h2 id="指数形式的傅里叶变换"><a href="#指数形式的傅里叶变换" class="headerlink" title="指数形式的傅里叶变换"></a>指数形式的傅里叶变换</h2><p>傅里叶变换出来的频谱是频率从0到无穷所有频率的正弦波的组合。</p>
+<p><em>正弦波</em>：</p>
+<ul>
+<li><p>螺旋线在实数空间的投影。</p>
+</li>
+<li><p>$ \cos(t) = \frac{e^{it} + e^{-it}}{2} $</p>
+<p>$ e^{i \cdot t} $是一条逆时针旋转的螺旋线，$e^{- i \cdot t}$ 是一条顺时针旋转的螺旋线。而$\cos(t)$是两条旋转方向不同的螺旋线叠加的一半，因为这两条螺旋线的虚数部分相互抵消掉了。</p>
+</li>
+</ul>
+<p>逆时针旋转的称为正频率，而顺时针旋转的称为负频率。</p>
+<h2 id="公式推导"><a href="#公式推导" class="headerlink" title="公式推导"></a>公式推导</h2><script type="math/tex; mode=display">f_T(t) = \sum_{n=-\infty}^{\infty} \frac{1}{T} \int_{-\frac{T}{2}}^{\frac{T}{2}} f_T(t) e^{-jn\omega _0t} \, dt \cdot e^{-jn \omega _0t}，T \rightarrow +\infty</script><script type="math/tex; mode=display">令\Delta \omega = \frac{2\pi}{T} = \omega _0 ，\omega = n \cdot \omega _0</script><script type="math/tex; mode=display">f(t) = \lim_{\Delta \omega \rightarrow 0} \frac{1}{2\pi} \int_{-\infty}^{+\infty} f(t) e^{-j\omega t} \, dt \cdot e^{-j\omega t} \cdot \Delta \omega</script><script type="math/tex; mode=display">= \frac{1}{2\pi} \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} f(t) e^{-j\omega t} \, dt \cdot e^{-j\omega t} \cdot d\omega</script><p>所以，<br>非周期信号$f(t)$的傅里叶变换公式为：</p>
+<script type="math/tex; mode=display">F(\omega) = \frac{1}{2\pi} \int_{-\infty}^{+\infty} f(t) e^{-j\omega t} \, dt</script><script type="math/tex; mode=display">f(t) = \frac{1}{2\pi} \int_{-\infty}^{+\infty} F(\omega) e^{j\omega t} \, d\omega</script><p>$F(\omega)$为信号在频率上的表现，展示了信号中包含的不同频率成分及其相应的幅度和相位。</p>
+<h2 id="频域特性"><a href="#频域特性" class="headerlink" title="频域特性"></a>频域特性</h2><ul>
+<li><p>频率分量：频域表示了信号中不同频率成分的强度。例如，音频信号的频域分析可以揭示音调的特性。</p>
+</li>
+<li><p>幅度和相位：频域信号不仅包括频率成分的幅度信息，还包含相位信息，这对信号的重构至关重要。</p>
+</li>
+<li><p>滤波：在频域中，可以方便地设计和实现滤波器，通过选择特定频率的成分来实现低通、高通、带通等滤波效果。</p>
+</li>
+</ul>
+<h2 id="傅里叶变换的性质"><a href="#傅里叶变换的性质" class="headerlink" title="傅里叶变换的性质"></a>傅里叶变换的性质</h2><h3 id="线性性"><a href="#线性性" class="headerlink" title="线性性"></a>线性性</h3><p>如果有两个信号 $f(t)$ 和 $g(t)$ 及其傅里叶变换分别为 $F(\omega)$ 和 $G(\omega)$，则对于任意常数 $a$ 和 $b$：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{a f(t) + b g(t)\} = a F(\omega) + b G(\omega)</script><p>这表明傅里叶变换是线性的。</p>
+<h3 id="平移性质"><a href="#平移性质" class="headerlink" title="平移性质"></a>平移性质</h3><h4 id="时间平移"><a href="#时间平移" class="headerlink" title="时间平移"></a>时间平移</h4><p>如果 $ f(t) $ 的傅里叶变换为 $ F(\omega) $，则时间平移 $ f(t - t_0) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{f(t - t_0)\} = F(\omega) e^{-j\omega t_0}</script><h4 id="频率平移"><a href="#频率平移" class="headerlink" title="频率平移"></a>频率平移</h4><p>如果 $ f(t) $ 的傅里叶变换为 $ F(\omega) $，则频率平移 $ e^{j\omega_0 t} f(t) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{e^{j\omega_0 t} f(t)\} = F(\omega - \omega_0)</script><h3 id="时间缩放"><a href="#时间缩放" class="headerlink" title="时间缩放"></a>时间缩放</h3><p>如果 $ f(t) $ 的傅里叶变换为 $ F(\omega) $，则缩放 $ f(at) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{f(at)\} = \frac{1}{|a|} F\left(\frac{\omega}{a}\right)</script><p>其中 ( a ) 是一个实数。时间压缩会导致频域的扩展，反之亦然。</p>
+<h3 id="共轭性质"><a href="#共轭性质" class="headerlink" title="共轭性质"></a>共轭性质</h3><p>如果 $ f(t) $ 的傅里叶变换为 $ F(\omega) $，则其共轭 $ f^*(t) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{f^*(t)\} = F^*(-\omega)</script><h3 id="傅里叶变换的卷积定理"><a href="#傅里叶变换的卷积定理" class="headerlink" title="傅里叶变换的卷积定理"></a>傅里叶变换的卷积定理</h3><p>如果 $ f(t) $ 和 $ g(t) $ 的傅里叶变换分别为 $ F(\omega) $ 和 $ G(\omega) $，则它们的卷积 $ f(t) * g(t) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{f(t) * g(t)\} = F(\omega) \cdot G(\omega)</script><p>反之亦然，乘积 $ f(t) \cdot g(t) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\{f(t) \cdot g(t)\} = \frac{1}{2\pi} F(\omega) * G(\omega)</script><h3 id="导数性质"><a href="#导数性质" class="headerlink" title="导数性质"></a>导数性质</h3><p>如果 $ f(t) $ 的傅里叶变换为 $ F(\omega) $，则其导数 $ \frac{d}{dt} f(t) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\left\{\frac{d}{dt} f(t)\right\} = j\omega F(\omega)</script><p>一般情况下，第 $ n $ 阶导数 $ \frac{d^n}{dt^n} f(t) $ 的傅里叶变换为：</p>
+<script type="math/tex; mode=display">
+\mathcal{F}\left\{\frac{d^n}{dt^n} f(t)\right\} = (j\omega)^n F(\omega)</script><h3 id="傅里叶变换的对称性"><a href="#傅里叶变换的对称性" class="headerlink" title="傅里叶变换的对称性"></a>傅里叶变换的对称性</h3><p>对于实值函数 $ f(t) $，其傅里叶变换 $ F(\omega) $ 满足共轭对称性：</p>
+<script type="math/tex; mode=display">
+F(-\omega) = F^*(\omega)</script><p>这意味着频谱的实部是偶函数，而虚部是奇函数。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/10/31/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/">http://shaohleon.github.io/2024/10/31/傅里叶变换/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/">傅里叶变换</a></div><div class="post-share"><div class="social-share" data-image="/images/background/GEM33.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/10/31/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换"><img class="cover" src="/images/background/GEM29.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">二、图像变换</div></div></a><a class="next-post pull-right" href="/2024/11/03/%E6%96%B0%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E5%A6%82%E4%BD%95%E5%9C%A8Ubuntu%E4%BD%BF%E7%94%A8/" title="新机械硬盘如何在Ubuntu使用"><img class="cover" src="/images/background/GEM30.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">新机械硬盘如何在Ubuntu使用</div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%88%86%E6%9E%90%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">傅里叶分析的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%91%E5%9F%9F"><span class="toc-number">1.2.</span> <span class="toc-text">频域</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Taylor%E7%BA%A7%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">Taylor级数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E8%A7%92%E7%BA%A7%E6%95%B0%EF%BC%88Fourier%E7%BA%A7%E6%95%B0%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">三角级数（Fourier级数）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E5%BD%A2%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">标准形式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0%E7%B3%BB"><span class="toc-number">3.1.1.</span> <span class="toc-text">三角函数系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E6%95%B0%E6%B1%82%E8%A7%A3"><span class="toc-number">3.1.2.</span> <span class="toc-text">系数求解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dirichlet-%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.1.3.</span> <span class="toc-text">Dirichlet 条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0%E7%9A%84%E9%A2%91%E8%B0%B1%EF%BC%88%E6%8C%AF%E5%B9%85%E8%B0%B1%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">傅里叶级数的频谱（振幅谱）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0%E7%9A%84%E7%9B%B8%E4%BD%8D%E8%B0%B1"><span class="toc-number">3.3.</span> <span class="toc-text">傅里叶级数的相位谱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E4%B8%BA-T-%E7%9A%84%E4%BF%A1%E5%8F%B7-f-T-t-%E7%9A%84%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0"><span class="toc-number">3.4.</span> <span class="toc-text">周期为$T$的信号$f_T(t)$的傅里叶级数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E6%95%B0%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%82%85%E9%87%8C%E5%8F%B6%E7%BA%A7%E6%95%B0"><span class="toc-number">3.5.</span> <span class="toc-text">指数形式的傅里叶级数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%88Fourier-Transformation%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">傅里叶变换（Fourier Transformation）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AC%A7%E6%8B%89%E5%85%AC%E5%BC%8F"><span class="toc-number">4.1.</span> <span class="toc-text">欧拉公式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%95%B0i"><span class="toc-number">4.1.1.</span> <span class="toc-text">虚数i</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AC%A7%E6%8B%89%E5%85%AC%E5%BC%8F-1"><span class="toc-number">4.1.2.</span> <span class="toc-text">欧拉公式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E6%95%B0%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">4.2.</span> <span class="toc-text">指数形式的傅里叶变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="toc-number">4.3.</span> <span class="toc-text">公式推导</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%91%E5%9F%9F%E7%89%B9%E6%80%A7"><span class="toc-number">4.4.</span> <span class="toc-text">频域特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">4.5.</span> <span class="toc-text">傅里叶变换的性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E6%80%A7"><span class="toc-number">4.5.1.</span> <span class="toc-text">线性性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E7%A7%BB%E6%80%A7%E8%B4%A8"><span class="toc-number">4.5.2.</span> <span class="toc-text">平移性质</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%B9%B3%E7%A7%BB"><span class="toc-number">4.5.2.1.</span> <span class="toc-text">时间平移</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%91%E7%8E%87%E5%B9%B3%E7%A7%BB"><span class="toc-number">4.5.2.2.</span> <span class="toc-text">频率平移</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%BC%A9%E6%94%BE"><span class="toc-number">4.5.3.</span> <span class="toc-text">时间缩放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E8%BD%AD%E6%80%A7%E8%B4%A8"><span class="toc-number">4.5.4.</span> <span class="toc-text">共轭性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%E7%9A%84%E5%8D%B7%E7%A7%AF%E5%AE%9A%E7%90%86"><span class="toc-number">4.5.5.</span> <span class="toc-text">傅里叶变换的卷积定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E6%95%B0%E6%80%A7%E8%B4%A8"><span class="toc-number">4.5.6.</span> <span class="toc-text">导数性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%E7%9A%84%E5%AF%B9%E7%A7%B0%E6%80%A7"><span class="toc-number">4.5.7.</span> <span class="toc-text">傅里叶变换的对称性</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/03/%E6%96%B0%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E5%A6%82%E4%BD%95%E5%9C%A8Ubuntu%E4%BD%BF%E7%94%A8/" title="新机械硬盘如何在Ubuntu使用"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="新机械硬盘如何在Ubuntu使用"/></a><div class="content"><a class="title" href="/2024/11/03/%E6%96%B0%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E5%A6%82%E4%BD%95%E5%9C%A8Ubuntu%E4%BD%BF%E7%94%A8/" title="新机械硬盘如何在Ubuntu使用">新机械硬盘如何在Ubuntu使用</a><time datetime="2024-11-07T07:48:35.732Z" title="Updated 2024-11-07 15:48:35">2024-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/" title="AppImage文件"><img src="/images/background/GEM24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AppImage文件"/></a><div class="content"><a class="title" href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/" title="AppImage文件">AppImage文件</a><time datetime="2024-11-07T07:48:35.728Z" title="Updated 2024-11-07 15:48:35">2024-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/15/Font%20Awesome%E5%9B%BE%E6%A0%87%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Font Awesome图标库的使用"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Font Awesome图标库的使用"/></a><div class="content"><a class="title" href="/2024/10/15/Font%20Awesome%E5%9B%BE%E6%A0%87%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Font Awesome图标库的使用">Font Awesome图标库的使用</a><time datetime="2024-11-07T07:48:35.728Z" title="Updated 2024-11-07 15:48:35">2024-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/11/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" title="Hexo+Butterfly主题+Github搭建自己的博客"><img src="/../images/background/%E9%82%93%E7%B4%AB%E6%A3%8B1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo+Butterfly主题+Github搭建自己的博客"/></a><div class="content"><a class="title" href="/2024/10/11/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" title="Hexo+Butterfly主题+Github搭建自己的博客">Hexo+Butterfly主题+Github搭建自己的博客</a><time datetime="2024-11-07T07:48:35.728Z" title="Updated 2024-11-07 15:48:35">2024-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/15/Hexo%E5%9F%BA%E7%A1%80(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo基础"><img src="/images/background/GEM15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo基础"/></a><div class="content"><a class="title" href="/2024/10/15/Hexo%E5%9F%BA%E7%A1%80(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo基础">Hexo基础</a><time datetime="2024-11-07T07:48:35.728Z" title="Updated 2024-11-07 15:48:35">2024-11-07</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
