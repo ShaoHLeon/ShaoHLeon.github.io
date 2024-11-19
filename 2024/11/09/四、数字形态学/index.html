@@ -1,0 +1,388 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>四、数字形态学 | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="数学形态学  是建立在集合论基础上的图像处理技术。  用集合描述图像目标，描述图像各部分之间关系，描述目标的结构特点。  用具有一定形态的结构元素去量度和提取图像中的对应形状,达到对图像分析和识别目的。   数学基础图像在数学形态学中，图像用集合来表示，定义在欧氏空间$\mathbb{R}^2$，记为 $A, B, C, \dots$。 像素图像中的像素则用集合的元素来表示，记为 $a, b, c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="四、数字形态学">
+<meta property="og:url" content="http://shaohleon.github.io/2024/11/09/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="数学形态学  是建立在集合论基础上的图像处理技术。  用集合描述图像目标，描述图像各部分之间关系，描述目标的结构特点。  用具有一定形态的结构元素去量度和提取图像中的对应形状,达到对图像分析和识别目的。   数学基础图像在数学形态学中，图像用集合来表示，定义在欧氏空间$\mathbb{R}^2$，记为 $A, B, C, \dots$。 像素图像中的像素则用集合的元素来表示，记为 $a, b, c">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM33.jpg">
+<meta property="article:published_time" content="2024-11-09T16:00:08.000Z">
+<meta property="article:modified_time" content="2024-11-19T15:27:07.959Z">
+<meta property="article:author" content="Leon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM33.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/11/09/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '四、数字形态学',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-19 23:27:07'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">四、数字形态学</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">四、数字形态学</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-11-09T16:00:08.000Z" title="Created 2024-11-10 00:00:08">2024-11-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-11-19T15:27:07.959Z" title="Updated 2024-11-19 23:27:07">2024-11-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>5mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>数学形态学</p>
+<ul>
+<li><p>是建立在集合论基础上的图像处理技术。</p>
+</li>
+<li><p>用集合描述图像目标，描述图像各部分之间关系，描述目标的结构特点。</p>
+</li>
+<li><p>用具有一定形态的<em>结构元素</em>去量度和提取图像中的对应形状,达到对图像分析和识别目的。</p>
+</li>
+</ul>
+<h1 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h1><h2 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h2><p>在数学形态学中，图像用<strong>集合</strong>来表示，定义在欧氏空间$\mathbb{R}^2$，记为 $A, B, C, \dots$。</p>
+<h2 id="像素"><a href="#像素" class="headerlink" title="像素"></a>像素</h2><p>图像中的像素则用集合的元素来表示，记为 $a, b, c, \dots$。</p>
+<ul>
+<li><p>$a \in A$，表示像素 $a$ 属于集合 $A$（图像）；</p>
+</li>
+<li><p>$a \notin A$，表示像素 $a$ 不属于集合 $A$。</p>
+</li>
+</ul>
+<h2 id="基本形态学算子"><a href="#基本形态学算子" class="headerlink" title="基本形态学算子"></a>基本形态学算子</h2><p>基本的数学形态学算子是通过一些集合运算来构成的，以下是常见的集合运算：</p>
+<ul>
+<li><p><strong>映射</strong>：用 $\,\hat{A}\,$ 表示集合 $A$ 的某种映射。</p>
+</li>
+<li><p><strong>补集</strong>：用 $A^c$ 表示集合 $A$ 的补集。</p>
+</li>
+<li><p><strong>子集</strong>：若 $B \subseteq A$，则表示 $B$ 是 $A$ 的子集。</p>
+</li>
+<li><p><strong>并集</strong>：$A \cup B$ 表示集合 $A$ 和集合 $B$ 的并集。</p>
+</li>
+<li><p><strong>交集</strong>：$A \cap B$ 表示集合 $A$ 和集合 $B$ 的交集。</p>
+</li>
+<li><p><strong>差集</strong>：$A - B$ 表示集合 $A$ 和集合 $B$ 的差集，即属于 $A$ 但不属于 $B$ 的元素集合。</p>
+</li>
+<li><p><strong>击中</strong>：如果 $A \cap B \neq \emptyset$，则称 $B$ 击中 $A$。</p>
+</li>
+<li><p><strong>击不中</strong>：如果 $A \cap B = \emptyset$，则称 $B$ 击不中 $A$。</p>
+</li>
+</ul>
+<h1 id="二值形态学"><a href="#二值形态学" class="headerlink" title="二值形态学"></a>二值形态学</h1><h2 id="结构元素"><a href="#结构元素" class="headerlink" title="结构元素"></a>结构元素</h2><p>在分析目标图像时，需要创建一种几何形态滤波模板，用来收集图像信息，称之为结构元素。</p>
+<p><mark>结构元素本身实际上也是1个图像集合。</mark></p>
+<p><em>选取结构元素的遵循原则</em>：</p>
+<ul>
+<li><p>几何结构要比原图像简单，且有界。</p>
+</li>
+<li><p>尺寸要明显小于目标图像的尺寸。</p>
+</li>
+<li><p>形状具有某种凸性，如圆形、十字架、方形等。</p>
+</li>
+<li><p><em>每个结构元素需指定一个原点</em>，作为结构元素参与形态学运算的<strong>“参考点”</strong>。</p>
+</li>
+</ul>
+<p><mark>所有形态学处理都基于填放结构元素的概念。</mark></p>
+<p>填放：用不同的方法把结构元素放在原图像的内部，在结构元素的填放中引出一系列图像的特性。</p>
+<p><img src="/home/leon/Pictures/Marktext/2024-11-10-16-29-27-image.png" alt=""></p>
+<p><mark>函数</mark>：<code>cv.getStructuringElement(shape, ksize[, anchor])</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="comment"># 矩形结构元素</span></span><br><span class="line">rect1 = cv.getStructuringElement(cv.MORPH_RECT, (<span class="number">5</span>, <span class="number">3</span>))  <span class="comment"># 矩形结构，大小为 5x3</span></span><br><span class="line">rect2 = cv.getStructuringElement(cv.MORPH_RECT, (<span class="number">5</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">0</span>))  <span class="comment"># 矩形结构，锚点 (0, 0)</span></span><br><span class="line"><span class="comment"># 十字形结构元素</span></span><br><span class="line">cross1 = cv.getStructuringElement(cv.MORPH_CROSS, (<span class="number">5</span>, <span class="number">3</span>))  <span class="comment"># 十字形结构，大小为 5x3</span></span><br><span class="line">cross2 = cv.getStructuringElement(cv.MORPH_CROSS, (<span class="number">5</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">0</span>))  <span class="comment"># 十字形结构，锚点 (0, 0)</span></span><br><span class="line"><span class="comment"># 椭圆形结构元素</span></span><br><span class="line">ellipse1 = cv.getStructuringElement(cv.MORPH_ELLIPSE, (<span class="number">9</span>, <span class="number">5</span>))  <span class="comment"># 椭圆形结构，大小为 9x5</span></span><br><span class="line">ellipse2 = cv.getStructuringElement(cv.MORPH_ELLIPSE, (<span class="number">9</span>, <span class="number">5</span>), (<span class="number">0</span>, <span class="number">0</span>))  <span class="comment"># 椭圆形结构，锚点 (0, 0)</span></span><br><span class="line"><span class="comment"># 输出结果以查看结构元素的矩阵形式</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;矩形结构元素 rect1:\n&quot;</span>, rect1)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;十字形结构元素 cross1:\n&quot;</span>, cross1)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;椭圆形结构元素 ellipse1:\n&quot;</span>, ellipse1)</span><br></pre></td></tr></table></figure>
+<h2 id="基本形态变换"><a href="#基本形态变换" class="headerlink" title="基本形态变换"></a>基本形态变换</h2><h3 id="膨胀-Dilation"><a href="#膨胀-Dilation" class="headerlink" title="膨胀(Dilation)"></a>膨胀(Dilation)</h3><h4 id="算符"><a href="#算符" class="headerlink" title="算符"></a>算符</h4><p>$A \oplus S$，其中 $A$ 为输入图像，$S$ 为结构元素。</p>
+<h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>膨胀操作会扩大图像中的前景（通常为白色）区域。在膨胀过程中，结构元素 $B$ 会扫描输入图像 $A$，如果 $B$ 的任何部分与 $A$ 的前景像素重叠，那么结构元素的原点（“参考点”）在输出图像中被设为前景。其作用是填充小孔、连接相邻物体等。</p>
+<script type="math/tex; mode=display">
+A \oplus S = \{z \mid (Ŝ )_z \cap A \neq \emptyset\}</script><p>其中，$(Ŝ)_z$对结构元素 S 作关于原点的映射，然后平移 z。</p>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p><code>cv.dilate()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建结构元素</span></span><br><span class="line">kernel = cv.getStructuringElement(cv.MORPH_RECT, (<span class="number">3</span>, <span class="number">3</span>))</span><br><span class="line"><span class="comment"># 膨胀操作</span></span><br><span class="line">dilated_image = cv.dilate(input_image, kernel, iterations=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="腐蚀-ecode"><a href="#腐蚀-ecode" class="headerlink" title="腐蚀(ecode)"></a>腐蚀(ecode)</h3><h4 id="算符-1"><a href="#算符-1" class="headerlink" title="算符"></a>算符</h4><p>$A \ominus B$</p>
+<h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>腐蚀操作会缩小图像中的前景区域。结构元素 $B$ 扫描输入图像 $A$，如果 $B$ 的任何部分不与前景像素完全重叠，则该位置在输出图像中被设为背景。其作用包括去除图像中的小物体、缩小目标物体等。</p>
+<script type="math/tex; mode=display">
+A \oplus B = \{z \mid (B)_z \subseteq A \}</script><h4 id="函数-1"><a href="#函数-1" class="headerlink" title="函数"></a>函数</h4><p><code>cv.erode()</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建结构元素</span></span><br><span class="line">kernel = cv.getStructuringElement(cv.MORPH_RECT, (<span class="number">3</span>, <span class="number">3</span>))</span><br><span class="line"><span class="comment"># 腐蚀操作</span></span><br><span class="line">eroded_image = cv.erode(input_image, kernel, iterations=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="膨胀腐蚀性质"><a href="#膨胀腐蚀性质" class="headerlink" title="膨胀腐蚀性质"></a>膨胀腐蚀性质</h3><ol>
+<li><p>对偶性</p>
+<script type="math/tex; mode=display">
+(X \oplus S)^c = X^c \ominus S</script><script type="math/tex; mode=display">
+(X \ominus S)^c = X^c \oplus S</script></li>
+<li><p>互换性（膨胀）</p>
+<script type="math/tex; mode=display">
+(X \oplus S_1) \oplus S_2 = (X \oplus S_2) \oplus S_1</script></li>
+<li><p>结合性（膨胀)</p>
+<script type="math/tex; mode=display">
+X \oplus (S_1 \oplus S_2) = (X \oplus S_1) \oplus S_2</script></li>
+<li><p>增长性</p>
+<script type="math/tex; mode=display">
+X \subseteq Y \Rightarrow X \oplus S \subseteq Y \oplus S</script><script type="math/tex; mode=display">
+X \subseteq Y \Rightarrow X \ominus S \subseteq Y \ominus S</script></li>
+</ol>
+<h2 id="复合形态变换"><a href="#复合形态变换" class="headerlink" title="复合形态变换"></a>复合形态变换</h2><p>膨胀和腐蚀不是互为逆运算的。膨胀和腐蚀进行级连结合使用，产生新的形态变换，即开运算(Opening)和闭运算(Closing)。</p>
+<h3 id="开运算（Opening）"><a href="#开运算（Opening）" class="headerlink" title="开运算（Opening）"></a>开运算（Opening）</h3><p>开运算由<strong>先腐蚀后膨胀</strong>构成，记作 $X \circ S$。</p>
+<h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><script type="math/tex; mode=display">
+X \circ S = (X \ominus S) \oplus S</script><ul>
+<li><strong>作用</strong>：开运算可以去除小于结构元素的前景噪点，开运算平滑图像轮廓，去掉细长的突起、边缘、毛刺和孤点。</li>
+</ul>
+<h4 id="函数："><a href="#函数：" class="headerlink" title="函数："></a>函数：</h4><p> <code>cv.morphologyEx()</code> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="comment"># 定义结构元素</span></span><br><span class="line">kernel = cv.getStructuringElement(cv.MORPH_RECT, (<span class="number">5</span>, <span class="number">5</span>))</span><br><span class="line"><span class="comment"># 开运算</span></span><br><span class="line">opened_image = cv.morphologyEx(input_image, cv.MORPH_OPEN, kernel)</span><br></pre></td></tr></table></figure>
+<h3 id="闭运算-Closing"><a href="#闭运算-Closing" class="headerlink" title="闭运算(Closing)"></a>闭运算(Closing)</h3><p>闭运算由<strong>先膨胀后腐蚀</strong>构成，记作 $X \bullet S$。</p>
+<h4 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h4><script type="math/tex; mode=display">
+X \bullet S = (X \oplus S) \ominus S</script><ul>
+<li><strong>作用</strong>：闭运算平滑图像的轮廓，融合窄的缺口和细长的弯口，填补图像的裂缝及破洞。</li>
+</ul>
+<h4 id="函数-2"><a href="#函数-2" class="headerlink" title="函数"></a>函数</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line">kernel = cv.getStructuringElement(cv.MORPH_RECT, (<span class="number">5</span>, <span class="number">5</span>))</span><br><span class="line">closed_image = cv.morphologyEx(input_image, cv.MORPH_CLOSE, kernel)</span><br></pre></td></tr></table></figure>
+<h2 id="二值形态学应用"><a href="#二值形态学应用" class="headerlink" title="二值形态学应用"></a>二值形态学应用</h2><h3 id="平滑滤波"><a href="#平滑滤波" class="headerlink" title="平滑滤波"></a>平滑滤波</h3><p>开运算和闭运算是关于集合补和反转的对偶（对偶：对集合执行开运算或闭运算 = 对集合的补集执行闭运算或开运算 ），而不是互为逆运算。</p>
+<p>结构元素S大于图像X中所有噪声孔和噪声块的尺寸，可以有效去除图像的噪声，但不能过大。</p>
+<h3 id="边缘提取"><a href="#边缘提取" class="headerlink" title="边缘提取"></a>边缘提取</h3><ol>
+<li><p>内边界</p>
+<script type="math/tex; mode=display">
+\text{Inner Boundary} = X - (X \ominus S)</script></li>
+<li><p>外边界</p>
+<script type="math/tex; mode=display">
+\text{Outer Boundary} = (X \oplus S) - X</script></li>
+<li><p>形态学梯度</p>
+<script type="math/tex; mode=display">
+\text{Morphological Gradient} = (X \oplus S) - (X \ominus S)</script></li>
+</ol>
+<h3 id="区域填充"><a href="#区域填充" class="headerlink" title="区域填充"></a>区域填充</h3><h3 id="目标探测"><a href="#目标探测" class="headerlink" title="目标探测"></a>目标探测</h3><h3 id="细化"><a href="#细化" class="headerlink" title="细化"></a>细化</h3><h1 id="灰度形态学"><a href="#灰度形态学" class="headerlink" title="灰度形态学"></a>灰度形态学</h1><h1 id="距离变换"><a href="#距离变换" class="headerlink" title="距离变换"></a>距离变换</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/11/09/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/">http://shaohleon.github.io/2024/11/09/四、数字形态学/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/images/background/GEM33.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/11/06/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强"><img class="cover" src="/images/background/GEM31.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">三、图像增强</div></div></a><a class="next-post pull-right" href="/2024/11/16/%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%9F%BA%E7%A1%80/" title="博弈论基础概念"><img class="cover" src="/images/background/GEM15.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">博弈论基础概念</div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">数学基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F"><span class="toc-number">1.1.</span> <span class="toc-text">图像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%83%8F%E7%B4%A0"><span class="toc-number">1.2.</span> <span class="toc-text">像素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%BD%A2%E6%80%81%E5%AD%A6%E7%AE%97%E5%AD%90"><span class="toc-number">1.3.</span> <span class="toc-text">基本形态学算子</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E5%80%BC%E5%BD%A2%E6%80%81%E5%AD%A6"><span class="toc-number">2.</span> <span class="toc-text">二值形态学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0"><span class="toc-number">2.1.</span> <span class="toc-text">结构元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%BD%A2%E6%80%81%E5%8F%98%E6%8D%A2"><span class="toc-number">2.2.</span> <span class="toc-text">基本形态变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%86%A8%E8%83%80-Dilation"><span class="toc-number">2.2.1.</span> <span class="toc-text">膨胀(Dilation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%85%90%E8%9A%80-ecode"><span class="toc-number">2.2.2.</span> <span class="toc-text">腐蚀(ecode)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6-1"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0-1"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%86%A8%E8%83%80%E8%85%90%E8%9A%80%E6%80%A7%E8%B4%A8"><span class="toc-number">2.2.3.</span> <span class="toc-text">膨胀腐蚀性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%90%88%E5%BD%A2%E6%80%81%E5%8F%98%E6%8D%A2"><span class="toc-number">2.3.</span> <span class="toc-text">复合形态变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E8%BF%90%E7%AE%97%EF%BC%88Opening%EF%BC%89"><span class="toc-number">2.3.1.</span> <span class="toc-text">开运算（Opening）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">函数：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AD%E8%BF%90%E7%AE%97-Closing"><span class="toc-number">2.3.2.</span> <span class="toc-text">闭运算(Closing)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0-2"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%80%BC%E5%BD%A2%E6%80%81%E5%AD%A6%E5%BA%94%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">二值形态学应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E6%BB%91%E6%BB%A4%E6%B3%A2"><span class="toc-number">2.4.1.</span> <span class="toc-text">平滑滤波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%BC%98%E6%8F%90%E5%8F%96"><span class="toc-number">2.4.2.</span> <span class="toc-text">边缘提取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BA%E5%9F%9F%E5%A1%AB%E5%85%85"><span class="toc-number">2.4.3.</span> <span class="toc-text">区域填充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E6%8E%A2%E6%B5%8B"><span class="toc-number">2.4.4.</span> <span class="toc-text">目标探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E5%8C%96"><span class="toc-number">2.4.5.</span> <span class="toc-text">细化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%81%B0%E5%BA%A6%E5%BD%A2%E6%80%81%E5%AD%A6"><span class="toc-number">3.</span> <span class="toc-text">灰度形态学</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2"><span class="toc-number">4.</span> <span class="toc-text">距离变换</span></a></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/" title="AppImage文件"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AppImage文件"/></a><div class="content"><a class="title" href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/" title="AppImage文件">AppImage文件</a><time datetime="2024-11-19T15:27:07.959Z" title="Updated 2024-11-19 23:27:07">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/15/Font%20Awesome%E5%9B%BE%E6%A0%87%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Font Awesome图标库的使用"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Font Awesome图标库的使用"/></a><div class="content"><a class="title" href="/2024/10/15/Font%20Awesome%E5%9B%BE%E6%A0%87%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Font Awesome图标库的使用">Font Awesome图标库的使用</a><time datetime="2024-11-19T15:27:07.959Z" title="Updated 2024-11-19 23:27:07">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/11/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" title="Hexo+Butterfly主题+Github搭建自己的博客"><img src="/../images/background/%E9%82%93%E7%B4%AB%E6%A3%8B1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo+Butterfly主题+Github搭建自己的博客"/></a><div class="content"><a class="title" href="/2024/10/11/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" title="Hexo+Butterfly主题+Github搭建自己的博客">Hexo+Butterfly主题+Github搭建自己的博客</a><time datetime="2024-11-19T15:27:07.959Z" title="Updated 2024-11-19 23:27:07">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/15/Hexo%E5%9F%BA%E7%A1%80(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo基础"><img src="/images/background/GEM25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo基础"/></a><div class="content"><a class="title" href="/2024/10/15/Hexo%E5%9F%BA%E7%A1%80(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo基础">Hexo基础</a><time datetime="2024-11-19T15:27:07.959Z" title="Updated 2024-11-19 23:27:07">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/Hexo%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo遇到的问题"><img src="/images/background/GEM33.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo遇到的问题"/></a><div class="content"><a class="title" href="/2024/10/31/Hexo%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo遇到的问题">Hexo遇到的问题</a><time datetime="2024-11-19T15:27:07.959Z" title="Updated 2024-11-19 23:27:07">2024-11-19</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
