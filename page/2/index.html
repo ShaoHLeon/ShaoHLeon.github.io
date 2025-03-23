@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Leon的博客 - Let's explore the world!</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="相见即缘分">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Leon的博客">
+<meta property="og:url" content="http://shaohleon.github.io/page/2/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="相见即缘分">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM36.jpg">
+<meta property="article:author" content="Leon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM36.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Leon的博客',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-03-23 10:34:17'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/images/background/邓紫棋7.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Leon的博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover left"><a href="/2024/10/24/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E6%90%9E%E6%B8%85%E5%AD%97%E5%8F%B7%E3%80%81%E7%BA%B8%E5%BC%A0%E5%92%8C%E7%94%B5%E6%B1%A0%E7%9A%84%E6%A0%87%E5%87%86%E5%B0%BA%E5%AF%B8%EF%BC%9F/" title="如何快速搞清字号、纸张和电池的标准尺寸？"><img class="post-bg" src="/images/background/GEM29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何快速搞清字号、纸张和电池的标准尺寸？"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/24/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E6%90%9E%E6%B8%85%E5%AD%97%E5%8F%B7%E3%80%81%E7%BA%B8%E5%BC%A0%E5%92%8C%E7%94%B5%E6%B1%A0%E7%9A%84%E6%A0%87%E5%87%86%E5%B0%BA%E5%AF%B8%EF%BC%9F/" title="如何快速搞清字号、纸张和电池的标准尺寸？">如何快速搞清字号、纸张和电池的标准尺寸？</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-24T13:25:51.000Z" title="Created 2024-10-24 21:25:51">2024-10-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Life/">Life</a></span></div><div class="content"> 生活中经常分不清字号、纸张和电池的标准尺寸，今天闲来无事总结一下。  字号基本概念 字号：指印刷文字的大小，文字的高度，通常以磅（pt）（点（Point））为单位表示。 点：1点等于1/72英寸，即0.3515毫米。  常见字号以及对应磅数 初号：42pt  小初：36pt  一号：26pt  小一：24pt  二号：22pt  小二：18pt  三号：16pt  小三：15pt  四号：14pt  小四：12pt  五号：10.5pt  小五：9pt   正文常用小四号（12pt）或五号（10.5pt），标题通常使用较大的字号，如三号或小三号。  纸张尺寸纸张尺寸（paper size）是将纸张的宽高规范成固定的比例尺寸来使用。 国际标准的纸张尺寸可分为A、B、和C三种系列。此标准的特色是纸张尺寸的宽高比均为 $\sqrt{2}$（约为1.4142）。 A系列A系列是最常见的纸张尺寸标准，应用于办公、打印和出版等各个领域。其最著名的纸张是A4，通常用于打印文件和写作材料。A系列的特点是，每向下一级尺寸折叠时，纸张的面积减半，保持了宽高比的恒定（√2:1）。  A0：841...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch"><img class="post-bg" src="/images/background/GEM25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中conda安装显卡驱动、CUDA、pytorch"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch">Ubuntu中conda安装显卡驱动、CUDA、pytorch</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-21T08:19:59.000Z" title="Created 2024-10-21 16:19:59">2024-10-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content"> 环境：Ubuntu20.04 x86_64、 anaconda  安装显卡驱动 显卡驱动（GPU driver）是操作系统与显卡硬件之间的一种软件接口，它负责管理和控制计算机中的图形处理器（GPU），是一种底层软件。显卡驱动的主要作用是使操作系统和应用程序能够正确使用显卡的硬件资源，从而处理和显示图形、加速渲染和视频输出等任务。 显卡驱动的主要功能：  与硬件通信：显卡驱动是显卡硬件与操作系统之间的“桥梁”。它向操作系统提供一套标准化的指令，使操作系统能够利用显卡硬件执行图形任务，比如 3D 渲染、视频解码等。  图形加速：显卡驱动通过调用 GPU 的硬件加速功能，显著提升图形渲染性能，尤其是对 3D 应用程序和视频的处理。它能够将复杂的图形任务交给 GPU 专门的硬件来执行，而不是让 CPU 完全负责。  显示设置和管理：驱动程序管理和控制显示器的分辨率、刷新率、颜色深度等参数，并支持多显示器配置。在驱动程序中，你可以调整显示器的布局、旋转方向等。  优化性能：显卡驱动通常会根据具体硬件做优化，使得系统能够以最高效的方式使用显卡的资源。制造商（如 NVIDIA 或...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda"><img class="post-bg" src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中安装配置anaconda"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda">Ubuntu中安装配置anaconda</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-21T02:28:55.000Z" title="Created 2024-10-21 10:28:55">2024-10-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Ubuntu/">Ubuntu</a></span></div><div class="content"> 环境：Ubuntu20.04  安装下载从Index of /anaconda/archive/ | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror网站中下载所需要的软件包 以Anaconda3-2024.06-1-Linux-x86_64.sh为例 下载到想要安装的文件夹下:[~/software/anaconda3（我的位置）]（需要替换成你的位置） 安装ctl+alt+T 打开终端进入该文件夹 12~$ cd [~/software/anaconda3（我的位置）][~/software/anaconda3（我的位置）]$ bash Anaconda3-2024.06-Linux-x86_64.sh 不断回车，需要输入就输入yes 中途会需要选择安装目录   Enter 默认在用户主目录下创建一个名为anaconda3的文件夹作为安装地址  我是输入 /home/software/anaconda3 安装在这个目录下   安装成功： 查看安装的包1(base)[~/software/anaconda3（我的位置）]$ conda...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础"><img class="post-bg" src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git基础"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础">Git基础</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-16T08:46:21.000Z" title="Created 2024-10-16 16:46:21">2024-10-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tools/">Tools</a></span></div><div class="content">Git 简介Git 是一个分布式版本控制系统，广泛用于代码管理和协作开发。相比 SVN 等集中式版本控制系统，Git 具有更高效的分支管理、离线操作能力和强大的合并机制。 Git工作区域和文件状态本地数据管理： 工作区（本地工作目录（电脑目录）,如：~/Documents/Study/Python$）  暂存区（索引，用于保存即将提交到Git仓库的修改内容）  本地仓库（版本库，包含完整的项目历史和元数据，Git存储代码和版本信息）   工作区git add —&gt; 暂存区git commit —&gt; 本地仓库 文件状态git status查看当前文件夹（工作区）的文件状态， untracked红色，committed绿色  未跟踪untracked：新建的，未被Git管理  未修改：被Git管理   安装 GitWindows 下载地址：Git 官方网站 安装后在终端输入 git --version 验证安装  Linux（Ubuntu/Debian）12sudo apt updatesudo apt install git macOS1brew install...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/10/16/Hexo%E5%9F%BA%E7%A1%80(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo基础"><img class="post-bg" src="/images/background/GEM15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo基础"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/16/Hexo%E5%9F%BA%E7%A1%80(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo基础">Hexo基础</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-15T16:16:17.000Z" title="Created 2024-10-16 00:16:17">2024-10-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Blog/">Blog</a></span></div><div class="content">前言什么是Hexo？Hexo 是一个快速、简洁且强大的博客框架。它基于 Node.js，使用 Markdown 语法编写文章，并可以通过多种主题、插件进行自定义。 一、写作创建文章1~/blog$ hexo new [layout] &lt;title&gt; [layout]:   post 文章(default) 在source/_posts page 页面 在source draft 草稿 在source/_drafts   可以通过编辑 _config.yml 文件中的 default_layout 参数来设置默认布局。  文章名字格式可以编辑 _config.yml 文件中的 new_post_name 参数来设置，默认为...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/10/15/Font%20Awesome%E5%9B%BE%E6%A0%87%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Font Awesome图标库的使用"><img class="post-bg" src="/images/background/GEM29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Font Awesome图标库的使用"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/15/Font%20Awesome%E5%9B%BE%E6%A0%87%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/" title="Font Awesome图标库的使用">Font Awesome图标库的使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-15T14:18:05.000Z" title="Created 2024-10-15 22:18:05">2024-10-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Blog/">Blog</a></span></div><div class="content">前言Butterfly主题配置文件中的 menu:Home: / || fas fa-home 是什么？如何获取所需要的图标？本文将介绍如何使用Font Awesome图标库。  A: fas 是Font Awesome的图标前缀，fa-home是图标名称，所以 fas fa-home 就是Font Awesome图标库的图标。  注：主要针对Hexo的配置。 Font Awesome图标库Font Awesome 是一个非常流行的图标库，它提供了数以千计的矢量图标，可以在网页设计中轻松使用。Font Awesome 提供了多种图标样式，每种样式都有不同的前缀，用于在 HTML 或配置文件中引用特定的图标样式。 Font Awesome 的主要前缀 Solid (fas) 前缀: fas 描述: 实心风格的图标，适用于大多数常见用途。 示例: fas fa-music （🎵）   Regular (far) 前缀: far 描述: 边框风格的图标，通常用于表示较轻的视觉效果。 示例: far fa-music （🎵）   Brands (fab)  前缀: fab 描述:...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/10/15/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BF%86HTML/" title="如何记忆HTML"><img class="post-bg" src="/../images/background/%E9%82%93%E7%B4%AB%E6%A3%8B2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何记忆HTML"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/15/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BF%86HTML/" title="如何记忆HTML">如何记忆HTML</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-15T08:28:31.000Z" title="Created 2024-10-15 16:28:31">2024-10-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Web/">Web</a></span></div><div class="content">HTML标签记忆    标签 英文 功能     html hypertext markup language 超文本标记语言，定义HTML文档   body body 定义文档主题，可显示部分   h heading 标题   段落:      p paragraph 段落   br break 换行   hr horizontal rule 定义水平分割线，用于分隔内容   文本格式化标签:   b bold 将文本加粗   strong strong 强调文本（通常呈现为加粗）   em emphasis 强调文本（通常呈现为斜体）   i italic 将文本斜体   sub subscript 下标字   sup superscript 上标字   ins insert 插入字   del delete 删除字   “计算机输出”...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/10/14/Markdown%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" title="Markdown基础语法"><img class="post-bg" src="/images/background/GEM33.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Markdown基础语法"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/14/Markdown%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" title="Markdown基础语法">Markdown基础语法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-14T13:33:08.000Z" title="Created 2024-10-14 21:33:08">2024-10-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Tools/">Tools</a></span></div><div class="content">   Markdown 是一种轻量级的标记语言，能够通过简单的标记符号来编写格式化文本。它的设计初衷是让文本既可以轻松阅读，又能够直接转换成 HTML，非常适合编写博客、文档和 README 文件。  编辑器 在线markdown编辑器_微信公众号markdown排版工具  markdown编辑器 - 在线工具  MarkText: Markdown神器Marktext的安装与汉化   基础语法标题（Headers）使用 # 符号来定义标题，# 的个数代表标题的层级（从 # 到 ######，依次为 1-6 级标题）。 123# 一级标题## 二级标题### 三级标题 段落（Paragraphs） Markdown 中段落之间需要空一行，直接输入文字即可。 123这是一个段落。这是另一个段落。 渲染效果： 这是一个段落。 这是另一个段落。  或者使用HTML语法 1&lt;p&gt;这是另一种方法的一个段落。&lt;/p&gt; 渲染效果： 这是另一种方法的一个段落。  换行 1&lt;br&gt;   强调（Emphasis）可以使用星号 * 或下划线 _...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/" title="AppImage文件"><img class="post-bg" src="/images/background/GEM18.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AppImage文件"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/11/AppImage%E6%96%87%E4%BB%B6/" title="AppImage文件">AppImage文件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-11T14:43:55.000Z" title="Created 2024-10-11 22:43:55">2024-10-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">什么是AppImage？AppImage 是一种用于在 Linux 上分发应用程序的便携式打包格式。与传统的 Linux 软件包（如 .deb、.rpm）不同，AppImage 是一个自包含的应用程序，打包了所有应用所需的依赖库和文件，允许用户无需安装即可运行应用程序。 以AppImage打包的应用程式，需要的依赖套件都包在一起，下载就是单一档案，点二下就可以执行，不需要安装，也无需考量不同Linux发行版的差异。 特点：  无需安装：AppImage 文件不需要安装或管理员权限。下载后，你只需赋予可执行权限，然后直接运行它。它不会改变系统文件或安装额外的依赖库。  便携性：AppImage 文件是自包含的，这意味着它打包了应用程序及其所需的所有依赖项。你可以将它复制到任何地方（USB 驱动器、云盘等），在不同的 Linux 发行版上运行，而不需要重新安装或配置。  无依赖性问题：因为 AppImage 打包了应用所需的所有库和依赖项，用户不必担心库版本冲突或依赖关系未满足的问题。  版本独立：AppImage 文件可以运行在大多数 Linux...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/10/11/Blog/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" title="Hexo+Butterfly主题+Github搭建自己的博客"><img class="post-bg" src="/../images/background/%E9%82%93%E7%B4%AB%E6%A3%8B1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo+Butterfly主题+Github搭建自己的博客"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/10/11/Blog/Hexo+Butterfly%E4%B8%BB%E9%A2%98+Github%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%8D%9A%E5%AE%A2/" title="Hexo+Butterfly主题+Github搭建自己的博客">Hexo+Butterfly主题+Github搭建自己的博客</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-11T01:52:19.000Z" title="Created 2024-10-11 09:52:19">2024-10-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Blog/">Blog</a></span></div><div class="content">本人设备及工具: 20.04-Ubuntu、 Marktext（markdown编辑器）、 Hexo(hexo-cli: 4.3.2)、 Git  一、安装Node.js 方式一：Ubuntu apt-get 命令安装 123sudo apt-get updatesudo apt-get install nodejssudo apt-get install npm  方式二: 二进制源码安装官网：(https://nodejs.org/en/download/prebuilt-binaries) 123456tar xf  node-v20.18.0-linux-x64.tar.xz       # 解压cd node-v20.18.0-linux-x64/./bin/node -v                   # 执行node命令 查看版本 v20.18.0# 建立软链接ln -s ./bin/npm   /usr/local/bin/ ln -s ./bin/node   /usr/local/bin/           版本更新安装 Hexo 博客的时候提示...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git基础"/></a><div class="content"><a class="title" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础">Git基础</a><time datetime="2025-03-23T02:31:01.394Z" title="Updated 2025-03-23 10:31:01">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch"><img src="/images/background/GEM25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中conda安装显卡驱动、CUDA、pytorch"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch">Ubuntu中conda安装显卡驱动、CUDA、pytorch</a><time datetime="2025-03-23T02:10:16.678Z" title="Updated 2025-03-23 10:10:16">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境"><img src="/images/background/GEM29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中配置TensorFlow环境"/></a><div class="content"><a class="title" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境">Ubuntu中配置TensorFlow环境</a><time datetime="2025-03-23T02:09:39.880Z" title="Updated 2025-03-23 10:09:39">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中安装配置anaconda"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda">Ubuntu中安装配置anaconda</a><time datetime="2025-03-17T08:32:55.906Z" title="Updated 2025-03-17 16:32:55">2025-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img src="/images/background/GEM24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见英文缩写"/></a><div class="content"><a class="title" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写">常见英文缩写</a><time datetime="2024-12-16T08:03:08.272Z" title="Updated 2024-12-16 16:03:08">2024-12-16</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            <a class="card-more-btn" href="/categories/" title="View More">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/"><span class="card-category-list-name">AI</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Blog/"><span class="card-category-list-name">Blog</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Life/"><span class="card-category-list-name">Life</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Math/"><span class="card-category-list-name">Math</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Python/"><span class="card-category-list-name">Python</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Tools/"><span class="card-category-list-name">Tools</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Ubuntu/"><span class="card-category-list-name">Ubuntu</span><span class="card-category-list-count">2</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.15em; color: rgb(50, 50, 50);">Linux</a><a href="/tags/Blog/" style="font-size: 1.3em; color: rgb(169, 150, 159);">Blog</a><a href="/tags/Tools/" style="font-size: 1.15em; color: rgb(50, 50, 89);">Tools</a><a href="/tags/Font-Awesome/" style="font-size: 1.15em; color: rgb(132, 127, 139);">Font Awesome</a><a href="/tags/Git/" style="font-size: 1.15em; color: rgb(86, 51, 50);">Git</a><a href="/tags/Hexo/" style="font-size: 1.3em; color: rgb(65, 50, 50);">Hexo</a><a href="/tags/Markdown/" style="font-size: 1.15em; color: rgb(51, 98, 54);">Markdown</a><a href="/tags/Ubuntu%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" style="font-size: 1.3em; color: rgb(188, 118, 130);">Ubuntu环境配置</a><a href="/tags/pytorch/" style="font-size: 1.15em; color: rgb(116, 85, 189);">pytorch</a><a href="/tags/Python/" style="font-size: 1.3em; color: rgb(50, 50, 131);">Python</a><a href="/tags/Ubuntu%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" style="font-size: 1.15em; color: rgb(114, 50, 83);">Ubuntu软件安装</a><a href="/tags/TensorFlow/" style="font-size: 1.15em; color: rgb(140, 119, 55);">TensorFlow</a><a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" style="font-size: 1.45em; color: rgb(50, 57, 183);">图像处理</a><a href="/tags/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" style="font-size: 1.15em; color: rgb(50, 112, 50);">傅里叶变换</a><a href="/tags/%E5%A5%87%E6%80%AA%E7%9A%84%E7%94%9F%E6%B4%BB%E7%9F%A5%E8%AF%86/" style="font-size: 1.15em; color: rgb(50, 127, 102);">奇怪的生活知识</a><a href="/tags/HTML/" style="font-size: 1.15em; color: rgb(71, 50, 137);">HTML</a><a href="/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" style="font-size: 1.15em; color: rgb(50, 155, 50);">博弈论</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
+      
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2025/01/">
+          <span class="card-archive-list-date">January 2025</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/12/">
+          <span class="card-archive-list-date">December 2024</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/11/">
+          <span class="card-archive-list-date">November 2024</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/10/">
+          <span class="card-archive-list-date">October 2024</span>
+          <span class="card-archive-list-count">14</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">20</div></div><div class="webinfo-item"><div class="item-name">Total Word Count :</div><div class="item-count">43.9k</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-03-23T02:34:17.489Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  btf.getScript('https://yijuzhan.com/api/word.php?m=js').then(() => {
+    const con = str[0]
+    if (true) {
+      const from = '出自 ' + str[1]
+      const sub = ["如果不能忠于自己的心，那胜负又有什么价值呢？"]
+      sub.unshift(con, from)
+      typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = con
+    }
+  })
+}
+typedJSFn.run(subtitleType)
+</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

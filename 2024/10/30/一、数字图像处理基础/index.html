@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一、数字图像处理基础 | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="色度学基础三基色人眼的视网膜上存在大量能在适当亮度下分辨颜色的锥状细胞，它们分别对应红、绿、蓝三种颜色，即分别对红光、绿光、蓝光敏感。由此，红（R）、绿（G）、蓝（B）这三种颜色被称为三基色。  三基色原理：自然界中的绝大部分色光都可以用特殊选定的三种基本单色光复合而成。  国际照明委员会(CIE)选择红色（波长700.00nm），绿色（波长546.1nm）和蓝色（波长435.8nm）三种光作为表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一、数字图像处理基础">
+<meta property="og:url" content="http://shaohleon.github.io/2024/10/30/%E4%B8%80%E3%80%81%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="色度学基础三基色人眼的视网膜上存在大量能在适当亮度下分辨颜色的锥状细胞，它们分别对应红、绿、蓝三种颜色，即分别对红光、绿光、蓝光敏感。由此，红（R）、绿（G）、蓝（B）这三种颜色被称为三基色。  三基色原理：自然界中的绝大部分色光都可以用特殊选定的三种基本单色光复合而成。  国际照明委员会(CIE)选择红色（波长700.00nm），绿色（波长546.1nm）和蓝色（波长435.8nm）三种光作为表">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM15.jpg">
+<meta property="article:published_time" content="2024-10-30T15:27:05.000Z">
+<meta property="article:modified_time" content="2024-11-16T08:02:14.256Z">
+<meta property="article:author" content="Leon">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM15.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/10/30/%E4%B8%80%E3%80%81%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一、数字图像处理基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-16 16:02:14'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">一、数字图像处理基础</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">一、数字图像处理基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-10-30T15:27:05.000Z" title="Created 2024-10-30 23:27:05">2024-10-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-11-16T08:02:14.256Z" title="Updated 2024-11-16 16:02:14">2024-11-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>5mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="色度学基础"><a href="#色度学基础" class="headerlink" title="色度学基础"></a>色度学基础</h2><h3 id="三基色"><a href="#三基色" class="headerlink" title="三基色"></a>三基色</h3><p>人眼的视网膜上存在大量能在适当亮度下分辨颜色的锥状细胞，它们分别对应红、绿、蓝三种颜色，即分别对红光、绿光、蓝光敏感。由此，红（R）、绿（G）、蓝（B）这三种颜色被称为三基色。</p>
+<blockquote>
+<p>三基色原理：自然界中的绝大部分色光都可以用特殊选定的三种基本单色光复合而成。</p>
+</blockquote>
+<p>国际照明委员会(CIE)选择红色（波长700.00nm），绿色（波长546.1nm）和蓝色（波长435.8nm）三种光作为表色系统的三基色。</p>
+<p>任意彩色C： <code>C = R（R）+ G（G）+ B（B）</code></p>
+<h3 id="颜色模型"><a href="#颜色模型" class="headerlink" title="颜色模型"></a>颜色模型</h3><p>人眼视觉的感受颜色可用色调（hue）、饱和度（saturation）和亮度（brightness）来表示。</p>
+<blockquote>
+<p>色调：它表明颜色的种类，取决于主波长；<br>饱和度：表示颜色浓淡的物理量。通常用混入白光量的比例来度量。<br>亮度（辉度）：人眼所感受到的颜色明暗程度的物理量。</p>
+</blockquote>
+<p>颜色模型:各种表示颜色的方法。</p>
+<ol>
+<li><p><em>RGB模型</em></p>
+<p>在三维直角坐标系中，用相互垂直的三个坐标轴代表R、G、B三<br>个分量，并将R、G、B分别限定在[0,1]，则该单位正方体就代表颜色<br>空间，其中的一个点就代表一种颜色。</p>
+<p><img src="/images/图像处理/1.png" alt=""></p>
+<ul>
+<li>面向机器（如显示器、摄像机、打印机等）</li>
+</ul>
+</li>
+<li><p><em>HSI模型/HSV模型</em><br>HSI模型利用颜色的三个属性色调H（hue）、饱和度S（ saturation ）和亮度I（intensity）组成一个表示颜色的双圆锥体。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/a1e00f255226b84a2fe9796ba5549408.png" alt=""></p>
+<ul>
+<li>面向颜色处理（也面向人眼视觉）</li>
+</ul>
+<blockquote>
+<p>RGB -&gt; HSI</p>
+<p><strong>计算亮度 ( I )</strong>:<br>$I = \frac{R + G + B}{3}$</p>
+<p><strong>计算饱和度 ( S )</strong>:<br>  反映出颜色的纯度。</p>
+<p>$S = 1 - \frac{\text{min}(R, G, B)}{I} \quad (I \neq 0)$</p>
+<p><strong>计算色相 ( H )</strong>: </p>
+<p>  计算出颜色在色轮上的角度。</p>
+<p>  计算RGB三个分量中的最大值和最小值；根据最大值和最小值确定颜色在色轮上的位置；根据不同情况计算出色相值，这些情况涉及了最大值的位置。</p>
+<ul>
+<li><p>如果 ( R = G = B ): H = 0</p>
+</li>
+<li><p>如果 $B \leq G$:<br>$H = \frac{1}{2} \times \left( \frac{(R - G) + (R - B)}{(R - G) + (G - B)} \right)$</p>
+</li>
+<li><p>如果 ( B &gt; G ):<br>$H = 1 - \frac{1}{2} \times \left( \frac{(R - G) + (R - B)}{(R - G) + (G - B)} \right)$</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p><em>CMYK模型</em></p>
+<p>青色(Cyan)、品红(Magenta)、黄色(Yellow)和黑色(Key)的颜色模型。</p>
+<ul>
+<li><p>通过减去特定波长的光来产生颜色，因此适合印刷行业。</p>
+</li>
+<li><p>主要用于彩色印刷和设计领域，因为它能有效地混合这些颜色以生成其他颜色。</p>
+</li>
+<li><p>减色模型</p>
+<blockquote>
+<p>减色模型主要是指通过减去光的某些波长来生成颜色的模型。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><em>YCbCr模型</em></p>
+<p>Y指亮度分量，Cb指蓝色色度分量，而Cr指红色色度分量。</p>
+<ul>
+<li><p>亮度信息和色彩信息的分离</p>
+</li>
+<li><p>用于数字彩色信号编码</p>
+</li>
+</ul>
+</li>
+<li><p><em>Lab模型</em></p>
+<p>L: 亮度成分（Lightness），范围从0到100，0表示黑色，100表示白色。 a: 红色-绿色成分，负值表示绿色，正值表示红色。 </p>
+<p>b: 黄蓝成分，负值表示蓝色，正值表示黄色。</p>
+<ul>
+<li>亮度、色度分开</li>
+</ul>
+</li>
+</ol>
+<h2 id="人的视觉特性"><a href="#人的视觉特性" class="headerlink" title="人的视觉特性"></a>人的视觉特性</h2><p><img src="https://i-blog.csdnimg.cn/blog_migrate/be0400452785cda9fc85c2ca23de7270.png" alt=""></p>
+<ul>
+<li><p>瞳孔：透明的角膜后是不透明的虹膜，虹膜中间的圆孔称为瞳孔，其直径可调节，控制进入人眼内之光通量(照相机光圈作用)。</p>
+</li>
+<li><p>晶状体：瞳孔后是一扁球形弹性透明体，其曲率可调节，以改变焦距，使不同距离的图在视网膜上成像 (照相机透镜作用)。</p>
+</li>
+<li><p>视细胞：视网膜上集中了大量视细胞，分为两类：</p>
+<ul>
+<li><p>锥状细胞：明视细胞，在强光下检测亮度和颜色；</p>
+</li>
+<li><p>杆(柱)状细胞：暗视细胞，在弱光下检测亮度，无色彩感觉。</p>
+</li>
+</ul>
+<p>其中，每个锥状视细胞连接着一个视神经末梢，故分辨率高，分辨细节、颜色；多个杆状视细胞连接着一个视神经末梢，故分辨率低，仅分辨物体的轮廓。</p>
+</li>
+</ul>
+<h2 id="图像数字化"><a href="#图像数字化" class="headerlink" title="图像数字化"></a>图像数字化</h2><h3 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h3><ol>
+<li><p>采样：将连续图像中的信息在空间上取样，并将其转换为离散点。</p>
+<p>位置上离散化 f ( x, y ) ==&gt; fs(m,n) ， (m,n)为采样点，称为像素(pixel) 。</p>
+</li>
+<li><p>采样的过程</p>
+<ul>
+<li><p>空间采样: 通过在图像中定义网格或像素阵列，在每个像素位置上记录颜色和亮度值。</p>
+</li>
+<li><p>时间采样: 在动态图像（如视频）中，时间采样则是指在不同时间点捕捉图像帧。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="量化"><a href="#量化" class="headerlink" title="量化"></a>量化</h3><ol>
+<li><p>量化：将连续的颜色或亮度值（如灰度级）映射到有限的离散值集合中的过程。这使得计算机能够用数字形式表示图像。</p>
+</li>
+<li><p>量化过程</p>
+<ul>
+<li><p>确定量化级数G: 选择量化级别（如256级、16级等），决定每个像素的颜色表示的细致程度。</p>
+</li>
+<li><p>划分区间: 根据选定的级数，将原始值范围分成相等或不等的区间。</p>
+</li>
+<li><p>替换值（映射）: 将每个像素的连续值替换为对应区间的离散值。</p>
+</li>
+</ul>
+</li>
+<li><p>因素</p>
+<ul>
+<li><p>量化精度: 更高的量化级数能够保留更多的图像细节，但会增加存储需求。</p>
+</li>
+<li><p>颜色深度: 通常以位数表示（如8位、16位），8位图像能表示256种颜色或灰度级，而16位图像能表示65,536种。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><mark><strong>连续图像到数字图像:</strong></mark></p>
+<p>捕获图像（连续图像）—&gt; 空间采样 —&gt; 幅度量化 —&gt; 数据编码（数字图像）</p>
+<h3 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h3><ol>
+<li><p><strong>分辨率</strong>: 通常指图像的细节表现能力，表示图像中包含的像素数量。分辨率越高，图像细节越丰富。</p>
+<p>因素：采样点数（M，N）和灰度级(数)G。</p>
+</li>
+<li><p>空间分辨率</p>
+<ul>
+<li><p>采样点数越多（采样间隔越小），空间分辨率越高；</p>
+</li>
+<li><p>G不变，(M,N)减少，图像像素粒子变粗。</p>
+</li>
+</ul>
+</li>
+<li><p>幅度分辨率</p>
+<ul>
+<li><p>G越多，图像幅度分辨率越高；</p>
+</li>
+<li><p>M、N不变，G减少，灰度渐变变成突变，出现虚假轮廓</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="数字图像"><a href="#数字图像" class="headerlink" title="数字图像"></a>数字图像</h3><ol>
+<li><p>表示形式</p>
+<p>矩阵表示</p>
+</li>
+<li><p>特点</p>
+<ul>
+<li><p>信息量大</p>
+</li>
+<li><p>占用频带宽</p>
+</li>
+<li><p>像素间相关性大</p>
+</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/10/30/%E4%B8%80%E3%80%81%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/">http://shaohleon.github.io/2024/10/30/一、数字图像处理基础/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></div><div class="post-share"><div class="social-share" data-image="/images/background/GEM15.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/10/24/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E6%90%9E%E6%B8%85%E5%AD%97%E5%8F%B7%E3%80%81%E7%BA%B8%E5%BC%A0%E5%92%8C%E7%94%B5%E6%B1%A0%E7%9A%84%E6%A0%87%E5%87%86%E5%B0%BA%E5%AF%B8%EF%BC%9F/" title="如何快速搞清字号、纸张和电池的标准尺寸？"><img class="cover" src="/images/background/GEM29.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">如何快速搞清字号、纸张和电池的标准尺寸？</div></div></a><a class="next-post pull-right" href="/2024/10/31/Hexo%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo遇到的问题"><img class="cover" src="/images/background/GEM16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">Hexo遇到的问题</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a href="/2024/11/06/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强"><img class="cover" src="/images/background/GEM31.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2024-11-09</div><div class="title">三、图像增强</div></div></a><a href="/2024/10/31/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换"><img class="cover" src="/images/background/GEM18.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2024-11-09</div><div class="title">二、图像变换</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%89%B2%E5%BA%A6%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">色度学基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E5%9F%BA%E8%89%B2"><span class="toc-number">1.1.</span> <span class="toc-text">三基色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%9C%E8%89%B2%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.</span> <span class="toc-text">颜色模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%BA%E7%9A%84%E8%A7%86%E8%A7%89%E7%89%B9%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">人的视觉特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E6%95%B0%E5%AD%97%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">图像数字化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%87%E6%A0%B7"><span class="toc-number">3.1.</span> <span class="toc-text">采样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8F%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">量化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E8%BE%A8%E7%8E%87"><span class="toc-number">3.3.</span> <span class="toc-text">分辨率</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F"><span class="toc-number">3.4.</span> <span class="toc-text">数字图像</span></a></li></ol></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git基础"/></a><div class="content"><a class="title" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础">Git基础</a><time datetime="2025-03-23T02:31:01.394Z" title="Updated 2025-03-23 10:31:01">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch"><img src="/images/background/GEM25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中conda安装显卡驱动、CUDA、pytorch"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch">Ubuntu中conda安装显卡驱动、CUDA、pytorch</a><time datetime="2025-03-23T02:10:16.678Z" title="Updated 2025-03-23 10:10:16">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境"><img src="/images/background/GEM29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中配置TensorFlow环境"/></a><div class="content"><a class="title" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境">Ubuntu中配置TensorFlow环境</a><time datetime="2025-03-23T02:09:39.880Z" title="Updated 2025-03-23 10:09:39">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中安装配置anaconda"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda">Ubuntu中安装配置anaconda</a><time datetime="2025-03-17T08:32:55.906Z" title="Updated 2025-03-17 16:32:55">2025-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img src="/images/background/GEM24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见英文缩写"/></a><div class="content"><a class="title" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写">常见英文缩写</a><time datetime="2024-12-16T08:03:08.272Z" title="Updated 2024-12-16 16:03:08">2024-12-16</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

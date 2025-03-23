@@ -1,0 +1,886 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>博弈论基础概念 | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="博弈论的基本概念要素：  博弈主体（参与人） 独立决策、独立行动并承担结果的个人或组织。  战略（行动）  战略集合（战略空间）  战略组合  纯战略  混合战略      支付（得益函数） 参与人战略实施后的效用。  信息（知识）  完全信息  不完全信息  完美信息  不完美信息  对称信息  非对称信息  共同知识：博弈问题的结构和参与人完全理性     规则：  参与人  行动次序  均衡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博弈论基础概念">
+<meta property="og:url" content="http://shaohleon.github.io/2024/11/16/AI/%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="博弈论的基本概念要素：  博弈主体（参与人） 独立决策、独立行动并承担结果的个人或组织。  战略（行动）  战略集合（战略空间）  战略组合  纯战略  混合战略      支付（得益函数） 参与人战略实施后的效用。  信息（知识）  完全信息  不完全信息  完美信息  不完美信息  对称信息  非对称信息  共同知识：博弈问题的结构和参与人完全理性     规则：  参与人  行动次序  均衡">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM25.jpg">
+<meta property="article:published_time" content="2024-11-16T03:36:27.000Z">
+<meta property="article:modified_time" content="2024-11-19T15:30:20.955Z">
+<meta property="article:author" content="Leon">
+<meta property="article:tag" content="博弈论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM25.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/11/16/AI/%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '博弈论基础概念',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-19 23:30:20'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">博弈论基础概念</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">博弈论基础概念</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-11-16T03:36:27.000Z" title="Created 2024-11-16 11:36:27">2024-11-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-11-19T15:30:20.955Z" title="Updated 2024-11-19 23:30:20">2024-11-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">7.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>24mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="博弈论的基本概念"><a href="#博弈论的基本概念" class="headerlink" title="博弈论的基本概念"></a>博弈论的基本概念</h1><p><em>要素：</em></p>
+<ul>
+<li><p>博弈主体（参与人）</p>
+<p>独立决策、独立行动并承担结果的个人或组织。</p>
+</li>
+<li><p>战略（行动）</p>
+<ul>
+<li><p>战略集合（战略空间）</p>
+</li>
+<li><p>战略组合</p>
+<ul>
+<li><p>纯战略</p>
+</li>
+<li><p>混合战略</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>支付（得益函数）</p>
+<p>参与人战略实施后的效用。</p>
+</li>
+<li><p>信息（知识）</p>
+<ul>
+<li><p>完全信息</p>
+</li>
+<li><p>不完全信息</p>
+</li>
+<li><p>完美信息</p>
+</li>
+<li><p>不完美信息</p>
+</li>
+<li><p>对称信息</p>
+</li>
+<li><p>非对称信息</p>
+</li>
+<li><p>共同知识：博弈问题的结构和参与人完全理性</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>规则：</em></p>
+<ul>
+<li><p>参与人</p>
+</li>
+<li><p>行动次序</p>
+</li>
+<li><p>均衡结果</p>
+</li>
+</ul>
+<p><em>博弈：</em></p>
+<p>在一定的环境和规则下，参与人从各自允许的战略集合中选择并加以实施，取得结果的过程。</p>
+<p><em>博弈的解：</em></p>
+<p>在博弈问题的结构和参与人完全理性为共同知识的前提下，所有参与人都预测到的博弈结果，即参与人的<strong>一致性预测</strong>，是共同知识。<br>一致性预测的性质：如果所有参与人都预测一个特定的博弈结果会出现，那么所有参与人都不会利用该预测选择与预测结果不一致的策略。</p>
+<p>博弈的表述：</p>
+<ul>
+<li><p>战略式表述（标准式表述）</p>
+<p>适合静态博弈。</p>
+<p>三要素：</p>
+<ul>
+<li><p>参与人集合 $N={1,2, \dots, n}$</p>
+</li>
+<li><p>每个参与人$i$的战略集合 $S_i = { \dots }$</p>
+</li>
+<li><p>参与人$i$的支付 $u_i$ (支付矩阵)</p>
+</li>
+</ul>
+</li>
+<li><p>扩展式表述（extensive form representation）</p>
+<p>适合动态博弈。</p>
+</li>
+</ul>
+<p><em>博弈论的分类</em></p>
+<ul>
+<li><p>合作博弈论</p>
+</li>
+<li><p>非合作博弈论</p>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>静态</th>
+<th>动态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全信息</td>
+<td>完全信息静态博弈(NE)</td>
+<td>完全信息动态博弈(SPNE)</td>
+</tr>
+<tr>
+<td>不完全信息</td>
+<td>不完全信息静态博弈(BNE)</td>
+<td>不完全信息动态博弈</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>纯战略</th>
+<th>混合战略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完美信息</td>
+<td>完全且完美信息纯战略博弈</td>
+<td>完全且完美信息混合战略博弈</td>
+</tr>
+<tr>
+<td>不完美信息</td>
+<td>完全但不完美信息纯战略博弈</td>
+<td>完全但不完美信息混合战略博弈</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="完全信息静态博弈"><a href="#完全信息静态博弈" class="headerlink" title="完全信息静态博弈"></a>完全信息静态博弈</h1><p><strong>完全信息</strong>：每个参与人对所有其他参与人的特征（包括战略空间、支付函数等）完全了解。</p>
+<p><strong>静态</strong>：所有参与人同时选择行动且只选择一次。<br><strong>同时</strong>：只要每个参与人在选择自己的行动时不知道其他参与人的选择，就是同时行动。</p>
+<p>博弈分析的目的是均衡实现的路径并预测均衡结果。</p>
+<h2 id="占优战略及占优战略均衡"><a href="#占优战略及占优战略均衡" class="headerlink" title="占优战略及占优战略均衡"></a>占优战略及占优战略均衡</h2><h3 id="占优战略"><a href="#占优战略" class="headerlink" title="占优战略"></a>占优战略</h3><p>无论其他玩家选择什么策略，某玩家总是会选择的最优策略。 即这种策略在任何情况下都比其他策略带来的收益更高或至少不低。</p>
+<p>严格占优战略：</p>
+<script type="math/tex; mode=display">
+u_i(s_i', s_{-i}) > u_i(s_i, s_{-i}), \quad \forall s_i \neq s_i', \forall s_{-i}</script><p>  不论其他人选择什么战略，$s’$是参与人唯一的最优战略</p>
+<p>弱占优战略：</p>
+<script type="math/tex; mode=display">
+u_i(s_i', s_{-i}) \geq u_i(s_i, s_{-i}), \quad \forall s_i \neq s_i', \forall s_{-i}</script><h3 id="重复剔除的占优战略均衡"><a href="#重复剔除的占优战略均衡" class="headerlink" title="重复剔除的占优战略均衡"></a>重复剔除的占优战略均衡</h3><p>  首先找到某个参与人的<mark>严格劣战略</mark>（假定存在），把这个严格劣战略剔除掉，重新构造一个不包含已剔除战略的新的博弈，然后再剔除这个新的博弈中的某个参与人的严格劣战略，一直重复这个过程，直到只剩下唯一的战略组合为止。这个唯一剩下的<u>战略组合</u>就是这个博弈的均衡解，称为“重复剔除的占优战略均衡”，这个唯一的解也是该博弈唯一的NE。</p>
+<p>  面对同样博弈支付矩阵，通过剔除弱被占优战略的方法求解时，剔除战略的顺序不同，得到的均衡解也可能不同。因此不建议采用剔除弱被占优战略的方法寻找博弈均衡。</p>
+<p><mark>注：</mark></p>
+<ul>
+<li><p>重复剔除的占优均衡结果与劣战略的剔除顺序是否有关取决于剔除的是否是严格劣战略。</p>
+</li>
+<li><p>重复剔除的占优战略均衡要求每个参与人是理性的，而且要求“理性”是参与人的共同知识。即：所有参与人知道所有参与是理性的，所有参与人知道所有参与人知道所有参与是理性的。</p>
+</li>
+</ul>
+<h2 id="纳什均衡-Nash-Equilibrium-NE"><a href="#纳什均衡-Nash-Equilibrium-NE" class="headerlink" title="纳什均衡(Nash Equilibrium,NE)"></a>纳什均衡(Nash Equilibrium,NE)</h2><p>针对其他参与人的每种战略找出自己的最佳应对战略。</p>
+<h3 id="最佳反应-Best-Response"><a href="#最佳反应-Best-Response" class="headerlink" title="最佳反应(Best Response)"></a>最佳反应(Best Response)</h3><p>一个玩家的最佳反应是指，给定其他玩家的策略时，使该玩家收益最大的策略选择。</p>
+<p>对于参与者$i$的最佳战略组合$s<em>i’$、战略空间$S_i，和其他参与者组合$s</em>{-i}$：</p>
+<script type="math/tex; mode=display">
+b_i(s_{-i}) = \{s_i \in S_i \mid u_i(s_i, s_{-i}) \geq u_i(s_i', s_{-i}), \forall s_i' \in S_i \}</script><h3 id="纳什均衡"><a href="#纳什均衡" class="headerlink" title="纳什均衡"></a>纳什均衡</h3><p>在博弈$G = { S<em>1, \dots , S_n; u_1, \dots , u_n }$ 中，如果战略组合 $(s_1^<em>, \dots , s_n^</em>) $ 中任意参与人$i$的战略 $s_i^<em>$ 都是其余参与人的战略组合 $(s_1^</em>, \dots , s</em>{i-1}^<em>, s_{i+1}^</em>, \dots ,s_{n}^<em>)$ 的最佳反应， 则 $ (s_1^</em>, \dots , s_n^*) $ 为博弈的一个NE。</p>
+<p>双方在给定的战略下不愿意调整自己的战略。</p>
+<h3 id="划线法寻找纳什均衡"><a href="#划线法寻找纳什均衡" class="headerlink" title="划线法寻找纳什均衡"></a>划线法寻找纳什均衡</h3><ol>
+<li><strong>确定最佳反应</strong>：</li>
+</ol>
+<ul>
+<li><p>对于每个玩家，在固定对手策略时找到自己的最佳反应。</p>
+</li>
+<li><p>在收益矩阵中，对每个玩家的最佳反应进行标记（如画线或圈出最高收益）。</p>
+</li>
+</ul>
+<ol>
+<li><strong>确定交点</strong>：</li>
+</ol>
+<ul>
+<li>如果某个格子的所有玩家策略均是最佳反应，则该格子对应的策略组合为纳什均衡。</li>
+</ul>
+<h3 id="均衡的稳定性"><a href="#均衡的稳定性" class="headerlink" title="均衡的稳定性"></a>均衡的稳定性</h3><ul>
+<li><p>纳什均衡是所有参与人共同的信念</p>
+</li>
+<li><p>纳什均衡具有“自实施” 的性质，参与人各自独立地追求自身利益，单独偏离没有意义。</p>
+</li>
+</ul>
+<h3 id="均衡的存在性"><a href="#均衡的存在性" class="headerlink" title="均衡的存在性"></a>均衡的存在性</h3><ol>
+<li><p>每一个有限的战略式博弈至少存在一个Nash均衡（包括纯战略和混合战略Nash均衡）。</p>
+</li>
+<li><p>对于战略式博弈 $ 𝑮 = {𝑵, 𝑺<em>𝒊 , 𝑼</em>𝒊 } $，若 $ 𝑺<em>𝒊$ 为欧氏空间的非空紧凸子集，支付函数 $𝑼</em>𝒊$ 关于战略组合 $ 𝑺$ 连续、关于 $𝒔_𝒊$ 拟凹，则该博弈存在纯战略的Nash均衡。</p>
+</li>
+<li><p>对于战略式博弈 $𝑮 = {𝑵, 𝑺<em>𝒊 , 𝑼</em>𝒊 }$，若战略空间 $𝑺<em>𝒊 = {𝒔</em>𝒊 }$为距离空间中的非空紧子集，支付函数 $𝒖_𝒊 $ 关于战略组合s连续，则该博弈存在混合战略的Nash均衡。</p>
+</li>
+<li><p>对于战略式博弈 $𝑮 = {𝑵, 𝑺<em>𝒊 , 𝑼</em>𝒊 }$ ，若对于所有的𝒊, $𝑺<em>𝒊$ 为有限维欧氏空间的非空紧凸子集； $𝒖</em>𝒊$ 关于 $𝒔<em>𝒊$ 拟凹、关于s上半连续且 $ \max 𝒖</em>𝒊 (𝒔<em>𝒊 , 𝒔</em>−𝒊 ) $关于 $𝑺_{−𝒊}$ 连续，则该博弈存在一个纯战略的Nash均衡。</p>
+</li>
+<li><p>若博弈存在两个纯战略纳什均衡，则一定还存在一个混合战略纳什均衡。</p>
+</li>
+</ol>
+<h3 id="纳什均衡与占优战略均衡及重复剔除的占优均衡"><a href="#纳什均衡与占优战略均衡及重复剔除的占优均衡" class="headerlink" title="纳什均衡与占优战略均衡及重复剔除的占优均衡"></a>纳什均衡与占优战略均衡及重复剔除的占优均衡</h3><p>  每一个占优战略均衡及重复剔除的占优均衡一定是纳什均衡，但并非每一个纳什均衡都是占优战略均衡或重复剔除的占优均衡</p>
+<p>  纳什均衡一定是在重复剔除严格劣战略过程中没有被剔除掉的战略组合，但没有被剔除掉的组合不一定是纳什均衡，除非它是唯一的（不适用于弱劣战略的情况）</p>
+<h2 id="混合战略-mixed-strategy"><a href="#混合战略-mixed-strategy" class="headerlink" title="混合战略(mixed strategy)"></a>混合战略(mixed strategy)</h2><p>在博弈 $G = { S<em>1, \dots , S_n; u_1, \dots , u_n }$ 中，参与人$i$的战略空间 $S_i = {s</em>{i1}, \dots ,s<em>{ik} }$ ，则参与人$i$以概率分布 $p_i = (p</em>{i1}, \dots, p_{ik})$，随机选择其$k$个可选战略。</p>
+<blockquote>
+<p><em>纯战略(pure strategies)</em>：如果一个战略规定参与人在一个给定的信息情况下只选择一种特定的行动。<br><em>混合战略(mixed strategies)</em>：如果一个战略规定参与人在给定的信息情况下，以某种概率分布随机地选择不同的行动。<br>在静态博弈里，纯战略等价于特定行动，混合战略是不同行动之间的随机选择。</p>
+</blockquote>
+<h3 id="混合战略纳什均衡的求解"><a href="#混合战略纳什均衡的求解" class="headerlink" title="混合战略纳什均衡的求解"></a>混合战略纳什均衡的求解</h3><p>与混合战略相伴随的一个问题是 <strong>支付的不确定性</strong> (Uncertainty)。为了量化这种不确定性，可以使用 <strong>期望支付</strong> (Expected Payoff) 的概念。</p>
+<p>参与者$i$支付可以取 $k$ 个值 $X_1, X_2, \dots, X_k$，概率分别为 $( p_1, p_2, \dots, p_k )$</p>
+<script type="math/tex; mode=display">
+EU_i = p_1 X_1 + p_2 X_2 + \dots + p_k X_k</script><ul>
+<li><p>支付最大化</p>
+<p>最优化的一阶条件为0</p>
+</li>
+<li><p>支付等值法</p>
+<p>参与者$i$每种可能取值相等，即$X_1 = \dots =X_k$</p>
+</li>
+<li><p>反应曲线法</p>
+</li>
+</ul>
+<p><mark>需要剔除严格劣战略</mark></p>
+<h1 id="完全信息动态博弈"><a href="#完全信息动态博弈" class="headerlink" title="完全信息动态博弈"></a>完全信息动态博弈</h1><p><strong>序贯博弈</strong>(Sequential Game)：参与人按照明确的顺序依次采取行动。每个参与人在决策时，可以观察到前面参与人的部分或全部行动。</p>
+<ul>
+<li><p>完全信息序贯博弈：每个参与人对所有之前的行动信息完全了解。</p>
+</li>
+<li><p>不完全信息序贯博弈：参与人对某些之前的行动信息不了解。</p>
+</li>
+</ul>
+<p><br></p>
+<p><strong>参与人集合$N$</strong>：博弈中所有参与人的集合。</p>
+<ul>
+<li><p>实际参与人：具有明确身份的博弈参与者。</p>
+</li>
+<li><p>虚拟参与人：例如自然或随机机制，其行动由概率分布描述。</p>
+</li>
+</ul>
+<p><br></p>
+<p>参与人的<strong>行动顺序</strong> (The Order of Moves)：定义了每个参与人采取行动的先后顺序。</p>
+<ul>
+<li><p>固定顺序：参与人的行动顺序明确且不变。</p>
+</li>
+<li><p>随机顺序：通过随机机制（例如抽签）决定行动顺序。</p>
+</li>
+</ul>
+<p><br></p>
+<p>参与人的<strong>行动空间</strong> (Action Set)：每个参与人在决策时可选择的策略集合$A<em>i = {a</em>{i1}, a<em>{i2}, \dots, a</em>{ik}}$。</p>
+<p><br></p>
+<p>参与人的<strong>信息集</strong> (Information Set):参与人在行动时所掌握的博弈信息，描述了参与人对博弈进程的了解程度。</p>
+<ul>
+<li><p>完全信息：参与人知道所有之前的决策和支付函数。</p>
+</li>
+<li><p>不完全信息：参与人只能观察到部分决策或结果。</p>
+</li>
+</ul>
+<p><br>参与人的<strong>支付函数</strong> (Payoff Function)：描述了参与人在博弈结束时，根据所有参与人的行动组合所获得的收益。</p>
+<p><br></p>
+<p><strong>阶段</strong>：动态博弈中参与人的一次行为。</p>
+<p><br></p>
+<p><strong>路径</strong>：从第一阶段到达博弈结束的某个终端各参与人的行为组合。</p>
+<p><br></p>
+<p><strong>战略</strong>：针对每种可能的情况如何选择的完整行动计划。</p>
+<p><br></p>
+<p><strong>可信性</strong>：动态博弈中先行为的参与人是否该相信后行为的参与人会采取对自己有利或不利的行为。</p>
+<h2 id="扩展式表述"><a href="#扩展式表述" class="headerlink" title="扩展式表述"></a>扩展式表述</h2><p>用决策树表示博弈过程:</p>
+<ul>
+<li><p><strong>节点（Node）</strong>：决策点。</p>
+</li>
+<li><p><strong>分支（Branch）</strong>：可选择的行动。</p>
+</li>
+<li><p><strong>叶子节点（Leaf Node）</strong>：每种可能结果的支付值。</p>
+</li>
+</ul>
+<h2 id="子博弈"><a href="#子博弈" class="headerlink" title="子博弈"></a>子博弈</h2><p>从某个决策节点开始、包括其后所有分支的博弈。每个子博弈必须是原博弈的一个子集，且从起点节点开始。</p>
+<ul>
+<li><p>能够自成一个博弈的某个动态博弈的从其某个阶段开始的后续阶段。</p>
+</li>
+<li><p>必须有一个初始信息集。</p>
+</li>
+<li><p>具备博弈所需要的各种信息。</p>
+</li>
+</ul>
+<h3 id="子博弈精炼纳什均衡-sub-game-perfect-Nash-equilibrium，SPNE"><a href="#子博弈精炼纳什均衡-sub-game-perfect-Nash-equilibrium，SPNE" class="headerlink" title="子博弈精炼纳什均衡(sub game perfect Nash equilibrium，SPNE)"></a>子博弈精炼纳什均衡(sub game perfect Nash equilibrium，SPNE)</h3><p><u>如果动态博弈中各参与人的战略在动态博弈本身和所有子博弈中都构成一个纳什均衡</u>，则称该战略组合为一个“子博弈精练纳什均衡”。</p>
+<ul>
+<li><p>方案的完整性</p>
+</li>
+<li><p>个体理性：序贯理性</p>
+</li>
+<li><p>既是纳什均衡，从而具有战略稳定性；又<br>不能包含任何的不会信守的许诺或威胁。</p>
+</li>
+</ul>
+<h3 id="逆推归纳法求解SPNE"><a href="#逆推归纳法求解SPNE" class="headerlink" title="逆推归纳法求解SPNE"></a>逆推归纳法求解SPNE</h3><p>从动态博弈的最后一个阶段或最后一个子博弈开始，逐步向前倒推以求解动态博弈。</p>
+<ol>
+<li><p>从最末端叶子节点的支付值开始，确定最后决策点的最佳选择。</p>
+</li>
+<li><p>向前回溯，依次计算每个决策点的最佳策略。</p>
+</li>
+<li><p>重复以上过程，直至根节点。</p>
+</li>
+</ol>
+<h2 id="重复博弈"><a href="#重复博弈" class="headerlink" title="重复博弈"></a>重复博弈</h2><p>重复博弈：同样结构的博弈重复多次,特殊的动态博弈。</p>
+<ul>
+<li><p>每次博弈称为阶段博弈（stage game）</p>
+</li>
+<li><p>有限次重复博弈、无限次重复博弈</p>
+</li>
+</ul>
+<p>由于长期利益的制约，一次博弈中不可信的威胁或许诺会变为可信，存在合作的可能性及更有效率的均衡。</p>
+<p>博弈的均衡结果有多种可能性。影响博弈均衡结果的主要因素是博弈重复次数和信息的完备性（completeness）</p>
+<h3 id="有限次重复博弈"><a href="#有限次重复博弈" class="headerlink" title="有限次重复博弈"></a>有限次重复博弈</h3><p>给定一个博弈G，重复进行T次G，并且在每次重复之前各参与人都能观察到以前博弈的结果，这样的博弈过程称为G的一个“T次重复博弈”，记为G（T）。而G则称为G（T）的原博弈。G（T）中的每次重复称为G（T）的一个阶段。</p>
+
+<p>如果原博弈存在唯一的纯战略NE，则有限次重复博弈的均衡解即各参与人在每阶段都采用原博弈的NE。</p>
+
+<p><mark>定理</mark>：<u>设原博弈G有唯一纯战略纳什均衡，则对任意正整数T，重复博弈G（T）有唯一的子博弈精练解，即各参与人每个阶段都采用G的纳什均衡战略。各参与人在G（T）中的总得益为在G中得益的T倍，平均每阶段得益等于原博弈G中的得益。</u></p>
+<h3 id="无限次重复博弈"><a href="#无限次重复博弈" class="headerlink" title="无限次重复博弈"></a>无限次重复博弈</h3><p>无限次重复博弈是指同一阶段博弈在无限个时间周期内重复进行的一种博弈模型。参与人不知道或不关心博弈的结束时间，因此需要在长期利益和短期收益之间权衡。</p>
+
+<p>给定一博弈G，无限次重复进行G博弈的过程称为G的“无限次重复博弈”，记为G（∞，δ），其中是各参与人得益共同的贴现系数δ。并且，对任意的t，在进行第t阶段（第t次重复）博弈之前，所有参与人都能看到前t－1阶段博弈的结果。各参与人在G（∞，δ）中的“得益”等于各阶段得益的现在值。</p>
+
+<ul>
+<li><strong>贴现因子（Discount Factor）$\delta$</strong>：范围为 $0 &lt; \delta &lt; 1$，反映了参与人对未来收益的重视程度。$\delta$ 越大，表示参与人越重视长期收益。</li>
+</ul>
+<h4 id="收益"><a href="#收益" class="headerlink" title="收益"></a>收益</h4><p>在无限次重复博弈中，参与人关注的是<strong>总收益的折现值</strong>，即将未来各阶段的支付按照贴现因子进行加权求和：</p>
+<script type="math/tex; mode=display">
+U_i = \sum_{t=0}^{\infty} \delta^t u_i^t</script><h4 id="触发战略-Trigger-Strateg"><a href="#触发战略-Trigger-Strateg" class="headerlink" title="触发战略(Trigger Strateg)"></a>触发战略(Trigger Strateg)</h4><ul>
+<li><p><strong>初始阶段合作</strong>：参与人假定对方会合作。</p>
+</li>
+<li><p><strong>背叛报复</strong>：如果对方在某一阶段背叛，则后续所有阶段均选择不合作作为惩罚。</p>
+</li>
+</ul>
+<p>为了维持合作，合作的总收益需大于背叛的总收益:</p>
+<script type="math/tex; mode=display">
+\frac{R}{1 - \delta} \geq T + \delta \cdot \frac{P}{1 - \delta}</script><p>其中，</p>
+<ul>
+<li><p>$ R $：双方合作时的支付；</p>
+</li>
+<li><p>$ T $：单方背叛时的最大支付；</p>
+</li>
+<li><p>$ P $：双方都不合作时的支付；</p>
+</li>
+<li><p>$ \delta $：贴现因子。</p>
+</li>
+</ul>
+<h1 id="市场模型"><a href="#市场模型" class="headerlink" title="市场模型"></a>市场模型</h1><h2 id="完全垄断模型"><a href="#完全垄断模型" class="headerlink" title="完全垄断模型"></a>完全垄断模型</h2><p>在完全垄断市场中，只有一个厂商，厂商完全控制市场供给，并能够通过调整产量影响市场价格。</p>
+<ul>
+<li><p><strong>均衡产量</strong>：</p>
+<p>单个企业的均衡产量：</p>
+<script type="math/tex; mode=display">
+q_s = \frac{a - c}{2}</script></li>
+<li><p><strong>总供给</strong>：</p>
+<script type="math/tex; mode=display">
+Q_m = q_s = \frac{a - c}{2}</script></li>
+<li><p><strong>市场价格</strong>：</p>
+<script type="math/tex; mode=display">
+p_m = \frac{a + c}{2}</script></li>
+<li><p><strong>企业均衡收益</strong>：</p>
+<script type="math/tex; mode=display">
+u_m = \frac{(a - c)^2}{8}</script></li>
+</ul>
+<h2 id="2-古诺模型（Cournot-Model）"><a href="#2-古诺模型（Cournot-Model）" class="headerlink" title="2. 古诺模型（Cournot Model）"></a>2. 古诺模型（Cournot Model）</h2><p>非合作寡占模型，两个企业同时决策产量，假设对手的产量不变，通过相互反应形成均衡。</p>
+<ul>
+<li><p><strong>均衡产量</strong>：</p>
+<p>两个企业的均衡产量分别为：</p>
+<script type="math/tex; mode=display">
+q_c^1 = q_c^2 = \frac{a - c}{3}</script></li>
+<li><p><strong>总供给</strong>：</p>
+<script type="math/tex; mode=display">
+Q_c = q_c^1 + q_c^2 = \frac{2(a - c)}{3}</script></li>
+<li><p><strong>市场价格</strong>：</p>
+<script type="math/tex; mode=display">
+p_c = \frac{a + 2c}{3}</script></li>
+<li><p><strong>企业均衡收益</strong>：</p>
+<p>每个企业的均衡收益为：</p>
+<script type="math/tex; mode=display">
+u_c^1 = u_c^2 = \frac{(a - c)^2}{9}</script></li>
+</ul>
+<h2 id="3-斯坦科尔伯格模型（Stackelberg-Model）"><a href="#3-斯坦科尔伯格模型（Stackelberg-Model）" class="headerlink" title="3. 斯坦科尔伯格模型（Stackelberg Model）"></a>3. 斯坦科尔伯格模型（Stackelberg Model）</h2><ul>
+<li><p><strong>均衡产量</strong>：</p>
+<ul>
+<li><p>领导企业的均衡产量：</p>
+<script type="math/tex; mode=display">
+q_s^1 = \frac{a - c}{2}</script></li>
+</ul>
+</li>
+<li><p>跟随企业的均衡产量</p>
+<script type="math/tex; mode=display">
+q_s^2 = \frac{a - c}{4}</script></li>
+<li><p><strong>总供给</strong>：</p>
+<script type="math/tex; mode=display">
+Q_s = q_s^1 + q_s^2 = \frac{3(a - c)}{4}</script></li>
+<li><p><strong>市场价格</strong>：</p>
+<script type="math/tex; mode=display">
+p_s = \frac{a + 3c}{4}</script><p>其中</p>
+</li>
+<li><p><strong>企业均衡收益</strong>：</p>
+<ul>
+<li><p>领导企业的均衡收益：</p>
+<script type="math/tex; mode=display">
+u_s^1 = \frac{(a - c)^2}{8}</script></li>
+</ul>
+</li>
+<li><p>跟随企业的均衡收益： </p>
+<script type="math/tex; mode=display">
+u_s^2 = \frac{(a - c)^2}{16}</script></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>模型</strong></th>
+<th><strong>均衡产量</strong></th>
+<th><strong>总供给</strong></th>
+<th><strong>市场价格</strong></th>
+<th><strong>企业收益</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>完全垄断</strong></td>
+<td>$q_s = \frac{a - c}{2}$</td>
+<td>$Q_m = \frac{a - c}{2}$</td>
+<td>$p_m = \frac{a + c}{2}$</td>
+<td>$u_m = \frac{(a - c)^2}{8}$</td>
+</tr>
+<tr>
+<td><strong>古诺模型</strong></td>
+<td>$q_c^1 = q_c^2 = \frac{a - c}{3}$</td>
+<td>$Q_c = \frac{2(a - c)}{3}$</td>
+<td>$p_c = \frac{a + 2c}{3}$</td>
+<td>$u_c^1 = u_c^2 = \frac{(a - c)^2}{9}$</td>
+</tr>
+<tr>
+<td><strong>斯坦科尔伯格</strong></td>
+<td>$q_s^1 = \frac{a - c}{2}, q_s^2 = \frac{a - c}{4}$</td>
+<td>$Q_s = \frac{3(a - c)}{4}$</td>
+<td>$p_s = \frac{a + 3c}{4}$</td>
+<td>$u_s^1 = \frac{(a - c)^2}{8}, u_s^2 = \frac{(a - c)^2}{16}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="不完全信息静态博弈"><a href="#不完全信息静态博弈" class="headerlink" title="不完全信息静态博弈"></a>不完全信息静态博弈</h1><p>不完全信息静态博弈是指参与人对某些博弈参数（如对手的支付函数、策略空间等）缺乏完整了解的博弈模型。参与人通过<strong>信念</strong>来描述不确定性，并基于贝叶斯法则更新和优化其策略。</p>
+<h2 id="海萨尼转换-Harsanyi-Transformation"><a href="#海萨尼转换-Harsanyi-Transformation" class="headerlink" title="海萨尼转换(Harsanyi Transformation)"></a>海萨尼转换(Harsanyi Transformation)</h2><p>海萨尼转换是一种将不完全信息博弈转化为完全但不完美信息博弈的方法。通过引入<strong>类型(Type)</strong>的概念，将参与人的不确定性量化为不同类型，并赋予每种类型对应的概率分布。</p>
+<p>引入虚拟的参与人-“自然”(𝒏𝒂𝒕𝒖𝒓𝒆)；自然首先行动决定参与人的特征(成本函数)，参与人知道自己的特征，其他参与人不知道。这样，上述不完全信息博弈就转换为完全但不完美信息博弈。</p>
+<ul>
+<li><p>“自然”先为其他每个参与人抽取他们的类型，抽取的这些类型构成类型向量。</p>
+</li>
+<li><p>“自然”让每个参与人知道自己的类型，但却不让其他参与人知道。</p>
+</li>
+<li><p>除“自然”以外的其他参与人同时从各自的行为空间中选择行动方<br>案。</p>
+</li>
+</ul>
+<h2 id="不完全信息静态博弈的表述"><a href="#不完全信息静态博弈的表述" class="headerlink" title="不完全信息静态博弈的表述"></a>不完全信息静态博弈的表述</h2><p>在不完全信息静态博弈中，参与人的行动空间可能取决于其类型，即行动空间是<strong>类型依存的（type-contingent）</strong>。这种特性反映了参与人根据自己掌握的信息做出的有限选择。</p>
+<script type="math/tex; mode=display">
+G = \{A_1, A_2, \dots, A_n; T_1, T_2, \dots, T_n; p_1, p_2, \dots, p_n; u_1, u_2, \dots, u_n\}</script><p>其中：</p>
+<ul>
+<li><p>$ A_i $：参与人 $ i $ 的类型依存行动空间。</p>
+</li>
+<li><p>$ T_i $：参与人 $ i $ 的类型集合。</p>
+</li>
+<li><p>$ p<em>i(t</em>{-i} / t<em>i) $：给定 $ t_i $ 时，关于 $ t</em>{-i} $ 的条件概率分布。</p>
+</li>
+<li><p>$ u<em>i(a_i, a</em>{-i}; t<em>i, t</em>{-i}) $：参与人 $ i $ 的支付函数，依赖于其行动 $ a<em>i $、对手的行动 $ a</em>{-i} $ 和所有人的类型。</p>
+</li>
+</ul>
+<p><strong>条件概率分布</strong>：</p>
+<script type="math/tex; mode=display">
+p_i(t_{-i} / t_i) = \frac{p(t_{-i}, t_i)}{\sum_{t'_{-i} \in T_{-i}} p(t'_{-i}, t_i)}</script><p><strong>期望效用函数</strong></p>
+<p>给定类型 $t_i$ 和行动 $a_i$，参与人 $i$ 的期望效用为：</p>
+<script type="math/tex; mode=display">
+v_i = \sum_{t_{-i} \in T_{-i}} p_i(t_{-i} / t_i) \cdot u_i(a_i(t_i), a_{-i}(t_{-i}); t_i, t_{-i})</script><h2 id="贝叶斯纳什均衡-Bayesian-Nash-Equilibrium"><a href="#贝叶斯纳什均衡-Bayesian-Nash-Equilibrium" class="headerlink" title="贝叶斯纳什均衡(Bayesian Nash Equilibrium)"></a>贝叶斯纳什均衡(Bayesian Nash Equilibrium)</h2><p>贝叶斯纳什均衡是指在不完全信息博弈中，每个参与人的策略 $s_i^*(t_i)$ 在给定其类型 $t_i$ 和对其他人策略及类型分布的信念下，最大化其期望支付。</p>
+<script type="math/tex; mode=display">
+\mathbb{E}_{t_{-i}} \big[ u_i(s_i^*(t_i), s_{-i}(t_{-i}), t_i, t_{-i}) \big]
+
+\geq
+
+\mathbb{E}_{t_{-i}} \big[ u_i(s_i', s_{-i}(t_{-i}), t_i, t_{-i}) \big]</script><p>其中，</p>
+<ul>
+<li><p>$ s_i^* (t_i) $：类型为 $t_i$ 时的最优策略。</p>
+</li>
+<li><p>$ t_{-i} $：其他参与人的类型。</p>
+</li>
+<li><p>$ u_i $：参与人 $i$ 的支付函数。</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+s^* = (s_1^*(t_1), s_2^*(t_2), \dots, s_n^*(t_n))</script><script type="math/tex; mode=display">
+s_i^*(t_i) = \arg \max_{s_i \in A_i(s_i)} \sum_{t_{-i} \in T_{-i}} p_i(t_{-i} / t_i) \cdot u_i(s_i, s_{-i}^*(t_{-i}); t_i, t_{-i})</script><p><br></p>
+<ol>
+<li><p>参与人基于对对手类型的信念选择最优策略。</p>
+</li>
+<li><p>每种类型的参与人均选择相互最优的策略。</p>
+</li>
+</ol>
+<h2 id="机制设计与揭示原理"><a href="#机制设计与揭示原理" class="headerlink" title="机制设计与揭示原理"></a>机制设计与揭示原理</h2><h3 id="直接机制"><a href="#直接机制" class="headerlink" title="直接机制"></a>直接机制</h3><p>直接机制是一种机制设计方法，要求参与人直接报告其私有信息（如类型），机制设计者根据报告的类型分配资源或确定支付。</p>
+<p><strong>形式</strong>：</p>
+<ul>
+<li><p>每个参与人报告类型 $\hat{t}_i$。</p>
+</li>
+<li><p>机制设计者基于$\hat{t}_i$决定结果 $ a(\hat{t}) $ 和支付规则 $ p_i(\hat{t}) $。</p>
+</li>
+</ul>
+<p>如果所设计的直接机制能使得各投标人讲真话为贝叶斯纳什均衡，则称这个直接机制为“鼓励—响应”的。</p>
+<p>如果存在某个间接机制 $ M $ 达成目标，则一定存在一个直接机制 $ M’ $，使参与人诚实报告类型 $ t_i $ 是其最优策略。</p>
+<h3 id="揭示原理"><a href="#揭示原理" class="headerlink" title="揭示原理"></a>揭示原理</h3><p>任何机制设计问题都可以被等效地转化为一个直接机制问题，其中参与人会诚实地报告其类型。任何贝叶斯博弈的任何贝叶斯纳什均衡都可以被一个“鼓<br>励-响应”的直接机制“代表”。</p>
+<h2 id="贝叶斯博弈与混合战略均衡"><a href="#贝叶斯博弈与混合战略均衡" class="headerlink" title="贝叶斯博弈与混合战略均衡"></a>贝叶斯博弈与混合战略均衡</h2><p>贝叶斯博弈是指参与人存在类型不确定性且可能使用混合策略的不完全信息博弈。</p>
+<h3 id="纯化定理"><a href="#纯化定理" class="headerlink" title="纯化定理"></a>纯化定理</h3><p><u>完全信息静态博弈中的一个混合战略博弈几乎总是可以被解释成一个有少量不完全信息的近似博弈的一个纯战略贝叶斯纳什均衡。</u></p>
+<p>即，一个混合战略纳什均衡的根本特征不是参与人以随机的方法选择战略（即行为），而是各参与人对其他参与人的选择不能确定，这种不确定性既可以是随机性引起，也可以是少量信息的不完全性引起。</p>
+<h1 id="不完全信息动态博弈"><a href="#不完全信息动态博弈" class="headerlink" title="不完全信息动态博弈"></a>不完全信息动态博弈</h1><p>不完全信息动态博弈是指参与人对博弈的某些信息（如对手的支付函数、类型等）存在不完全了解，但随着博弈的进行可以<u>通过观察对手的行为逐渐更新信念</u>。博弈的分析通常依赖于贝叶斯法则和精炼贝叶斯均衡。</p>
+<p>“自然”首先选择参与人的类型，参与人自己知道，其他参与人不知道；之后参与人开始先后行动，后行动者能观测到先行动者的行动，但不能观测到先行动者的类型。</p>
+<p>参与人的行动是类型依存的，后行动者可通过观察先行动者所选择的行动来推断其类型或修正对其类型的先验信念(概率分布)，然后选择最优行动。</p>
+<p>先行动者预测到自己的行动将被后行动者所利用，就会设法选择传递对自己最有利的信息。</p>
+<h2 id="贝叶斯法则"><a href="#贝叶斯法则" class="headerlink" title="贝叶斯法则"></a>贝叶斯法则</h2><p>先验概率：</p>
+<script type="math/tex; mode=display">
+P(\theta^k)，\sum_{k=1}^{K}P(\theta^k) = 1</script><p>条件概率：</p>
+<script type="math/tex; mode=display">
+P(a^h | \theta^k)， \sum_{k=1}^{K}P(a^h | \theta^k) = 1</script><p>边缘概率：</p>
+<script type="math/tex; mode=display">
+P(a^h) = \sum_{k=1}^{K}P(\theta^k) \cdot P(a^h | \theta^k) = 1</script><p>后验概率：</p>
+<script type="math/tex; mode=display">
+P(\theta^k | a^h) = \frac{P(\theta^k) \cdot P(a^h | \theta^k)}{P(a^h)}</script><h2 id="精炼贝叶斯均衡"><a href="#精炼贝叶斯均衡" class="headerlink" title="精炼贝叶斯均衡"></a>精炼贝叶斯均衡</h2><ul>
+<li><p>在每一个信息集上，决策者必须有一个定义在属于该信息集的所有决策结上的一个概率分布(信念)</p>
+</li>
+<li><p>给定该信息集上的概率分布和其他参与人的后续战略，参与人的行动必须是最优的</p>
+</li>
+<li><p>每一个参与人根据贝叶斯法则和均衡战略修正后验概率</p>
+</li>
+</ul>
+<p>精炼贝叶斯均衡是一个战略组合 $s(\theta) = [s_1(\theta_1), \dots, s_n(\theta_n)]$ 和后验概率组合 $\tilde{p} = (\tilde{p}_1, \dots, \tilde{p}_n)$，满足以下两个条件：</p>
+<script type="math/tex; mode=display">
+s_i^*(s_{-i}, \theta_i) \in \arg \max_{s_i} \sum_{\theta_{-i}} \tilde{p}_i(\theta_{-i} | a_{-i}) \cdot u_i(s_i, s_{-i}, \theta_i)</script><script type="math/tex; mode=display">
+\tilde{p}_i(\theta_{-i} | a_{-i}) = \frac{p(\theta_{-i} | \theta_i) \cdot P(a_{-i} | \theta_{-i}, s_{-i}^*)}{\sum_{\theta_{-i}'} p(\theta_{-i}' | \theta_i) \cdot P(a_{-i} | \theta_{-i}', s_{-i}^*)}</script><p>在每一信息集中，应该行动的参与人必须对博弈进行到该信息集中的哪个节有一个推断。对于非单节信息集，推断是在信息集中不同节点的一个概率分布；对于单节的信息集，参与人的推断就是到达单一决策节的概率为1。</p>
+<p>给定参与人的推断，参与人的战略必须满足序贯理性的要求，即在每一个信息集中应该行动的参与人(以及参与人随后的战略)，对于给定的该参与人在此信息集中的推断，以及其他参与人随后的战略必须是最优反应。</p>
+<p>在处于均衡路径之上的信息集中，推断由贝叶斯法则及参与人的均衡战略给出；对处于均衡路径之外的信息集，推断由贝叶斯法则以及可能情况下的参与人的均衡战略决定。</p>
+<blockquote>
+<p>对于一个扩展式博弈中给定的均衡，如果博弈根据均衡战略进行时将以正的概率达到某信息集，称此信息集处于均衡路径之上。</p>
+</blockquote>
+<h2 id="信号传递博弈"><a href="#信号传递博弈" class="headerlink" title="信号传递博弈"></a>信号传递博弈</h2><h3 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h3><ol>
+<li><p>“自然”首先为参与人1（发送方）选择一个类型 $\theta \in \Theta$，类型空间为： </p>
+<script type="math/tex; mode=display">
+\Theta = {\theta_1, \theta_2, \dots, \theta_k}</script><ul>
+<li><p>参与人1知道自己的类型 \theta，但参与人2不知道。</p>
+</li>
+<li><p>参与人2仅知道类型的先验概率分布 $p = {p<em>{\theta_1}, p</em>{\theta<em>2}, \dots, p</em>{\theta_k}}$，满足：</p>
+<script type="math/tex; mode=display">
+\sum_{k} p({\theta_k}) = 1</script></li>
+</ul>
+</li>
+<li><p>参与人1在观察到自己的类型 $\theta$ 后，选择发送一个信号 $m \in M$。</p>
+<p>信号空间为：</p>
+<script type="math/tex; mode=display">
+M = \{m_1, m_2, \dots, m_j\}</script></li>
+<li><p>参与人2观察到信号 $m$ 后，通过贝叶斯法则更新关于 $\theta$ 的信念，得到后验概率 $\tilde{p}(\theta | m)$。接收方随后根据后验概率选择一个行动 $a \in A$，其中行动空间为： </p>
+<script type="math/tex; mode=display">
+A = \{a_1, a_2, \dots, a_H\}</script></li>
+</ol>
+<ol>
+<li><p>两位参与人的支付函数分别为： </p>
+<ul>
+<li><p>发送方（参与人1）： </p>
+<script type="math/tex; mode=display">
+\mu_1(m, a, \theta)</script></li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>接收方（参与人2）：</p>
+<script type="math/tex; mode=display">
+\mu_2(m, a, \theta)</script></li>
+</ul>
+<h3 id="信号传递博弈的精炼贝叶斯均衡"><a href="#信号传递博弈的精炼贝叶斯均衡" class="headerlink" title="信号传递博弈的精炼贝叶斯均衡"></a>信号传递博弈的精炼贝叶斯均衡</h3><p>是一个策略组合 $(m^<em>(\theta), a^</em>(m))$ 和后验概率分布 $\tilde{p}(\theta | m)$ 的集合。</p>
+<h4 id="接收方的最优策略"><a href="#接收方的最优策略" class="headerlink" title="接收方的最优策略"></a>接收方的最优策略</h4><p>给定信号 $ m $ 和更新后的信念 $ \tilde{p}(\theta | m) $，接收方 $ a^*(m) $ 选择最大化其期望支付的行动：</p>
+<script type="math/tex; mode=display">
+a^*(m) \in \arg \max_a \sum_{\theta} \tilde{p}(\theta | m) \cdot \mu_2(m, a, \theta)</script><h4 id="发送方的最优策略"><a href="#发送方的最优策略" class="headerlink" title="发送方的最优策略"></a>发送方的最优策略</h4><p>给定接收方的策略 $ a^<em>(m) $，发送方 $ m^</em>(\theta) $ 选择最大化自身支付的信号：</p>
+<script type="math/tex; mode=display">
+m^*(\theta) \in \arg \max_m \mu_1(m, a^*(m), \theta)</script><h4 id="信念更新"><a href="#信念更新" class="headerlink" title="信念更新"></a>信念更新</h4><p>接收方的后验概率 $ \tilde{p}(\theta | m) $ 是根据贝叶斯法则，从先验概率 $ p(\theta) $、观测信号 $ m $、以及发送方的最优策略 $ m^*(\theta) $ 计算得出的：</p>
+<script type="math/tex; mode=display">
+\tilde{p}(\theta | m) = \frac{p(\theta) \cdot P(m | \theta, m^*(\theta))}{\sum_{\theta' \in \Theta} p(\theta') \cdot P(m | \theta', m^*(\theta'))}</script><p>其中：</p>
+<ul>
+<li>$ P(m | \theta, m^<em>(\theta)) $ 是在类型为 $ \theta $ 且发送最优信号 $ m^</em>(\theta) $ 时，信号 $ m $ 被发送的概率。</li>
+</ul>
+<h3 id="均衡类型"><a href="#均衡类型" class="headerlink" title="均衡类型"></a>均衡类型</h3><ol>
+<li><p>分离均衡（Separating Equilibrium）</p>
+<p>不同类型的发送方以概率 1 选择不同的信号。</p>
+</li>
+<li><p>混同均衡（Pooling Equilibrium）</p>
+<p>混同均衡是指所有类型的发送方选择相同的信号 $m$，接收方无法区分发送方的类型。</p>
+</li>
+<li><p>准分离均衡（Semi-separating Equilibrium）</p>
+<p>一种介于分离均衡和混同均衡之间的情况，不同类型的发送方以一定的概率选择不同的信号。</p>
+</li>
+</ol>
+<h1 id="演化博弈"><a href="#演化博弈" class="headerlink" title="演化博弈"></a>演化博弈</h1><p>演化博弈研究策略在长期互动中通过自然选择或学习过程的动态变化。与经典博弈论不同，它<u>关注个体的适应性而非完全理性</u>。演化博弈广泛应用于生物学、经济学和人工智能等领域。</p>
+<ol>
+<li><p>强调策略的适应性；</p>
+</li>
+<li><p>通过群体互动决定策略的成败；</p>
+</li>
+<li><p>采用动态方法分析策略的稳定性。</p>
+</li>
+</ol>
+<h2 id="动态调整机制"><a href="#动态调整机制" class="headerlink" title="动态调整机制"></a>动态调整机制</h2><h3 id="最优反应动态"><a href="#最优反应动态" class="headerlink" title="最优反应动态"></a>最优反应动态</h3><p>最优反应动态描述参与人如何调整策略以逐步接近最优策略。假设参与人选择的策略为 x_i，其最优反应为 $BR_i$，则策略的动态变化为：</p>
+<script type="math/tex; mode=display">
+\dot{x}_i = \lambda \cdot \left[ BR_i - x_i \right]</script><p>其中：</p>
+<ul>
+<li>$BR_i$：策略 <script type="math/tex">i</script> 的最优反应，满足：</li>
+</ul>
+<script type="math/tex; mode=display">
+BR_i \in \arg \max_{x_i} u(x_i, x_{-i})</script><ul>
+<li>$\lambda$：调整速度。</li>
+</ul>
+<h3 id="复制动态"><a href="#复制动态" class="headerlink" title="复制动态"></a>复制动态</h3><p>复制动态描述了群体中策略的比例如何随着适应性变化。假设群体中有 $n$ 种策略，每种策略的比例为 $x_i$，其适应性为 $u_i$，则策略 $i$ 的动态变化由以下方程描述：</p>
+<script type="math/tex; mode=display">
+\dot{x}_i = x_i \cdot \left[ u_i - \bar{u} \right]</script><p>其中：</p>
+<ul>
+<li><p>$\dot{x}_i$：策略 <script type="math/tex">i</script> 的比例变化率；</p>
+</li>
+<li><p>$u_i$：策略 <script type="math/tex">i</script> 的收益；</p>
+</li>
+<li><p>$\bar{u} = \sum_{i=1}^n x_i u_i$：群体的平均收益。</p>
+</li>
+<li><p>当 $u_i &gt; \bar{u}$ 时，策略 $i$ 的比例增加；</p>
+</li>
+<li><p>当 $u_i &lt; \bar{u}$ 时，策略 $i$ 的比例减少。</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/11/16/AI/%E5%8D%9A%E5%BC%88%E8%AE%BA%E5%9F%BA%E7%A1%80/">http://shaohleon.github.io/2024/11/16/AI/博弈论基础/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/">博弈论</a></div><div class="post-share"><div class="social-share" data-image="/images/background/GEM25.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/11/10/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学"><img class="cover" src="/images/background/GEM30.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">四、数字形态学</div></div></a><a class="next-post pull-right" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img class="cover" src="/images/background/GEM24.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">常见英文缩写</div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%9A%E5%BC%88%E8%AE%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">博弈论的基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E4%BF%A1%E6%81%AF%E9%9D%99%E6%80%81%E5%8D%9A%E5%BC%88"><span class="toc-number">2.</span> <span class="toc-text">完全信息静态博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%A0%E4%BC%98%E6%88%98%E7%95%A5%E5%8F%8A%E5%8D%A0%E4%BC%98%E6%88%98%E7%95%A5%E5%9D%87%E8%A1%A1"><span class="toc-number">2.1.</span> <span class="toc-text">占优战略及占优战略均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%A0%E4%BC%98%E6%88%98%E7%95%A5"><span class="toc-number">2.1.1.</span> <span class="toc-text">占优战略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E5%89%94%E9%99%A4%E7%9A%84%E5%8D%A0%E4%BC%98%E6%88%98%E7%95%A5%E5%9D%87%E8%A1%A1"><span class="toc-number">2.1.2.</span> <span class="toc-text">重复剔除的占优战略均衡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1-Nash-Equilibrium-NE"><span class="toc-number">2.2.</span> <span class="toc-text">纳什均衡(Nash Equilibrium,NE)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%8F%8D%E5%BA%94-Best-Response"><span class="toc-number">2.2.1.</span> <span class="toc-text">最佳反应(Best Response)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1"><span class="toc-number">2.2.2.</span> <span class="toc-text">纳什均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%92%E7%BA%BF%E6%B3%95%E5%AF%BB%E6%89%BE%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1"><span class="toc-number">2.2.3.</span> <span class="toc-text">划线法寻找纳什均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%87%E8%A1%A1%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="toc-number">2.2.4.</span> <span class="toc-text">均衡的稳定性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%87%E8%A1%A1%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7"><span class="toc-number">2.2.5.</span> <span class="toc-text">均衡的存在性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1%E4%B8%8E%E5%8D%A0%E4%BC%98%E6%88%98%E7%95%A5%E5%9D%87%E8%A1%A1%E5%8F%8A%E9%87%8D%E5%A4%8D%E5%89%94%E9%99%A4%E7%9A%84%E5%8D%A0%E4%BC%98%E5%9D%87%E8%A1%A1"><span class="toc-number">2.2.6.</span> <span class="toc-text">纳什均衡与占优战略均衡及重复剔除的占优均衡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E6%88%98%E7%95%A5-mixed-strategy"><span class="toc-number">2.3.</span> <span class="toc-text">混合战略(mixed strategy)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E6%88%98%E7%95%A5%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1%E7%9A%84%E6%B1%82%E8%A7%A3"><span class="toc-number">2.3.1.</span> <span class="toc-text">混合战略纳什均衡的求解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E4%BF%A1%E6%81%AF%E5%8A%A8%E6%80%81%E5%8D%9A%E5%BC%88"><span class="toc-number">3.</span> <span class="toc-text">完全信息动态博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E5%BC%8F%E8%A1%A8%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">扩展式表述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%90%E5%8D%9A%E5%BC%88"><span class="toc-number">3.2.</span> <span class="toc-text">子博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E5%8D%9A%E5%BC%88%E7%B2%BE%E7%82%BC%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1-sub-game-perfect-Nash-equilibrium%EF%BC%8CSPNE"><span class="toc-number">3.2.1.</span> <span class="toc-text">子博弈精炼纳什均衡(sub game perfect Nash equilibrium，SPNE)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%86%E6%8E%A8%E5%BD%92%E7%BA%B3%E6%B3%95%E6%B1%82%E8%A7%A3SPNE"><span class="toc-number">3.2.2.</span> <span class="toc-text">逆推归纳法求解SPNE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E5%8D%9A%E5%BC%88"><span class="toc-number">3.3.</span> <span class="toc-text">重复博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E9%99%90%E6%AC%A1%E9%87%8D%E5%A4%8D%E5%8D%9A%E5%BC%88"><span class="toc-number">3.3.1.</span> <span class="toc-text">有限次重复博弈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E9%99%90%E6%AC%A1%E9%87%8D%E5%A4%8D%E5%8D%9A%E5%BC%88"><span class="toc-number">3.3.2.</span> <span class="toc-text">无限次重复博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%B6%E7%9B%8A"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">收益</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%88%98%E7%95%A5-Trigger-Strateg"><span class="toc-number">3.3.2.2.</span> <span class="toc-text">触发战略(Trigger Strateg)</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%82%E5%9C%BA%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">市场模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E5%9E%84%E6%96%AD%E6%A8%A1%E5%9E%8B"><span class="toc-number">4.1.</span> <span class="toc-text">完全垄断模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8F%A4%E8%AF%BA%E6%A8%A1%E5%9E%8B%EF%BC%88Cournot-Model%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 古诺模型（Cournot Model）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%96%AF%E5%9D%A6%E7%A7%91%E5%B0%94%E4%BC%AF%E6%A0%BC%E6%A8%A1%E5%9E%8B%EF%BC%88Stackelberg-Model%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">3. 斯坦科尔伯格模型（Stackelberg Model）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8D%E5%AE%8C%E5%85%A8%E4%BF%A1%E6%81%AF%E9%9D%99%E6%80%81%E5%8D%9A%E5%BC%88"><span class="toc-number">5.</span> <span class="toc-text">不完全信息静态博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%B7%E8%90%A8%E5%B0%BC%E8%BD%AC%E6%8D%A2-Harsanyi-Transformation"><span class="toc-number">5.1.</span> <span class="toc-text">海萨尼转换(Harsanyi Transformation)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%AE%8C%E5%85%A8%E4%BF%A1%E6%81%AF%E9%9D%99%E6%80%81%E5%8D%9A%E5%BC%88%E7%9A%84%E8%A1%A8%E8%BF%B0"><span class="toc-number">5.2.</span> <span class="toc-text">不完全信息静态博弈的表述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1-Bayesian-Nash-Equilibrium"><span class="toc-number">5.3.</span> <span class="toc-text">贝叶斯纳什均衡(Bayesian Nash Equilibrium)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E5%88%B6%E8%AE%BE%E8%AE%A1%E4%B8%8E%E6%8F%AD%E7%A4%BA%E5%8E%9F%E7%90%86"><span class="toc-number">5.4.</span> <span class="toc-text">机制设计与揭示原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%9C%BA%E5%88%B6"><span class="toc-number">5.4.1.</span> <span class="toc-text">直接机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%AD%E7%A4%BA%E5%8E%9F%E7%90%86"><span class="toc-number">5.4.2.</span> <span class="toc-text">揭示原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%8D%9A%E5%BC%88%E4%B8%8E%E6%B7%B7%E5%90%88%E6%88%98%E7%95%A5%E5%9D%87%E8%A1%A1"><span class="toc-number">5.5.</span> <span class="toc-text">贝叶斯博弈与混合战略均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%AF%E5%8C%96%E5%AE%9A%E7%90%86"><span class="toc-number">5.5.1.</span> <span class="toc-text">纯化定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8D%E5%AE%8C%E5%85%A8%E4%BF%A1%E6%81%AF%E5%8A%A8%E6%80%81%E5%8D%9A%E5%BC%88"><span class="toc-number">6.</span> <span class="toc-text">不完全信息动态博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95%E5%88%99"><span class="toc-number">6.1.</span> <span class="toc-text">贝叶斯法则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%BE%E7%82%BC%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9D%87%E8%A1%A1"><span class="toc-number">6.2.</span> <span class="toc-text">精炼贝叶斯均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E4%BC%A0%E9%80%92%E5%8D%9A%E5%BC%88"><span class="toc-number">6.3.</span> <span class="toc-text">信号传递博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">6.3.1.</span> <span class="toc-text">基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E4%BC%A0%E9%80%92%E5%8D%9A%E5%BC%88%E7%9A%84%E7%B2%BE%E7%82%BC%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%9D%87%E8%A1%A1"><span class="toc-number">6.3.2.</span> <span class="toc-text">信号传递博弈的精炼贝叶斯均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A5%E6%94%B6%E6%96%B9%E7%9A%84%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="toc-number">6.3.2.1.</span> <span class="toc-text">接收方的最优策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E6%96%B9%E7%9A%84%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5"><span class="toc-number">6.3.2.2.</span> <span class="toc-text">发送方的最优策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E5%BF%B5%E6%9B%B4%E6%96%B0"><span class="toc-number">6.3.2.3.</span> <span class="toc-text">信念更新</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9D%87%E8%A1%A1%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.3.3.</span> <span class="toc-text">均衡类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%94%E5%8C%96%E5%8D%9A%E5%BC%88"><span class="toc-number">7.</span> <span class="toc-text">演化博弈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4%E6%9C%BA%E5%88%B6"><span class="toc-number">7.1.</span> <span class="toc-text">动态调整机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BC%98%E5%8F%8D%E5%BA%94%E5%8A%A8%E6%80%81"><span class="toc-number">7.1.1.</span> <span class="toc-text">最优反应动态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%8A%A8%E6%80%81"><span class="toc-number">7.1.2.</span> <span class="toc-text">复制动态</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git基础"/></a><div class="content"><a class="title" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础">Git基础</a><time datetime="2025-03-23T02:31:01.394Z" title="Updated 2025-03-23 10:31:01">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch"><img src="/images/background/GEM25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中conda安装显卡驱动、CUDA、pytorch"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch">Ubuntu中conda安装显卡驱动、CUDA、pytorch</a><time datetime="2025-03-23T02:10:16.678Z" title="Updated 2025-03-23 10:10:16">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境"><img src="/images/background/GEM29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中配置TensorFlow环境"/></a><div class="content"><a class="title" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境">Ubuntu中配置TensorFlow环境</a><time datetime="2025-03-23T02:09:39.880Z" title="Updated 2025-03-23 10:09:39">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中安装配置anaconda"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda">Ubuntu中安装配置anaconda</a><time datetime="2025-03-17T08:32:55.906Z" title="Updated 2025-03-17 16:32:55">2025-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img src="/images/background/GEM24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见英文缩写"/></a><div class="content"><a class="title" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写">常见英文缩写</a><time datetime="2024-12-16T08:03:08.272Z" title="Updated 2024-12-16 16:03:08">2024-12-16</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

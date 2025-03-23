@@ -1,0 +1,435 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Ubuntu中conda安装显卡驱动、CUDA、pytorch | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="环境：Ubuntu20.04 x86_64、 anaconda  安装显卡驱动 显卡驱动（GPU driver）是操作系统与显卡硬件之间的一种软件接口，它负责管理和控制计算机中的图形处理器（GPU），是一种底层软件。显卡驱动的主要作用是使操作系统和应用程序能够正确使用显卡的硬件资源，从而处理和显示图形、加速渲染和视频输出等任务。 显卡驱动的主要功能：  与硬件通信：显卡驱动是显卡硬件与操作系统之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu中conda安装显卡驱动、CUDA、pytorch">
+<meta property="og:url" content="http://shaohleon.github.io/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="环境：Ubuntu20.04 x86_64、 anaconda  安装显卡驱动 显卡驱动（GPU driver）是操作系统与显卡硬件之间的一种软件接口，它负责管理和控制计算机中的图形处理器（GPU），是一种底层软件。显卡驱动的主要作用是使操作系统和应用程序能够正确使用显卡的硬件资源，从而处理和显示图形、加速渲染和视频输出等任务。 显卡驱动的主要功能：  与硬件通信：显卡驱动是显卡硬件与操作系统之">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM25.jpg">
+<meta property="article:published_time" content="2024-10-21T08:19:59.000Z">
+<meta property="article:modified_time" content="2025-03-23T02:10:16.678Z">
+<meta property="article:author" content="Leon">
+<meta property="article:tag" content="Ubuntu环境配置">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM25.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ubuntu中conda安装显卡驱动、CUDA、pytorch',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-23 10:10:16'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Ubuntu中conda安装显卡驱动、CUDA、pytorch</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Ubuntu中conda安装显卡驱动、CUDA、pytorch</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-10-21T08:19:59.000Z" title="Created 2024-10-21 16:19:59">2024-10-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-03-23T02:10:16.678Z" title="Updated 2025-03-23 10:10:16">2025-03-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Python/">Python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>8mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>环境：Ubuntu20.04 x86_64、 anaconda</p>
+</blockquote>
+<h2 id="安装显卡驱动"><a href="#安装显卡驱动" class="headerlink" title="安装显卡驱动"></a>安装显卡驱动</h2><blockquote>
+<p>显卡驱动（GPU driver）是操作系统与显卡硬件之间的一种软件接口，它负责管理和控制计算机中的图形处理器（GPU），<mark>是一种底层软件</mark>。显卡驱动的主要作用是使操作系统和应用程序能够正确使用显卡的硬件资源，从而处理和显示图形、加速渲染和视频输出等任务。</p>
+<p>显卡驱动的主要功能：</p>
+<ol>
+<li><p><strong>与硬件通信</strong>：<br>显卡驱动是显卡硬件与操作系统之间的“桥梁”。它向操作系统提供一套标准化的指令，使操作系统能够利用显卡硬件执行图形任务，比如 3D 渲染、视频解码等。</p>
+</li>
+<li><p><strong>图形加速</strong>：<br>显卡驱动通过调用 GPU 的硬件加速功能，显著提升图形渲染性能，尤其是对 3D 应用程序和视频的处理。它能够将复杂的图形任务交给 GPU 专门的硬件来执行，而不是让 CPU 完全负责。</p>
+</li>
+<li><p><strong>显示设置和管理</strong>：<br>驱动程序管理和控制显示器的分辨率、刷新率、颜色深度等参数，并支持多显示器配置。在驱动程序中，你可以调整显示器的布局、旋转方向等。</p>
+</li>
+<li><p><strong>优化性能</strong>：<br>显卡驱动通常会根据具体硬件做优化，使得系统能够以最高效的方式使用显卡的资源。制造商（如 NVIDIA 或 AMD）会发布驱动更新，修复问题或优化针对特定游戏、软件的性能。</p>
+</li>
+<li><p><strong>兼容性</strong>：<br>驱动程序确保操作系统与显卡硬件的兼容性，提供 API（如 OpenGL、DirectX、Vulkan）的支持，允许开发人员编写图形应用程序，并且让用户能够运行这些应用程序。</p>
+</li>
+</ol>
+<p>常见的显卡驱动类型：</p>
+<ol>
+<li><p><strong>厂商驱动（Proprietary Drivers）</strong>：<br>这些是由显卡制造商（如 NVIDIA、AMD 或 Intel）开发并发布的专有驱动程序。它们通常是闭源的，性能优化和硬件支持更好，尤其是在处理图形密集型任务（如游戏、3D 渲染）时表现更佳。</p>
+<ul>
+<li>例如：NVIDIA 的 <code>nvidia-driver-535</code>、AMD 的 <code>amdgpu-pro</code>。</li>
+</ul>
+</li>
+<li><p><strong>开源驱动（Open-Source Drivers）</strong>：<br>开源社区为某些显卡开发了免费的驱动程序，它们是开源的，可以由用户修改和改进。尽管这些驱动程序的性能有时不如厂商的闭源驱动，但它们在开源操作系统（如 Linux）中使用广泛，并且由社区进行长期维护。</p>
+<ul>
+<li>例如：NVIDIA 的开源驱动 <code>nouveau</code>、AMD 的 <code>amdgpu</code>。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h3 id="更新软件包"><a href="#更新软件包" class="headerlink" title="更新软件包"></a>更新软件包</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> add-apt-repository ppa:graphics-drivers/ppa  <span class="comment"># 加入官方ppa源</span></span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> apt update  <span class="comment"># 检查软件包更新列表</span></span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> apt upgrade  <span class="comment"># 更新所有可更新的软件包</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="检查可选驱动"><a href="#检查可选驱动" class="headerlink" title="检查可选驱动"></a>检查可选驱动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">ubuntu-drivers devices</span> </span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">我的结果：</span><br><span class="line">ubuntu-drivers devices</span><br><span class="line">== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==</span><br><span class="line">modalias : pci:v000010DEd00002560sv000017AAsd00003AE8bc03sc00i00</span><br><span class="line">vendor   : NVIDIA Corporation</span><br><span class="line">driver   : nvidia-driver-470 - distro non-free</span><br><span class="line">driver   : nvidia-driver-535-server - distro non-free</span><br><span class="line">driver   : nvidia-driver-535-server-open - distro non-free</span><br><span class="line">driver   : nvidia-driver-470-server - distro non-free</span><br><span class="line">driver   : nvidia-driver-535 - distro non-free recommended</span><br><span class="line">driver   : nvidia-driver-535-open - distro non-free</span><br><span class="line">driver   : xserver-xorg-video-nouveau - distro free builtin</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><p><strong>distro</strong>: 代表你的 Linux 发行版（distribution），例如 Ubuntu。它指明这个驱动程序是由发行版的官方软件仓库提供的，而不是用户手动从第三方下载的。</p>
+</li>
+<li><p><strong>non-free</strong>: 代表该驱动程序是 <strong>非自由</strong>（proprietary）的，也就是它的源代码没有公开，通常由公司（如 NVIDIA）拥有和维护。用户无法自由修改或发布它的源代码。虽然它是闭源的，但通常能够提供更好的硬件支持、性能优化和 bug 修复。</p>
+</li>
+</ul>
+<ol>
+<li><p><strong>nvidia-driver-535 (推荐)</strong>：</p>
+<ul>
+<li><strong>版本</strong>: 535</li>
+<li><strong>类型</strong>: NVIDIA 专有驱动（non-free）</li>
+<li><strong>描述</strong>: 这是最新的稳定版本，由 NVIDIA 官方提供。它被推荐用于现代 NVIDIA 显卡，支持最新的显卡功能、性能优化和 bug 修复。如果系统推荐你使用这个驱动，意味着它最适合你的显卡硬件。</li>
+</ul>
+</li>
+<li><p><strong>nvidia-driver-535-open</strong>：</p>
+<ul>
+<li><strong>版本</strong>: 535</li>
+<li><strong>类型</strong>: 开源版本</li>
+<li><strong>描述</strong>: 这是 NVIDIA 的开源驱动，基于官方的 open-gpu-kernel-modules。尽管它是开源的，但在功能和性能上可能不如闭源版本全面，适合希望在开源环境中使用的用户。</li>
+</ul>
+</li>
+<li><p><strong>nvidia-driver-535-server</strong>：</p>
+<ul>
+<li><strong>版本</strong>: 535</li>
+<li><strong>类型</strong>: 专有驱动（non-free）</li>
+<li><strong>描述</strong>: 这是专门为服务器硬件优化的版本。服务器驱动专注于稳定性和长期支持，通常被用于数据中心和 GPU 加速的计算任务，如深度学习、AI 推理等工作负载。</li>
+</ul>
+</li>
+<li><p><strong>nvidia-driver-535-server-open</strong>：</p>
+<ul>
+<li><strong>版本</strong>: 535</li>
+<li><strong>类型</strong>: 开源版本</li>
+<li><strong>描述</strong>: 这是服务器驱动的开源版本，类似于 <code>nvidia-driver-535-open</code>，但针对服务器工作负载进行了优化。</li>
+</ul>
+</li>
+<li><p><strong>nvidia-driver-470</strong>：</p>
+<ul>
+<li><strong>版本</strong>: 470</li>
+<li><strong>类型</strong>: 专有驱动（non-free）</li>
+<li><strong>描述</strong>: 这是 NVIDIA 的较旧的稳定版本，适用于一些兼容性要求较高的旧显卡或软件环境。如果某些旧应用或旧硬件不完全支持新驱动，可能需要这个版本。</li>
+</ul>
+</li>
+<li><p><strong>nvidia-driver-470-server</strong>：</p>
+<ul>
+<li><strong>版本</strong>: 470</li>
+<li><strong>类型</strong>: 专有驱动（non-free）</li>
+<li><strong>描述</strong>: 这是与 <code>nvidia-driver-470</code> 相似的版本，但它是为服务器环境优化的，重点关注稳定性和长期支持。</li>
+</ul>
+</li>
+<li><p><strong>xserver-xorg-video-nouveau</strong>：</p>
+<ul>
+<li><strong>版本</strong>: Nouveau（开源驱动）</li>
+<li><strong>类型</strong>: 开源驱动（free builtin）</li>
+<li><strong>描述</strong>: 这是 Linux 社区开发的开源 NVIDIA 显卡驱动，默认包含在大多数 Linux 发行版中。虽然它不需要安装非自由软件，但性能和功能性不如 NVIDIA 的官方闭源驱动。适合对开源驱动有偏好，但在性能和显卡高级功能需求较低的场景。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h3 id="下载安装驱动"><a href="#下载安装驱动" class="headerlink" title="下载安装驱动"></a>下载安装驱动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> apt install nvidia-driver-535   <span class="comment"># 根据自己需求可选驱动下载显卡驱动</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="查看显卡基本信息验证是否安装成功"><a href="#查看显卡基本信息验证是否安装成功" class="headerlink" title="查看显卡基本信息验证是否安装成功"></a>查看显卡基本信息验证是否安装成功</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">nvidia-smi</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/Blog/Ubuntu软件安装/3.png" alt=""></p>
+<h3 id="查询问题（若未安装成功）"><a href="#查询问题（若未安装成功）" class="headerlink" title="查询问题（若未安装成功）"></a>查询问题（若未安装成功）</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> gpu-manager</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/Blog/Ubuntu软件安装/4.png" alt=""></p>
+<p>根据信息进行相应问题解决</p>
+<h2 id="CUDA安装（以下是安装在系统）"><a href="#CUDA安装（以下是安装在系统）" class="headerlink" title="CUDA安装（以下是安装在系统）"></a>CUDA安装（以下是安装在系统）</h2><blockquote>
+<p>CUDA（Compute Unified Device Architecture）是由 <strong>NVIDIA</strong> 开发的<mark>一种并行计算平台和编程模型</mark>，旨在利用 <strong>GPU</strong>（图形处理单元）的强大计算能力进行通用计算任务。CUDA 允许开发者使用 GPU 处理不仅限于图形渲染的高性能计算任务，比如科学计算、机器学习、深度学习和模拟仿真等。</p>
+<p><strong>CUDA的基本概念</strong></p>
+<ol>
+<li><p><strong>并行计算</strong>：<br>CUDA 提供了一种并行编程环境，允许开发者编写程序，将计算任务分解为大量的小任务，并将这些任务分配到 GPU 上的成千上万个处理核心上同时执行。GPU 的设计使得它非常适合处理需要大规模并行计算的任务。</p>
+</li>
+<li><p><strong>GPU与CPU的协作</strong>：<br>在 CUDA 编程中，CPU 称为 <strong>主机（Host）</strong>，GPU 则称为 <strong>设备（Device）</strong>。CPU 主要负责一般的计算任务和管理程序的控制流，而 GPU 则负责执行计算密集型的并行任务。CUDA 编程模型允许开发者将部分工作交给 GPU 处理，从而大大加速计算过程。</p>
+</li>
+<li><p><strong>内存模型</strong>：<br>CUDA 提供了灵活的内存管理方式。内存主要分为 <strong>主机内存（Host Memory）</strong> 和 <strong>设备内存（Device Memory）</strong>，即 CPU 和 GPU 各自的内存。程序通常需要将数据从主机内存复制到设备内存，然后在 GPU 上进行计算，最后将结果返回到主机。</p>
+</li>
+</ol>
+<p><strong>CUDA 编程模型</strong></p>
+<p>CUDA 的编程语言基于 <strong>C/C++</strong>，并提供了扩展来定义并行任务，主要包括以下几个核心概念：</p>
+<ol>
+<li><p><strong>核函数（Kernel Function）</strong>：<br>核函数是运行在 GPU 上的函数。每个核函数通过大量的线程并行运行。CUDA 的并行模型允许开发者将计算任务划分为多个线程，所有线程可以同时执行核函数。</p>
+</li>
+<li><p><strong>线程（Thread）</strong>：<br>CUDA 中的每个线程是执行核函数的基本单位。数以千计的线程能够被 GPU 并行运行，从而大大提高运算效率。CUDA 线程组织在多个层次的结构中，如 <strong>线程块（Block）</strong> 和 <strong>网格（Grid）</strong>。</p>
+</li>
+<li><p><strong>线程块（Block）</strong> 和 <strong>网格（Grid）</strong>：</p>
+<ul>
+<li><strong>线程块</strong>：一组线程被组织成线程块。每个线程块中的线程可以共享一些本地的设备内存，并且可以进行同步操作。一个线程块最多可以包含 1024 个线程。</li>
+<li><strong>网格</strong>：多个线程块组成一个网格。网格中的线程块可以独立运行，因此 CUDA 可以将庞大的计算任务分解到成千上万个线程块中。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h3 id="查看对应版本"><a href="#查看对应版本" class="headerlink" title="查看对应版本"></a>查看对应版本</h3><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html">查询链接</a>中根据自己显卡版本选择合适的CUDA版本</p>
+<p><img src="/images/Blog/Ubuntu软件安装/5.png" alt=""></p>
+<p><img src="/images/Blog/Ubuntu软件安装/6.png" alt=""></p>
+<p><code>nvidia-smi</code>查询驱动版本，我的驱动版本 <code>Driver Version: 535.183.01</code>，可以安装 CUDA Version 12.2</p>
+<h3 id="下载CUDA"><a href="#下载CUDA" class="headerlink" title="下载CUDA"></a>下载CUDA</h3><p>到官网(<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive | NVIDIA Developer</a>)根据自己的需要选择CUDA版本</p>
+<p><img src="/images/Blog/Ubuntu软件安装/7.png" alt=""></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">wget https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装CUDA"><a href="#安装CUDA" class="headerlink" title="安装CUDA"></a>安装CUDA</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> sh cuda_12.2.2_535.104.05_linux.run</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p><img src="https://i-blog.csdnimg.cn/blog_migrate/6dc85544475499997e8606ed30ee875a.png" alt=""></p>
+</li>
+<li><p><img src="https://i-blog.csdnimg.cn/blog_migrate/8eda00e88164002cb3ea78c2efcf45a7.png" alt=""></p>
+</li>
+<li><p>选择驱动，给他回车取消，因为我们已经有安装驱动了，然后移动到install安装<img src="https://i-blog.csdnimg.cn/blog_migrate/88b5eea6fad323b3c180aad8c14801f3.png" alt=""></p>
+</li>
+</ol>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">sudo</span> vim ~/.bashrc</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加以下内容：</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">&lt;&lt;&lt;<span class="string">cuda&lt;&lt;&lt;</span></span></span><br><span class="line">export PATH=&quot;/usr/local/cuda-12.1/bin:$PATH&quot;</span><br><span class="line">export LD_LIBRARY_PATH=&quot;/usr/local/cuda-12.1/lib64:$LD_LIBRARY_PATH&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="验证是否成功"><a href="#验证是否成功" class="headerlink" title="验证是否成功"></a>验证是否成功</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash"><span class="built_in">source</span> ~/.bashrc    <span class="comment"># 更新环境变量</span></span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">nvcc -V</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">我的输出：</span></span><br><span class="line">nvcc: NVIDIA (R) Cuda compiler driver</span><br><span class="line">Copyright (c) 2005-2023 NVIDIA Corporation</span><br><span class="line">Built on Mon_Apr__3_17:16:06_PDT_2023</span><br><span class="line">Cuda compilation tools, release 12.1, V12.1.105</span><br><span class="line">Build cuda_12.1.r12.1/compiler.32688072_0</span><br></pre></td></tr></table></figure>
+<h2 id="安装pytorch"><a href="#安装pytorch" class="headerlink" title="安装pytorch"></a>安装pytorch</h2><h3 id="选择合适pytorch版本"><a href="#选择合适pytorch版本" class="headerlink" title="选择合适pytorch版本"></a>选择合适pytorch版本</h3><p><a target="_blank" rel="noopener" href="https://pytorch.org/get-started/previous-versions/">pytorch官网</a>选择需要的版本</p>
+<p><img src="/images/Blog/Ubuntu软件安装/8.png" alt=""></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">可以创建虚拟环境,装在这个虚拟环境中</span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">conda create --name pytorch_env python=3.11</span></span><br><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">conda activate pytorch_env</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">CUDA 12.1</span></span><br><span class="line"><span class="meta prompt_">(pytorch_env)~$ </span><span class="language-bash">conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia</span></span><br></pre></td></tr></table></figure>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">(pytorch_env)~$ </span><span class="language-bash">python -c <span class="string">&quot;import torch; print(torch.__version__)&quot;</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">输出对应版本则成功： 2.3.1</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34972053/article/details/127689332">【ubuntu环境配置】超详细ubuntu20.04/22.04安装nvidia驱动/CUDA/cudnn_ubuntu20安装nvidia显卡驱动-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sdbyp/article/details/139853774">Ubuntu 20.04安装显卡驱动、CUDA、Miniconda和Pytorch（2024.09最新）-Ubuntu从零搭建深度学习环境_ubuntu20.04安装显卡驱动-CSDN博客</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/">http://shaohleon.github.io/2024/10/21/Ubuntu中conda安装显卡驱动、CUDA、pytorch/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ubuntu%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">Ubuntu环境配置</a><a class="post-meta__tags" href="/tags/pytorch/">pytorch</a><a class="post-meta__tags" href="/tags/Python/">Python</a></div><div class="post-share"><div class="social-share" data-image="/images/background/GEM25.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda"><img class="cover" src="/images/background/GEM16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Ubuntu中安装配置anaconda</div></div></a><a class="next-post pull-right" href="/2024/10/24/%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E6%90%9E%E6%B8%85%E5%AD%97%E5%8F%B7%E3%80%81%E7%BA%B8%E5%BC%A0%E5%92%8C%E7%94%B5%E6%B1%A0%E7%9A%84%E6%A0%87%E5%87%86%E5%B0%BA%E5%AF%B8%EF%BC%9F/" title="如何快速搞清字号、纸张和电池的标准尺寸？"><img class="cover" src="/images/background/GEM29.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">如何快速搞清字号、纸张和电池的标准尺寸？</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境"><img class="cover" src="/images/background/GEM29.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">Ubuntu中配置TensorFlow环境</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.</span> <span class="toc-text">安装显卡驱动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">1.1.</span> <span class="toc-text">更新软件包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%8F%AF%E9%80%89%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.2.</span> <span class="toc-text">检查可选驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">下载安装驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%98%BE%E5%8D%A1%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="toc-number">1.4.</span> <span class="toc-text">查看显卡基本信息验证是否安装成功</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E9%97%AE%E9%A2%98%EF%BC%88%E8%8B%A5%E6%9C%AA%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F%EF%BC%89"><span class="toc-number">1.5.</span> <span class="toc-text">查询问题（若未安装成功）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CUDA%E5%AE%89%E8%A3%85%EF%BC%88%E4%BB%A5%E4%B8%8B%E6%98%AF%E5%AE%89%E8%A3%85%E5%9C%A8%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">CUDA安装（以下是安装在系统）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AF%B9%E5%BA%94%E7%89%88%E6%9C%AC"><span class="toc-number">2.1.</span> <span class="toc-text">查看对应版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BDCUDA"><span class="toc-number">2.2.</span> <span class="toc-text">下载CUDA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85CUDA"><span class="toc-number">2.3.</span> <span class="toc-text">安装CUDA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.4.</span> <span class="toc-text">配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F"><span class="toc-number">2.5.</span> <span class="toc-text">验证是否成功</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85pytorch"><span class="toc-number">3.</span> <span class="toc-text">安装pytorch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82pytorch%E7%89%88%E6%9C%AC"><span class="toc-number">3.1.</span> <span class="toc-text">选择合适pytorch版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">3.2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">3.3.</span> <span class="toc-text">验证</span></a></li></ol></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git基础"/></a><div class="content"><a class="title" href="/2024/10/16/Git%E5%9F%BA%E7%A1%80/" title="Git基础">Git基础</a><time datetime="2025-03-23T02:31:01.394Z" title="Updated 2025-03-23 10:31:01">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch"><img src="/images/background/GEM25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中conda安装显卡驱动、CUDA、pytorch"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%ADconda%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8%E3%80%81CUDA%E3%80%81pytorch/" title="Ubuntu中conda安装显卡驱动、CUDA、pytorch">Ubuntu中conda安装显卡驱动、CUDA、pytorch</a><time datetime="2025-03-23T02:10:16.678Z" title="Updated 2025-03-23 10:10:16">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境"><img src="/images/background/GEM29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中配置TensorFlow环境"/></a><div class="content"><a class="title" href="/2025/01/25/Ubuntu%E4%B8%AD%E9%85%8D%E7%BD%AETensorFlow%E7%8E%AF%E5%A2%83/" title="Ubuntu中配置TensorFlow环境">Ubuntu中配置TensorFlow环境</a><time datetime="2025-03-23T02:09:39.880Z" title="Updated 2025-03-23 10:09:39">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu中安装配置anaconda"/></a><div class="content"><a class="title" href="/2024/10/21/Ubuntu%E4%B8%AD%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEanaconda/" title="Ubuntu中安装配置anaconda">Ubuntu中安装配置anaconda</a><time datetime="2025-03-17T08:32:55.906Z" title="Updated 2025-03-17 16:32:55">2025-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img src="/images/background/GEM24.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见英文缩写"/></a><div class="content"><a class="title" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写">常见英文缩写</a><time datetime="2024-12-16T08:03:08.272Z" title="Updated 2024-12-16 16:03:08">2024-12-16</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
