@@ -1,0 +1,813 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>三、图像增强 | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="引言图像增强：图像增强是对图像进行加工，以得到对具体应用来说视觉效果更“好”，更“有用”的图像的技术。由于光照度不够会造成图像灰度过于集中；图像在传输或者处理过程中会引入噪声等等。 在图像增强的过程中，没有新信息的增加，只是通过压制一部分信息，从而突出另一部分信息。 分类1234567891011121314151617181920212223242526272829303132333435图像增">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三、图像增强">
+<meta property="og:url" content="http://shaohleon.github.io/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="引言图像增强：图像增强是对图像进行加工，以得到对具体应用来说视觉效果更“好”，更“有用”的图像的技术。由于光照度不够会造成图像灰度过于集中；图像在传输或者处理过程中会引入噪声等等。 在图像增强的过程中，没有新信息的增加，只是通过压制一部分信息，从而突出另一部分信息。 分类1234567891011121314151617181920212223242526272829303132333435图像增">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM30.jpg">
+<meta property="article:published_time" content="2024-11-06T15:33:16.000Z">
+<meta property="article:modified_time" content="2025-03-23T03:01:14.424Z">
+<meta property="article:author" content="Leon">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM30.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '三、图像增强',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-23 11:01:14'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">三、图像增强</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">三、图像增强</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-11-06T15:33:16.000Z" title="Created 2024-11-06 23:33:16">2024-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>27mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>图像增强：图像增强是对图像进行加工，以得到对具体应用来说视觉效果更“好”，更“有用”的图像的技术。由于光照度不够会造成图像灰度过于集中；图像在传输或者处理过程中会引入噪声等等。</p>
+<p>在图像增强的过程中，没有新信息的增加，只是通过压制一部分信息，从而突出另一部分信息。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">图像增强</span><br><span class="line">├── 空间域增强方法</span><br><span class="line">│   ├── 灰度变换</span><br><span class="line">│   │   ├── 对数变换</span><br><span class="line">│   │   ├── 伽马变换</span><br><span class="line">│   │   ├── 反转变换</span><br><span class="line">│   │   └── 线性变换</span><br><span class="line">│   ├── 直方图均衡化</span><br><span class="line">│   │   ├── 全局直方图均衡化</span><br><span class="line">│   │   └── 局部直方图均衡化</span><br><span class="line">│   ├── 图像平滑与锐化</span><br><span class="line">│   │   ├── 平滑</span><br><span class="line">│   │   │   ├── 均值滤波</span><br><span class="line">│   │   │   ├── 中值滤波</span><br><span class="line">│   │   │   └── 高斯滤波</span><br><span class="line">│   │   └── 锐化</span><br><span class="line">│   │       ├── 拉普拉斯算子</span><br><span class="line">│   │       ├── Sobel算子</span><br><span class="line">│   │       └── 高提升滤波</span><br><span class="line">│   └── 边缘检测</span><br><span class="line">│       ├── Sobel算子</span><br><span class="line">│       ├── Canny算子</span><br><span class="line">│       └── 拉普拉斯算子</span><br><span class="line">└── 频率域增强方法</span><br><span class="line">    ├── 低通滤波</span><br><span class="line">    │   ├── 理想低通滤波器</span><br><span class="line">    │   ├── 巴特沃斯低通滤波器</span><br><span class="line">    │   └── 高斯低通滤波器</span><br><span class="line">    ├── 高通滤波</span><br><span class="line">    │   ├── 理想高通滤波器</span><br><span class="line">    │   ├── 巴特沃斯高通滤波器</span><br><span class="line">    │   └── 高斯高通滤波器</span><br><span class="line">    └── 带通滤波和带阻滤波</span><br><span class="line">        ├── 带通滤波</span><br><span class="line">        └── 带阻滤波</span><br></pre></td></tr></table></figure>
+<h1 id="图像的对比度增强"><a href="#图像的对比度增强" class="headerlink" title="图像的对比度增强"></a>图像的对比度增强</h1><h2 id="灰度变换"><a href="#灰度变换" class="headerlink" title="灰度变换"></a>灰度变换</h2><p>用于调整图像的亮度、对比度以及增强特定的视觉效果。其原理是<mark>通过改变像素的灰度值</mark>来达到预期的效果，主要用于图像的预处理，如增强、拉伸、反转等。</p>
+<h3 id="线性变换"><a href="#线性变换" class="headerlink" title="线性变换"></a>线性变换</h3><script type="math/tex; mode=display">
+s = a \cdot r + b</script><p>其中，</p>
+<p>$r$ 表示输入图像的灰度值;</p>
+<p>$s$ 表示输出图像的灰度值; </p>
+<p>$a$ 和 $b$ 为常数，控制图像的亮度和对比度。</p>
+<h3 id="对数变换"><a href="#对数变换" class="headerlink" title="对数变换"></a>对数变换</h3><p>由于人眼所可以分辨的灰度的变化范围有限，所以当动态范围太大时，很高的亮度值把暗区的信号都掩盖了。</p>
+<p>用于增强低灰度值的细节，使暗部细节更加清晰。</p>
+<script type="math/tex; mode=display">
+s = c \cdot \log(1 + r)</script><p>其中，</p>
+<p>$c$ 为常数，用于控制灰度变换的尺度;</p>
+<p>$r$ 表示输入图像的灰度值。</p>
+<h3 id="伽马（Gamma）变换"><a href="#伽马（Gamma）变换" class="headerlink" title="伽马（Gamma）变换"></a>伽马（Gamma）变换</h3><p>伽马变换可以增强暗区域的灰度值，抑制亮区的灰度值。</p>
+<script type="math/tex; mode=display">
+s = c \cdot r^{\gamma}</script><p>其中，</p>
+<p>$\gamma$ 为伽马值，$\gamma&gt;1$用于减暗图像，$0 &lt; \gamma &lt; 1$ 用于增亮图像；</p>
+<p>$c$ 为常数，用于调整整体亮度。</p>
+<h3 id="反转变换"><a href="#反转变换" class="headerlink" title="反转变换"></a>反转变换</h3><p>增强图像反差或获取负片效果。</p>
+<script type="math/tex; mode=display">
+s = L - 1 - r</script><p>其中，</p>
+<p>$L$ 为灰度级的总数（例如，对于 8 位图像，L = 256）。</p>
+<h3 id="分段线性变换"><a href="#分段线性变换" class="headerlink" title="分段线性变换"></a>分段线性变换</h3><p>通过设置分段线性函数，可以调整特定灰度范围的图像细节。</p>
+<script type="math/tex; mode=display">
+s =
+\begin{cases}
+\alpha \cdot r, & r < R_1 \\
+\frac{S_2 - S_1}{R_2 - R_1} \cdot (r - R_1) + S_1, & R_1 \leq r \leq R_2 \\
+\gamma \cdot (r-R_2) + S_2, & r > R_2
+\end{cases}</script><ul>
+<li><strong>对比度拉伸</strong>：用于拉伸图像的对比度，将图像的灰度范围扩展。</li>
+<li><strong>灰度切割</strong>：将特定灰度范围的值保留或放大，抑制其他灰度范围，增强特定灰度区域的细节。</li>
+</ul>
+<h1 id="直方图修正"><a href="#直方图修正" class="headerlink" title="直方图修正"></a>直方图修正</h1><p>通过调整图像的灰度分布来增强图像对比度。</p>
+<h2 id="统计直方图"><a href="#统计直方图" class="headerlink" title="统计直方图"></a>统计直方图</h2><p><strong>统计直方图</strong>用于表示图像中各灰度级（亮度级别）的像素数量分布。</p>
+<script type="math/tex; mode=display">
+p(s_k) = \frac{n_k}{n}</script><p>其中，</p>
+<p>$s_k$是图像中第$k$级灰度，$n_k$是具有灰度$s_k$的像素个数。</p>
+<h3 id="直方图与图像清晰性"><a href="#直方图与图像清晰性" class="headerlink" title="直方图与图像清晰性"></a>直方图与图像清晰性</h3><p>直方图反映了图像的清晰程度，当直方图均匀分布时，图像最清晰。</p>
+<ul>
+<li><strong>高亮图像</strong>：直方图会集中在高灰度级（右侧）。</li>
+<li><strong>低亮度图像</strong>：直方图集中在低灰度级（左侧）。</li>
+<li><strong>对比度较低图像</strong>：直方图会集中在灰度级中间范围，分布较窄。</li>
+<li><strong>对比度较高图像</strong>：直方图分布较广，覆盖了较宽的灰度范围。</li>
+</ul>
+<h2 id="直方图均衡化"><a href="#直方图均衡化" class="headerlink" title="直方图均衡化"></a>直方图均衡化</h2><p><mark>将图像的灰度直方图分布尽量拉伸至均匀分布</mark>，使得图像的亮度和对比度得到增强。</p>
+<script type="math/tex; mode=display">
+t = T(s) = \int_0^s p_s(w) \, dw</script><p>其中，</p>
+<p>$s$ 为原图像的灰度级；$t$ 为均衡化后的灰度级；$p_s(w)$ 为原图像的灰度分布概率。</p>
+<h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
+<li><p>列出原始图像灰度级 $s_k(0,1, \dots , L-1)$ （对于8位灰度图像$L=8$）</p>
+</li>
+<li><p>统计原始图像各灰度级像素 $n_k$</p>
+</li>
+<li><p>计算原始直方图 $p(s_k) = \frac{n_k}{n}$</p>
+</li>
+<li><p>计算累积直方图（累积分布函数（CDF）） $ t(s<em>k) = \sum</em>{i=0}^{k} p(s_i) $，$t(s_k)$ 为灰度级 $s_k$ 的累计概率密度</p>
+</li>
+<li><p>将累计概率映射到新的灰度级，并对结果（向下）取整。$ T(s_k) = \text{int}[(L - 1) \cdot t(s_k) + 0.5] $</p>
+</li>
+<li><p>确定映射对应关系：将每个灰度级 $s_k$ 映射到新的灰度级 $t(s_k)$，重新排序灰度级 $s_k’(0,1, \dots , L’-1)$</p>
+</li>
+<li><p>统计新图像各灰度级像素 $n_k’$</p>
+</li>
+<li><p>计算新的直方图 $p(s_k’) = \frac{n_k’}{n}$</p>
+</li>
+</ol>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>算法简单，易于实现，计算效率高，适合实时应用。</li>
+<li>不需要预设参数，能够自适应不同图像的灰度分布，自动调整对比度。</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><p>不能用于交互方式的图像增强应用。</p>
+</li>
+<li><p>对于噪声较多的图像，均衡化可能会同时增强噪声，从而影响图像质量。</p>
+</li>
+</ul>
+<h2 id="直方图规定化-Histogram-Specification"><a href="#直方图规定化-Histogram-Specification" class="headerlink" title="直方图规定化(Histogram Specification)"></a>直方图规定化(Histogram Specification)</h2><p>有时要求突出感兴趣灰度范围，即修正直方图使其具有要求的形式。</p>
+<h3 id="算法步骤-1"><a href="#算法步骤-1" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
+<li><p>计算原始图像的累积直方图</p>
+<p> $t(s<em>k) = \sum</em>{i=0}^{k} p(s_i)(i = 0,1, \dots , L-1)<br>$</p>
+</li>
+<li><p>计算目标图像的累计直方图 </p>
+<p>$t<em>z(z_k) = \sum</em>{j=0}^{k} p_z(z_j)(j = 0,1, \dots , L-1)$</p>
+</li>
+<li><p>建立映射关系</p>
+<p>将输入图像的累计概率 $t(s_k)$ 与目标直方图的累计概率 $t_z(z_k)$ 进行匹配，找到最接近的灰度级映射关系。</p>
+<p>$s_k \rightarrow z_k$</p>
+</li>
+<li><p>根据映射关系，将输入图像中的每个灰度级 $s_k$ 映射到目标灰度级 $z_k$，生成匹配后的图像。</p>
+</li>
+</ol>
+<p><img src="/images/图像处理/三/1.png" alt=""></p>
+<h3 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h3><h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>可以将图像的灰度分布调整为特定的形状。</li>
+<li>通过将不同图像的灰度分布规定为相同的参考分布，可使它们在视觉上更一致，适合于多图像拼接、图像数据库标准化等应用。</li>
+</ul>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><p>规定化效果依赖于选择的参考图像，若参考图像质量不高，规定化后的图像效果也可能不理想。</p>
+</li>
+<li><p>相比直方图均衡化，直方图规定化需要两个图像的分布信息，并进行灰度匹配，计算复杂性较高。</p>
+</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><ul>
+<li><strong>图像匹配和拼接</strong>：将多幅图像的灰度分布标准化，便于拼接。</li>
+<li><strong>医学影像分析</strong>：将不同患者或不同设备拍摄的医学影像进行对比分析。</li>
+<li><strong>图像风格迁移</strong>：通过规定化，模仿某幅图像的风格，产生风格相似的图像。</li>
+</ul>
+<h1 id="图像平滑"><a href="#图像平滑" class="headerlink" title="图像平滑"></a>图像平滑</h1><p>图像平滑（Image Smoothing）：通过减少图像中的噪声或细小的纹理，使图像看起来更加平滑和连续。常用于去除噪声、减少细节或提高图像质量。</p>
+<h2 id="均值滤波"><a href="#均值滤波" class="headerlink" title="均值滤波"></a>均值滤波</h2><p>均值滤波是一种低通滤波器，将每个像素值替换为其邻域内像素值的平均值。这种方法能够平滑掉高频噪声，但也会导致边缘模糊。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>对于每个像素 $(i, j)$，使用一个 $k \times k$ 的窗口：</p>
+<script type="math/tex; mode=display">
+g(i, j) = \frac{1}{k^2} \sum_{m=-a}^{a} \sum_{n=-a}^{a} f(i+m, j+n)</script><p>其中： </p>
+<p>$f(i, j)$ 是原始图像的像素值 ；</p>
+<p>$g(i, j)$ 是平滑后的像素值 ；</p>
+<p>$a = \frac{k-1}{2}$</p>
+<h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><ul>
+<li><strong>低频性</strong>：均值滤波能够去除高频噪声，使图像变得平滑。 </li>
+<li><strong>线性性</strong>：均值滤波属于线性滤波器，因此可以分解为简单的加法和除法运算。 </li>
+<li><strong>平滑性</strong>：均值滤波器会模糊图像边缘。</li>
+</ul>
+<h3 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><p><strong>优点</strong>：简单、快速，适合初步的噪声去除。 </p>
+</li>
+<li><p><strong>缺点</strong>：会模糊边缘，不适合保留图像细节。</p>
+</li>
+</ul>
+<h2 id="高斯滤波"><a href="#高斯滤波" class="headerlink" title="高斯滤波"></a>高斯滤波</h2><p>采用高斯分布权重来计算窗口内的加权平均值。</p>
+<h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><script type="math/tex; mode=display">
+g(i, j) = \sum_{m=-a}^{a} \sum_{n=-a}^{a} f(i+m, j+n) \cdot G(m, n, \sigma)</script><p>其中，</p>
+<p>$G(m, n, \sigma)$ 表示高斯核函数的权重，定义为：$G(m, n, \sigma) = \frac{1}{2\pi\sigma^2} e^{-\frac{m^2 + n^2}{2\sigma^2}}$；</p>
+<p>$\sigma$ 控制高斯核的宽度，值越大则平滑效果越明显。</p>
+<h3 id="性质-1"><a href="#性质-1" class="headerlink" title="性质"></a>性质</h3><ul>
+<li><p>高斯函数的可分离性</p>
+<p>二维高斯滤波可以分解为两个一维滤波操作，分别在水平方向和竖直方向上应用。这种特性大大降低了计算复杂度，使高斯滤波在实际应用中更加高效。</p>
+<script type="math/tex; mode=display">
+G(x, y) = \frac{1}{2\pi\sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}}</script><script type="math/tex; mode=display">
+= \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{x^2}{2\sigma^2}} \cdot \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{y^2}{2\sigma^2}}</script><p>计算复杂度由 $O(n^2)$ 降低到 $O(2n)$，其中 $n$ 是图像的一维大小，因此更适合大型图像的平滑处理。</p>
+</li>
+<li><p><strong>平滑性</strong>：比均值滤波更平滑，且能保留一些边缘信息。</p>
+</li>
+<li><p>高斯函数的性质 </p>
+<ul>
+<li><p><strong>旋转对称性</strong>：二维高斯函数具有旋转对称性，即滤波器在各个方向上的平滑程度是相同的。这意味着无论方向如何，高斯滤波都能够以相同的方式平滑图像。 </p>
+</li>
+<li><p><strong>单调递减</strong>：高斯函数是单值递减函数，随着距离中心点的增大，像素点的系数逐渐递减。即距离中心点越远的像素点对平滑结果的影响越小。 </p>
+</li>
+<li><p><strong>平滑程度与方差关系</strong>：高斯平滑的程度由方差 \sigma 表征，\sigma 值越大，平滑程度越强，即图像会变得更加模糊；\sigma 值越小，平滑效果越弱。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="优缺点-3"><a href="#优缺点-3" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><p><strong>优点</strong>：</p>
+<p>能较好地保留边缘细节，适合自然噪声的去除。 </p>
+</li>
+<li><p><strong>缺点</strong>：计算复杂度较高。</p>
+</li>
+</ul>
+<h2 id="中值滤波"><a href="#中值滤波" class="headerlink" title="中值滤波"></a>中值滤波</h2><p>中值滤波是一种对于干扰脉冲和点状噪声有良好抑制作用，而对图像边缘能较好保持的非线性图像增强技术，将窗口内的像素替换为中值，以更好地去除椒盐噪声（噪声以孤立点的形式出现，这些点对应的像素数很少，<br>而图像则是由像素数较多、面积较大的块构成）。</p>
+<h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>对于每个像素 $(i, j)$，使用 $k \times k$ 窗口内的像素值，并将其替换为该区域的中值：</p>
+<script type="math/tex; mode=display">
+g(i, j) = \text{median}(f(i+m, j+n))</script><p>其中 $(m, n)$ 是 $k \times k$ 窗口内的像素坐标。</p>
+<h3 id="函数性质"><a href="#函数性质" class="headerlink" title="函数性质"></a>函数性质</h3><ul>
+<li><p><strong>非线性</strong>：中值滤波是非线性滤波，不会对图像进行加权平均。 </p>
+</li>
+<li><p><strong>边缘保留性</strong>：中值滤波能够较好地保留边缘信息，不会模糊边缘。 </p>
+</li>
+</ul>
+<h3 id="优缺点-4"><a href="#优缺点-4" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><p><strong>优点</strong>：对椒盐噪声和干扰脉冲，尤其适合于目标物形状是块状时的图像滤波非常有效，且保留边缘信息。 </p>
+</li>
+<li><p><strong>缺点</strong>：</p>
+<ul>
+<li><p>无法去除其他类型噪声，且计算较复杂。</p>
+</li>
+<li><p>当噪声的宽度大于窗宽的一半时，中值滤波无效。</p>
+</li>
+<li><p><mark>不适用：需要保持细线状及尖顶角目标物细节。</mark></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="自适应中值滤波"><a href="#自适应中值滤波" class="headerlink" title="自适应中值滤波"></a>自适应中值滤波</h2><p>自适应中值滤波（Adaptive Median Filtering）会根据每个像素的邻域动态调整窗口大小</p>
+<h3 id="原理-3"><a href="#原理-3" class="headerlink" title="原理"></a>原理</h3><p>自适应中值滤波通过计算像素邻域中的最小值、最大值和中值，判断当前像素是否为噪声。</p>
+<p><strong>算法步骤：</strong></p>
+<p>设窗口大小为 $S \times S$，当前像素为 $f(i, j)$，窗口内的中值为 $Z<em>{med}$，最小值为 $Z</em>{min}$，最大值为 $Z_{max}$。</p>
+<ol>
+<li><p><strong>定义窗口</strong>：从最小窗口尺寸开始（如 $3 \times 3$），计算窗口中的最小值、最大值和中值。 </p>
+</li>
+<li><p><strong>判断条件</strong>： </p>
+<ul>
+<li><p><strong>步骤A</strong>：检查窗口中的中值$Z_{med}$是否在最小值和最大值之间。</p>
+<p>$A1 = Z<em>{med} - Z</em>{min}$</p>
+<p>$A2 = Z<em>{med} - Z</em>{max}$</p>
+<ul>
+<li><p>如果满足 $A1 &gt; 0$ 且 $A2 &lt; 0$，继续步骤B。</p>
+</li>
+<li><p>如果不满足，增大窗口尺寸 $S$ 并重新计算，直到达到最大窗口尺寸。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>步骤B</strong>：检查当前像素值是否在最小值和最大值之间。</p>
+<p>$B1 = f(i, j) - Z_{min}$</p>
+<p>$B2 = f(i, j) - Z_{max}$</p>
+<ul>
+<li><p>如果满足 $B1 &gt; 0$ 且 $B2 &lt; 0$ ，用当前像素值替换为中值。</p>
+</li>
+<li><p>如果不满足，用中值 $Z_{med}$ 替代 $f(i, j)$ 的值。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>输出结果</strong>：在整个图像中重复上述步骤，最终得到去噪结果。</p>
+</li>
+</ol>
+<h3 id="优缺点-5"><a href="#优缺点-5" class="headerlink" title="优缺点"></a>优缺点</h3><h4 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h4><ul>
+<li><strong>有效去除脉冲噪声</strong>：自适应中值滤波器特别适合去除椒盐噪声。</li>
+<li><strong>自适应窗口</strong>：根据局部噪声水平调整窗口大小，避免过度模糊。</li>
+<li><strong>边缘保护</strong>：在边缘和细节区域滤波效果良好。</li>
+</ul>
+<h4 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><strong>计算复杂度高</strong>：逐像素调整窗口大小，计算量大，处理速度较慢。</li>
+<li><strong>对高密度噪声效果有限</strong>：在高密度噪声下可能需要更大的窗口，导致平滑效果增强。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">adaptive_median_filter</span>(<span class="params">image, max_window_size=<span class="number">7</span></span>):</span><br><span class="line">    padded_image = cv2.copyMakeBorder(image, max_window_size//<span class="number">2</span>, max_window_size//<span class="number">2</span>, max_window_size//<span class="number">2</span>, max_window_size//<span class="number">2</span>, cv2.BORDER_REFLECT)</span><br><span class="line">    output_image = np.zeros_like(image)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">apply_filter</span>(<span class="params">i, j</span>):</span><br><span class="line">        window_size = <span class="number">3</span></span><br><span class="line">        <span class="keyword">while</span> window_size &lt;= max_window_size:</span><br><span class="line">            local_window = padded_image[i - window_size//<span class="number">2</span>:i + window_size//<span class="number">2</span> + <span class="number">1</span>, j - window_size//<span class="number">2</span>:j + window_size//<span class="number">2</span> + <span class="number">1</span>]</span><br><span class="line">            z_min, z_max = np.<span class="built_in">min</span>(local_window), np.<span class="built_in">max</span>(local_window)</span><br><span class="line">            z_med = np.median(local_window)</span><br><span class="line">            pixel_value = padded_image[i, j]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Step A</span></span><br><span class="line">            A1 = z_med - z_min</span><br><span class="line">            A2 = z_med - z_max</span><br><span class="line">            <span class="keyword">if</span> A1 &gt; <span class="number">0</span> <span class="keyword">and</span> A2 &lt; <span class="number">0</span>:</span><br><span class="line">                <span class="comment"># Step B</span></span><br><span class="line">                B1 = pixel_value - z_min</span><br><span class="line">                B2 = pixel_value - z_max</span><br><span class="line">                <span class="keyword">return</span> pixel_value <span class="keyword">if</span> B1 &gt; <span class="number">0</span> <span class="keyword">and</span> B2 &lt; <span class="number">0</span> <span class="keyword">else</span> z_med</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                window_size += <span class="number">2</span>  <span class="comment"># Increase window size</span></span><br><span class="line">        <span class="keyword">return</span> z_med  <span class="comment"># Use median if max window size reached</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Apply the filter to each pixel</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_window_size//<span class="number">2</span>, padded_image.shape[<span class="number">0</span>] - max_window_size//<span class="number">2</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(max_window_size//<span class="number">2</span>, padded_image.shape[<span class="number">1</span>] - max_window_size//<span class="number">2</span>):</span><br><span class="line">            output_image[i - max_window_size//<span class="number">2</span>, j - max_window_size//<span class="number">2</span>] = apply_filter(i, j)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> output_image</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load a grayscale image and apply the adaptive median filter</span></span><br><span class="line">image = cv2.imread(<span class="string">&quot;noisy_image.png&quot;</span>, cv2.IMREAD_GRAYSCALE)</span><br><span class="line">filtered_image = adaptive_median_filter(image)</span><br><span class="line">cv2.imshow(<span class="string">&quot;Filtered Image&quot;</span>, filtered_image)</span><br><span class="line">cv2.waitKey(<span class="number">0</span>)</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h2 id="双边滤波"><a href="#双边滤波" class="headerlink" title="双边滤波"></a>双边滤波</h2><p>非线性滤波器，不仅考虑空间距离，还结合像素值差异，保留边缘信息的同时平滑图像。</p>
+<h3 id="原理-4"><a href="#原理-4" class="headerlink" title="原理"></a>原理</h3><p>对于每个像素 $(i, j)$，</p>
+<script type="math/tex; mode=display">
+g(i, j) = \frac{\sum_{m=-a}^{a} \sum_{n=-a}^{a} f(i+m, j+n) \cdot w(i, j, m, n)}{\sum_{m=-a}^{a} \sum_{n=-a}^{a} w(i, j, m, n)}</script><p>其中，</p>
+<p>权重 $w(i, j, m, n)$ 包含空间距离和灰度差异两个高斯分布函数 $w(i, j, m, n) = e^{-\frac{(m^2 + n^2)}{2\sigma_s^2}} \cdot e^{-\frac{(f(i, j) - f(i+m, j+n))^2}{2\sigma_r^2}}$</p>
+<p>$\sigma_s$ 控制空间距离影响，$\sigma_r$ 控制灰度差异影响。</p>
+<h3 id="性质-2"><a href="#性质-2" class="headerlink" title="性质"></a>性质</h3><ul>
+<li><strong>边缘保留</strong>：双边滤波可平滑图像大面积区域，且保留边缘。 </li>
+<li><strong>非线性</strong>：根据像素灰度值差异调整权重，属于非线性操作。</li>
+</ul>
+<h3 id="优缺点-6"><a href="#优缺点-6" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><strong>优点</strong>：适合去除噪声且保留边缘细节，适合高质量平滑。 </li>
+<li><strong>缺点</strong>：计算量大，速度较慢，适合较小图像。</li>
+</ul>
+<h2 id="自适应局部噪声消除滤波器"><a href="#自适应局部噪声消除滤波器" class="headerlink" title="自适应局部噪声消除滤波器"></a>自适应局部噪声消除滤波器</h2><p>自适应局部噪声消除滤波器（Adaptive Local Noise Reduction Filter）：根据图像局部区域内的统计信息对滤波器进行动态调整，以最大程度地保留图像细节，同时有效去除噪声，特别适用于含有随机噪声的图像。</p>
+<h3 id="原理-5"><a href="#原理-5" class="headerlink" title="原理"></a>原理</h3><p>自适应局部噪声消除滤波器在每个像素的局部邻域内计算<mark>局部均值和方差</mark>，以确定该区域内噪声的程度和图像内容的细节。对于每个像素，该滤波器依据局部和全局的图像统计信息。</p>
+<p>像素值为 $f(i, j)$，滤波后的像素值为 $g(i, j)$：</p>
+<script type="math/tex; mode=display">
+g(i, j) = \bar{f}_{L} + \frac{\sigma_{L}^2}{\sigma_{L}^2 + \sigma_n^2} \cdot (f(i, j) - \bar{f}_{L})</script><p>其中：</p>
+<ul>
+<li>$\bar{f}_{L}$ 表示当前像素 $(i, j)$ 所在局部窗口的平均值； </li>
+<li>$\sigma_{L}^2$ 表示该窗口内像素的方差；</li>
+<li>$\sigma_n^2$ 表示图像中噪声的方差，通常可通过图像先验知识或噪声模型获得。</li>
+</ul>
+<p>当局部方差较大时，认为该区域包含图像细节，应减少平滑力度；</p>
+<p>当局部方差较小时，认为该区域噪声较多，应增加平滑力度。</p>
+<h3 id="优缺点-7"><a href="#优缺点-7" class="headerlink" title="优缺点"></a>优缺点</h3><h4 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h4><ul>
+<li><strong>高效去噪</strong>：自适应调整滤波器，能够有效减少噪声影响。</li>
+<li><strong>细节保留</strong>：在图像细节较多的区域（高方差）中，滤波器平滑程度较小，能保留边缘细节。</li>
+<li><strong>适用性强</strong>：适用于多种噪声类型，尤其是随机噪声。</li>
+</ul>
+<h4 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><p><strong>计算复杂</strong>：需要计算每个像素的局部均值和方差，计算量较大。</p>
+</li>
+<li><p><strong>依赖噪声方差</strong>：对噪声方差 $\sigma_n^2$ 的估计准确性较为敏感，错误估计会影响滤波效果。 </p>
+</li>
+<li><p><strong>适用范围有限</strong>：对于某些复杂噪声或强边缘区域，效果不如其他高效去噪算法。</p>
+</li>
+</ul>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">adaptive_local_noise_filter</span>(<span class="params">image, window_size, noise_variance</span>):</span><br><span class="line"> padded_image = cv2.copyMakeBorder(image, window_size//<span class="number">2</span>, window_size//<span class="number">2</span>, window_size//<span class="number">2</span>, window_size//<span class="number">2</span>, cv2.BORDER_REFLECT)</span><br><span class="line"> output_image = np.zeros_like(image, dtype=<span class="built_in">float</span>)</span><br><span class="line"> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(window_size // <span class="number">2</span>, padded_image.shape[<span class="number">0</span>] - window_size // <span class="number">2</span>):</span><br><span class="line"> <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(window_size // <span class="number">2</span>, padded_image.shape[<span class="number">1</span>] - window_size // <span class="number">2</span>):</span><br><span class="line"> local_window = padded_image[i - window_size//<span class="number">2</span>:i + window_size//<span class="number">2</span> + <span class="number">1</span>, j - window_size//<span class="number">2</span>:j + window_size//<span class="number">2</span> + <span class="number">1</span>]</span><br><span class="line"> local_mean = np.mean(local_window)</span><br><span class="line"> local_variance = np.var(local_window)</span><br><span class="line"> pixel_value = image[i - window_size//<span class="number">2</span>, j - window_size//<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 应用自适应滤波公式</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> local_variance &gt; <span class="number">0</span>:</span><br><span class="line"> output_image[i - window_size//<span class="number">2</span>, j - window_size//<span class="number">2</span>] = local_mean + (local_variance / (local_variance + noise_variance)) * (pixel_value - local_mean)</span><br><span class="line"> <span class="keyword">else</span>:</span><br><span class="line"> output_image[i - window_size//<span class="number">2</span>, j - window_size//<span class="number">2</span>] = local_mean</span><br><span class="line"> <span class="keyword">return</span> output_image.astype(np.uint8)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载图像并调用滤波函数</span></span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">&quot;noisy_image.png&quot;</span>, cv2.IMREAD_GRAYSCALE)</span><br><span class="line">filtered_image = adaptive_local_noise_filter(image, window_size=<span class="number">5</span>, noise_variance=<span class="number">20</span>)</span><br><span class="line">cv2.imshow(<span class="string">&quot;Filtered Image&quot;</span>, filtered_image)</span><br><span class="line">cv2.waitKey(<span class="number">0</span>)</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h2 id="各向异性扩散"><a href="#各向异性扩散" class="headerlink" title="各向异性扩散"></a>各向异性扩散</h2><p>各向异性扩散（Anisotropic Diffusion）是一种图像去噪方法，也称为Perona-Malik滤波器。其通过图像的局部梯度调整扩散系数，在保留边缘细节的同时减少噪声，实现“平滑但不模糊”的效果。与各向同性扩散不同，各向异性扩散在噪声较高的区域进行强烈平滑，而在边缘区域减少扩散，以保持图像边缘的锐利度。</p>
+<h3 id="原理-6"><a href="#原理-6" class="headerlink" title="原理"></a>原理</h3><p>在各向异性扩散中，图像被看作一个热量场，像素值视为温度。扩散的过程类似于热传导，模拟“热量”在像素间传递。但与经典的各向同性扩散不同，各向异性扩散会<mark>根据当前像素和周围像素的关系决定扩散的强度</mark>。具体而言，各向异性扩散在图像边缘处减少扩散，从而保留边缘信息。</p>
+<script type="math/tex; mode=display">
+\frac{\partial I(x, y, t)}{\partial t} = \nabla \cdot \left( c(x, y, t) \cdot \nabla I(x, y, t) \right)</script><p>其中： </p>
+<ul>
+<li><p>$I(x, y, t)$ 表示时间 $t$ 时刻的图像强度值； </p>
+</li>
+<li><p>$\nabla$ 表示梯度操作符，$\nabla I$ 是图像的梯度（表示图像边缘的强度和方向）； </p>
+</li>
+<li><p>$c(x, y, t)$ 是扩散系数，与图像的梯度大小相关，控制扩散的强度。</p>
+</li>
+</ul>
+<h1 id="图像锐化"><a href="#图像锐化" class="headerlink" title="图像锐化"></a>图像锐化</h1><p>图像模糊的原因：成像系统聚焦不好或信道过窄；平均或积分运算。</p>
+<p>图像锐化（Image Sharpening）是一种增强图像中边缘和细节的技术，能够突出图像中变化较大的区域，使得物体轮廓更加清晰。锐化主要用于视觉增强，使边缘、纹理等细节更加清晰分明。</p>
+<p>基于图像梯度和高频成分的增强。通常，图像中的<mark>高频部分代表边缘和细节</mark>，锐化方法通过增加这些高频成分来实现增强效果。</p>
+<h2 id="边缘检测"><a href="#边缘检测" class="headerlink" title="边缘检测"></a>边缘检测</h2><p>边缘通常发生在图像中亮度或颜色变化明显的区域，即像素值的快速变化点。检测这些变化可以使用图像的一阶或二阶导数来实现.</p>
+<p>边缘检测（Edge Detection）是图像处理中用于识别图像中物体边界的技术，通过检测像素值变化剧烈的区域来提取图像的结构信息。</p>
+<h3 id="边缘类型"><a href="#边缘类型" class="headerlink" title="边缘类型"></a>边缘类型</h3><ul>
+<li><p>突变型细节：检测一阶微分极值点，二阶微分过0点</p>
+</li>
+<li><p>细线型细节：检测一阶微分过0点，二阶微分极值点</p>
+</li>
+<li><p>渐变型细节：难检测，二阶微分信息略多于一阶微分</p>
+</li>
+</ul>
+<p><img src="/images/图像处理/三/2.png" alt=""></p>
+<p><img src="/images/图像处理/三/3.png" alt=""></p>
+<h2 id="一阶微分算子"><a href="#一阶微分算子" class="headerlink" title="一阶微分算子"></a>一阶微分算子</h2><p>以下算子模板（卷积核）用来边缘检测，<mark>锐化 = 原图像和梯度图像</mark></p>
+<h3 id="梯度算子"><a href="#梯度算子" class="headerlink" title="梯度算子"></a>梯度算子</h3><h4 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h4><p>图像$f(x,y)$在$(x,y)$处的梯度：$G[f( x , y )] = [\frac{\partial f}{\partial x} \  \frac{\partial f}{\partial y}]^T$</p>
+<p>使用梯度的幅度来代替 $G[f( x , y )] = [(\frac{\partial f}{\partial x})^2 +  (\frac{\partial f}{\partial y})^2]^\frac{1}{2} = |f_x| + |f_y|$</p>
+<p>图像为离散的数字矩阵，使用差分代替微分：</p>
+<p>水平：</p>
+<script type="math/tex; mode=display">
+\frac{\partial f}{\partial x} = f(x+1, y) - f(x, y)</script><p>垂直：</p>
+<script type="math/tex; mode=display">
+\frac{\partial f}{\partial y} = f(x, y+1) - f(x, y)</script><p>梯度图像$g(x,y)$：</p>
+<script type="math/tex; mode=display">
+g(x,y) = |f_x| + |f_y| = |f(x+1, y) - f(x, y)| + |f(x, y+1) - f(x, y)|</script><h4 id="图像锐化和边缘检测"><a href="#图像锐化和边缘检测" class="headerlink" title="图像锐化和边缘检测"></a>图像锐化和边缘检测</h4><p>边缘检测：检测出边缘所在的位置，找出微分中的过零点或极值点，得到梯度图像。</p>
+<p>图像锐化：原图像和梯度图像相加，突出边缘和轮廓。</p>
+<h4 id="阈值化检测"><a href="#阈值化检测" class="headerlink" title="阈值化检测"></a>阈值化检测</h4><ol>
+<li><p>固定边界灰度</p>
+<script type="math/tex; mode=display">
+g(x, y) = 
+\begin{cases} 
+L_G & \text{if } f(x, y) \geq T \\
+f(x,y) & \text{if } f(x, y) < T
+\end{cases}</script></li>
+<li><p>突出边界</p>
+<script type="math/tex; mode=display">
+g(x, y) = 
+\begin{cases} 
+G[f(x,y)] & \text{if } G[f(x,y)] \geq T \\
+f(x,y) & \text{if } else
+\end{cases}</script></li>
+<li><p>二值化边界与背景</p>
+<script type="math/tex; mode=display">
+g(x, y) = 
+\begin{cases} 
+L_G & \text{if } f(x, y) \geq T \\
+L_B & \text{if } f(x, y) < T
+\end{cases}</script></li>
+</ol>
+<p>阈值的选择决定边缘检测的效果。</p>
+<h3 id="Roberts算子"><a href="#Roberts算子" class="headerlink" title="Roberts算子"></a>Roberts算子</h3><p>Roberts算子是一种简单的差分算子，通过在对角线方向上进行卷积来计算图像的梯度。</p>
+<p>对于一个图像像素 $(i, j)$，使用以下卷积核(模板)计算水平和垂直方向上的梯度：</p>
+<script type="math/tex; mode=display">
+G_x = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}, \quad G_y = \begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}</script><script type="math/tex; mode=display">
+g(x,y) = |f(x, y) - f(x+1, y+1)| + |f(x+1, y) - f(x, y+1)|</script><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ul>
+<li><p><strong>优点</strong>：计算速度快，适用于实时处理。</p>
+</li>
+<li><p><strong>缺点</strong>：对噪声敏感，不适合处理高噪声图像。</p>
+</li>
+</ul>
+<h3 id="Sobel算子"><a href="#Sobel算子" class="headerlink" title="Sobel算子"></a>Sobel算子</h3><p>Sobel算子使用<mark>加权平均</mark>的方法计算水平方向和垂直方向的梯度，对图像中<mark>随机噪声有一定的平滑作用</mark>。</p>
+<script type="math/tex; mode=display">
+G_x = \begin{bmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{bmatrix}, \quad G_y = \begin{bmatrix} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{bmatrix}</script><script type="math/tex; mode=display">
+f_x(x, y) = (f(x+1, y-1) + 2 \cdot f(x+1, y) + f(x+1, y+1)) - (f(x-1, y-1) + 2 \cdot f(x-1, y) + f(x-1, y+1))</script><script type="math/tex; mode=display">
+f_y(x, y) = (f(x-1, y+1) + 2 \cdot f(x, y+1) + f(x+1, y+1)) - (f(x-1, y-1) + 2 \cdot f(x, y-1) + f(x+1, y-1))</script><script type="math/tex; mode=display">
+g(x,y) = |f_x| + |f_y|</script><p>相隔两行或两列求差分，故边缘两侧的元素得到了增强，<mark>边缘显得粗而亮</mark></p>
+<h3 id="Prewitt算子"><a href="#Prewitt算子" class="headerlink" title="Prewitt算子"></a>Prewitt算子</h3><p>通过在水平和垂直方向上分别计算图像的梯度来识别边缘。Prewitt算子与Sobel算子类似，但它在计算梯度时不加权中心像素，因此计算更加简单。</p>
+<p>在水平方向和垂直方向上的卷积核(模板)分别为：</p>
+<script type="math/tex; mode=display">
+G_x = 
+\begin{bmatrix}
+-1 & 0 & +1 \\
+-1 & 0 & +1 \\
+-1 & 0 & +1 \\
+\end{bmatrix}</script><script type="math/tex; mode=display">
+G_y = 
+\begin{bmatrix}
++1 & +1 & +1 \\
+0 & 0 & 0 \\
+-1 & -1 & -1 \\
+\end{bmatrix}</script><script type="math/tex; mode=display">
+f_x(x, y) = |f(x+1, y-1) + f(x+1, y) + f(x+1, y+1)| - |f(x-1, y-1) + f(x-1, y) + f(x-1, y+1)|</script><script type="math/tex; mode=display">
+f_y(x, y) = |f(x-1, y+1) + f(x, y+1) + f(x+1, y+1)| - |f(x-1, y-1) + f(x, y-1) + f(x+1, y-1)|</script><script type="math/tex; mode=display">
+g(x,y) = |f_x| + |f_y|</script><h3 id="其他算子"><a href="#其他算子" class="headerlink" title="其他算子"></a>其他算子</h3><h4 id="Kirsch算子"><a href="#Kirsch算子" class="headerlink" title="Kirsch算子"></a>Kirsch算子</h4><p>Kirsch算子是一种方向性算子，它使用8个$3 \times 3$卷积核，每个核对应一个不同的方向。</p>
+<ul>
+<li>水平方向：</li>
+</ul>
+<script type="math/tex; mode=display">
+K_x =
+
+\begin{bmatrix}
+
+-3 & -3 & 5 \\
+
+-3 & 0 & 5 \\
+
+-3 & -3 & 5 \\
+
+\end{bmatrix}</script><ul>
+<li>垂直方向：</li>
+</ul>
+<script type="math/tex; mode=display">
+K_y =
+
+\begin{bmatrix}
+
+-3 & -3 & -3 \\
+
+5 & 0 & 5 \\
+
+5 & 5 & 5 \\
+
+\end{bmatrix}</script><ul>
+<li>45度方向：</li>
+</ul>
+<script type="math/tex; mode=display">
+K_{45} =
+
+\begin{bmatrix}
+
+-3 & 5 & 5 \\
+
+-3 & 0 & 5 \\
+
+-3 & -3 & -3 \\
+
+\end{bmatrix}</script><ul>
+<li>135度方向：</li>
+</ul>
+<script type="math/tex; mode=display">
+K_{135} =
+
+\begin{bmatrix}
+
+5 & 5 & -3 \\
+
+5 & 0 & -3 \\
+
+-3 & -3 & -3 \\
+
+\end{bmatrix}</script><p>其中，每个卷积核可以检测特定方向的边缘。</p>
+<h3 id="边缘方向"><a href="#边缘方向" class="headerlink" title="边缘方向"></a>边缘方向</h3><p><em>梯度方向</em>：函数最大增长的方向，即图像灰度值最大增长的方向，沿该方向灰度值的变化速率最大</p>
+<script type="math/tex; mode=display">
+\phi (x,y) = \arctan (\frac{f_y}{f_x})</script><p><em>边缘方向</em>：垂直于梯度方向</p>
+<script type="math/tex; mode=display">
+\theta (x,y) = \arctan (\frac{f_x}{f_y})</script><p>边缘方向的估计方法：</p>
+<p>将8个或更多模板分别作用在图像上，取最大响应作为梯度幅度，梯度的方向为对应模板确定的方向。</p>
+<h2 id="二阶微分算子"><a href="#二阶微分算子" class="headerlink" title="二阶微分算子"></a>二阶微分算子</h2><p>二阶微分算子用于检测图像中的边缘位置，通过检测灰度值变化的二阶导数，能够有效找到图像中的边缘。不同于一阶微分算子，二阶微分算子更加敏感，可以在边缘位置产生尖锐的响应。</p>
+<h3 id="拉普拉斯算子"><a href="#拉普拉斯算子" class="headerlink" title="拉普拉斯算子"></a>拉普拉斯算子</h3><p>通过计算像素点在两个方向上的二阶导数之和来检测边缘。拉普拉斯算子的主要特点是它对所有方向上的变化同样敏感，适用于在多个方向上检测边缘。</p>
+<script type="math/tex; mode=display">
+\frac{\partial^2 f}{\partial x^2} = \Delta_xf(x+1,y)-\Delta_xf(x,y)</script><script type="math/tex; mode=display">
+= f ( x + 1 , y ) + f ( x − 1 , y ) − 2 f ( x , y )</script><script type="math/tex; mode=display">
+\frac{\partial^2 f}{\partial y^2} = \Delta_xf(x,y+1)-\Delta_xf(x,y)</script><script type="math/tex; mode=display">
+= f ( x , y + 1 ) + f ( x , y − 1 ) − 2 f ( x , y )</script><script type="math/tex; mode=display">
+\nabla^2 f(x, y) = \frac{\partial^2 f}{\partial x^2} + \frac{\partial^2 f}{\partial y^2}
+= f ( x + 1 , y ) + f ( x − 1 , y )
++ f ( x , y + 1 ) + f ( x , y − 1 ) − 4 f ( x , y )</script><p>模板：</p>
+<script type="math/tex; mode=display">
+G = 
+   \begin{bmatrix}
+   0 & -1 & 0 \\
+   -1 & 4 & -1 \\
+   0 & -1 & 0 \\
+   \end{bmatrix}</script><p>锐化模板：</p>
+<script type="math/tex; mode=display">
+G = 
+   \begin{bmatrix}
+   0 & -1 & 0 \\
+   -1 & 5 & -1 \\
+   0 & -1 & 0 \\
+   \end{bmatrix}</script><p>对待模板$G$运算得到的负值：</p>
+<ul>
+<li><p>取绝对值</p>
+</li>
+<li><p>加上正整数，有浮雕效果</p>
+</li>
+</ul>
+<h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><p><strong>优点</strong>：</p>
+<ul>
+<li><p>拉普拉斯算子在检测边缘时对方向不敏感，因此可以检测所有方向的边缘。</p>
+</li>
+<li><p>在检测图像的细小边缘特征方面表现良好，适合高频信息检测。</p>
+</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><p>对噪声较为敏感，容易导致图像中噪声被错误识别为边缘。</p>
+</li>
+<li><p>二阶微分对噪声的放大效应较明显，通常需要在应用前对图像进行平滑处理。</p>
+</li>
+</ul>
+<h2 id="高斯滤波与边缘检测"><a href="#高斯滤波与边缘检测" class="headerlink" title="高斯滤波与边缘检测"></a>高斯滤波与边缘检测</h2><h3 id="高斯函数"><a href="#高斯函数" class="headerlink" title="高斯函数"></a>高斯函数</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p><strong>二元高斯函数</strong></p>
+<script type="math/tex; mode=display">
+g(x, y) = \frac{1}{2\pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}}</script><p>$\sigma$ 是标准差，控制高斯函数的扩展范围</p>
+<p><strong>一阶导数</strong></p>
+<p>高斯函数的一阶导数用于检测图像中的变化方向</p>
+<script type="math/tex; mode=display">
+\frac{\partial g}{\partial x} = -\frac{x}{\sigma^2} g(x, y)</script><script type="math/tex; mode=display">
+\frac{\partial g}{\partial y} = -\frac{y}{\sigma^2} g(x, y)</script><script type="math/tex; mode=display">
+\nabla g(x,y) = -\frac{x+y}{\sigma^2} g(x, y)</script><p><strong>二阶导数</strong></p>
+<script type="math/tex; mode=display">
+\frac{\partial^2 G}{\partial x^2} = \frac{(x^2 - \sigma^2)}{\sigma^4} G(x, y)</script><script type="math/tex; mode=display">
+\frac{\partial^2 G}{\partial y^2} = \frac{(y^2 - \sigma^2)}{\sigma^4} G(x, y)</script><script type="math/tex; mode=display">
+\nabla ^2 g(x,y) = \frac{(x^2 +y^2 - 2\sigma^2)}{\sigma^4} G(x, y)</script><h4 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h4><ul>
+<li><p>随着远离原点，权值逐渐减小到零，表明离中心较近的图像值比远处的更重要；标准差σ决定邻域范围，总权值的95％包含在2σ的中间范围内。</p>
+</li>
+<li><p>二阶导数具有光滑的中间突出部分，函数值为负；两个光滑的侧边突出部分，值为正。零交叉位于-σ和+σ处，与$h(x)$的拐点和$h’(x)$的极值点对应。高斯函数应用的一个数学基础。</p>
+</li>
+<li><p>1D形式绕垂直轴旋转得各向同性的2D函数形式（在任意过原点的切面上具有相同的1D高斯截面），其二阶导数形式像一个宽边帽或称为墨西哥草帽。高斯滤波器在各方向上平滑程度相同。</p>
+</li>
+</ul>
+<h3 id="LoG算子"><a href="#LoG算子" class="headerlink" title="LoG算子"></a>LoG算子</h3><h4 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h4><p>先对图像进行高斯平滑（去除噪声），然后用拉普拉斯算子检测边缘。</p>
+<script type="math/tex; mode=display">
+\nabla^2 [f(x,y)*h(x,y)] = f(x,y)*\nabla^2h(x,y)</script><p>$\nabla^2h(x,y)$ 为$LoG$滤波器(算子)； $\sigma$ 为尺度因子，大的值可用来检测模糊的边缘，小的值可用来检测聚焦良好的图像细节。</p>
+<p><img src="/images/图像处理/三/4.png" alt=""></p>
+<p>$\omega<em>{2D} = 2 \sigma$ 确定滤波器大小。为了不使函数被过分地截短，应在足够大的窗口内作计算，窗口宽度通常取 $\omega_d \geq 3.6 \omega</em>{2D}  $</p>
+<h4 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h4><p>模板大小由 $\sigma$ 决定</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+0 & 0 & -1 & 0 & 0 \\
+0 & -1 & -2 & -1 & 0 \\
+-1 & -2 & 16 & -2 & -1 \\
+0 & -1 & -2 & -1 & 0 \\
+0 & 0 & -1 & 0 & 0 \\
+\end{bmatrix}</script><h3 id="DoG算子"><a href="#DoG算子" class="headerlink" title="DoG算子"></a>DoG算子</h3><p>DoG算子 (Difference of Gaussian)：用两个不同标准差的高斯函数平滑图<br>像，将结果相减，实现滤波，再利用过零点检测等方式处理滤波图像，实现边缘检测。</p>
+<script type="math/tex; mode=display">
+DoG(x, y) = h(x, y, k\sigma) - h(x, y, \sigma)</script><h3 id="Canny算子"><a href="#Canny算子" class="headerlink" title="Canny算子"></a>Canny算子</h3><blockquote>
+<p>最优边缘检测的三个主要评价标准:</p>
+<ol>
+<li><p>低错误率。标识出尽可能多的实际边缘，同时尽可能的减少噪声产生的误报。</p>
+</li>
+<li><p>对边缘的定位准确。标识出的边缘要与图像中的实际边缘尽可能接近。</p>
+</li>
+<li><p>最小响应。图像中的边缘最好只标识一次，并且可能存在的图像噪声部分不应标识为边缘。</p>
+</li>
+</ol>
+</blockquote>
+<p><strong>算法步骤：</strong></p>
+<ol>
+<li><p>使用高斯平滑滤波器卷积降噪</p>
+</li>
+<li><p>计算平滑图像的梯度幅值和方向，可采用不同的梯度算子</p>
+</li>
+<li><p>对梯度幅值应用非极大抑制，即找出图像梯度中的局部极大值点，其他非局部极大值点置零</p>
+</li>
+<li><p>使用双阈值检测：设定高、低两个阈值，将大于高阈值的像素点作为强边缘，低于低阈值的像素点作为非边缘，介于两者之间的作为弱边缘。</p>
+</li>
+<li><p>连接边缘：从强边缘像素出发，连接到弱边缘像素，形成最终的边缘检测结果。</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/">http://shaohleon.github.io/2024/11/06/图像处理/三、图像增强/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></div><div class="post-share"><div class="social-share" data-image="/images/background/GEM30.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/11/03/Linux/%E6%96%B0%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E5%A6%82%E4%BD%95%E5%9C%A8Ubuntu%E4%BD%BF%E7%94%A8/" title="新机械硬盘如何在Ubuntu使用"><img class="cover" src="/images/background/GEM24.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">新机械硬盘如何在Ubuntu使用</div></div></a><a class="next-post pull-right" href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学"><img class="cover" src="/images/background/GEM15.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">四、数字形态学</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a href="/2024/10/30/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%80%E3%80%81%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/" title="一、数字图像处理基础"><img class="cover" src="/images/background/GEM24.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">一、数字图像处理基础</div></div></a><a href="/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换"><img class="cover" src="/images/background/GEM16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">二、图像变换</div></div></a><a href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学"><img class="cover" src="/images/background/GEM15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">四、数字形态学</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">分类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E5%AF%B9%E6%AF%94%E5%BA%A6%E5%A2%9E%E5%BC%BA"><span class="toc-number">2.</span> <span class="toc-text">图像的对比度增强</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%81%B0%E5%BA%A6%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.</span> <span class="toc-text">灰度变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.1.</span> <span class="toc-text">线性变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%95%B0%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.2.</span> <span class="toc-text">对数变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%BD%E9%A9%AC%EF%BC%88Gamma%EF%BC%89%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.3.</span> <span class="toc-text">伽马（Gamma）变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E8%BD%AC%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.4.</span> <span class="toc-text">反转变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%AE%B5%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.5.</span> <span class="toc-text">分段线性变换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%BF%AE%E6%AD%A3"><span class="toc-number">3.</span> <span class="toc-text">直方图修正</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="toc-number">3.1.</span> <span class="toc-text">统计直方图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E5%9B%BE%E5%83%8F%E6%B8%85%E6%99%B0%E6%80%A7"><span class="toc-number">3.1.1.</span> <span class="toc-text">直方图与图像清晰性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">直方图均衡化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.2.1.</span> <span class="toc-text">算法步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">3.2.2.</span> <span class="toc-text">优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">3.2.2.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">3.2.2.2.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE%E8%A7%84%E5%AE%9A%E5%8C%96-Histogram-Specification"><span class="toc-number">3.3.</span> <span class="toc-text">直方图规定化(Histogram Specification)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4-1"><span class="toc-number">3.3.1.</span> <span class="toc-text">算法步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-1"><span class="toc-number">3.3.2.</span> <span class="toc-text">优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-1"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="toc-number">3.3.2.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">3.3.3.</span> <span class="toc-text">应用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%B9%B3%E6%BB%91"><span class="toc-number">4.</span> <span class="toc-text">图像平滑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="toc-number">4.1.</span> <span class="toc-text">均值滤波</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">4.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%B4%A8"><span class="toc-number">4.1.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-2"><span class="toc-number">4.1.3.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2"><span class="toc-number">4.2.</span> <span class="toc-text">高斯滤波</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%B4%A8-1"><span class="toc-number">4.2.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-3"><span class="toc-number">4.2.3.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="toc-number">4.3.</span> <span class="toc-text">中值滤波</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">4.3.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E6%80%A7%E8%B4%A8"><span class="toc-number">4.3.2.</span> <span class="toc-text">函数性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-4"><span class="toc-number">4.3.3.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="toc-number">4.4.</span> <span class="toc-text">自适应中值滤波</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-3"><span class="toc-number">4.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-5"><span class="toc-number">4.4.2.</span> <span class="toc-text">优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-2"><span class="toc-number">4.4.2.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-2"><span class="toc-number">4.4.2.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.4.3.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2"><span class="toc-number">4.5.</span> <span class="toc-text">双边滤波</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-4"><span class="toc-number">4.5.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%B4%A8-2"><span class="toc-number">4.5.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-6"><span class="toc-number">4.5.3.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E5%B1%80%E9%83%A8%E5%99%AA%E5%A3%B0%E6%B6%88%E9%99%A4%E6%BB%A4%E6%B3%A2%E5%99%A8"><span class="toc-number">4.6.</span> <span class="toc-text">自适应局部噪声消除滤波器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-5"><span class="toc-number">4.6.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9-7"><span class="toc-number">4.6.2.</span> <span class="toc-text">优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E7%82%B9-3"><span class="toc-number">4.6.2.1.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9-3"><span class="toc-number">4.6.2.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">4.6.3.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%84%E5%90%91%E5%BC%82%E6%80%A7%E6%89%A9%E6%95%A3"><span class="toc-number">4.7.</span> <span class="toc-text">各向异性扩散</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-6"><span class="toc-number">4.7.1.</span> <span class="toc-text">原理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text">图像锐化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-number">5.1.</span> <span class="toc-text">边缘检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%BC%98%E7%B1%BB%E5%9E%8B"><span class="toc-number">5.1.1.</span> <span class="toc-text">边缘类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E9%98%B6%E5%BE%AE%E5%88%86%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.</span> <span class="toc-text">一阶微分算子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.1.</span> <span class="toc-text">梯度算子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6"><span class="toc-number">5.2.1.1.</span> <span class="toc-text">梯度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E5%92%8C%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-number">5.2.1.2.</span> <span class="toc-text">图像锐化和边缘检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%88%E5%80%BC%E5%8C%96%E6%A3%80%E6%B5%8B"><span class="toc-number">5.2.1.3.</span> <span class="toc-text">阈值化检测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Roberts%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.2.</span> <span class="toc-text">Roberts算子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">5.2.2.1.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sobel%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.3.</span> <span class="toc-text">Sobel算子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prewitt%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.4.</span> <span class="toc-text">Prewitt算子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.5.</span> <span class="toc-text">其他算子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Kirsch%E7%AE%97%E5%AD%90"><span class="toc-number">5.2.5.1.</span> <span class="toc-text">Kirsch算子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%BC%98%E6%96%B9%E5%90%91"><span class="toc-number">5.2.6.</span> <span class="toc-text">边缘方向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E9%98%B6%E5%BE%AE%E5%88%86%E7%AE%97%E5%AD%90"><span class="toc-number">5.3.</span> <span class="toc-text">二阶微分算子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E7%AE%97%E5%AD%90"><span class="toc-number">5.3.1.</span> <span class="toc-text">拉普拉斯算子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-1"><span class="toc-number">5.3.1.1.</span> <span class="toc-text">特点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E4%B8%8E%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="toc-number">5.4.</span> <span class="toc-text">高斯滤波与边缘检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E6%96%AF%E5%87%BD%E6%95%B0"><span class="toc-number">5.4.1.</span> <span class="toc-text">高斯函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">5.4.1.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-2"><span class="toc-number">5.4.1.2.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LoG%E7%AE%97%E5%AD%90"><span class="toc-number">5.4.2.</span> <span class="toc-text">LoG算子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">5.4.2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF"><span class="toc-number">5.4.2.2.</span> <span class="toc-text">模板</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DoG%E7%AE%97%E5%AD%90"><span class="toc-number">5.4.3.</span> <span class="toc-text">DoG算子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Canny%E7%AE%97%E5%AD%90"><span class="toc-number">5.4.4.</span> <span class="toc-text">Canny算子</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/15/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BF%86HTML/" title="如何记忆HTML"><img src="/../images/background/%E9%82%93%E7%B4%AB%E6%A3%8B2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何记忆HTML"/></a><div class="content"><a class="title" href="/2024/10/15/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BF%86HTML/" title="如何记忆HTML">如何记忆HTML</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img src="/images/background/GEM15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见英文缩写"/></a><div class="content"><a class="title" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写">常见英文缩写</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="三、图像增强"/></a><div class="content"><a class="title" href="/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强">三、图像增强</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二、图像变换"/></a><div class="content"><a class="title" href="/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换">二、图像变换</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学"><img src="/images/background/GEM15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="四、数字形态学"/></a><div class="content"><a class="title" href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学">四、数字形态学</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

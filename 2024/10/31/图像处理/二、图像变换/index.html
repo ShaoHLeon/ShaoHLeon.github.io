@@ -1,0 +1,736 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>二、图像变换 | Leon的博客</title><meta name="author" content="Leon"><meta name="copyright" content="Leon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基本概念什么是变换？ 信号变换的本质：空间变换。透过不同角度去更简洁观察和认识信号。将信号放到不同空间观察，如傅里叶变换。 什么是图像变换？ 通过一定规则将图像由一个空间（空间域）转变到另一个空间（空间域或频率域） 几何变换几何变换：用数学建模的方法描述图像位置、大小、形状等变化。 平移变换定义：将图像整体移动到新位置。  (x&#39;, y&#39;) &#x3D; (x + t_x, y + t_y) \begin{">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二、图像变换">
+<meta property="og:url" content="http://shaohleon.github.io/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/index.html">
+<meta property="og:site_name" content="Leon的博客">
+<meta property="og:description" content="基本概念什么是变换？ 信号变换的本质：空间变换。透过不同角度去更简洁观察和认识信号。将信号放到不同空间观察，如傅里叶变换。 什么是图像变换？ 通过一定规则将图像由一个空间（空间域）转变到另一个空间（空间域或频率域） 几何变换几何变换：用数学建模的方法描述图像位置、大小、形状等变化。 平移变换定义：将图像整体移动到新位置。  (x&#39;, y&#39;) &#x3D; (x + t_x, y + t_y) \begin{">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shaohleon.github.io/images/background/GEM16.jpg">
+<meta property="article:published_time" content="2024-10-31T06:04:25.000Z">
+<meta property="article:modified_time" content="2025-03-23T03:01:14.424Z">
+<meta property="article:author" content="Leon">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shaohleon.github.io/images/background/GEM16.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://shaohleon.github.io/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '二、图像变换',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-03-23 11:01:14'
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/mainColor/heoMainColor.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/zhheo/JS-Heo@main/poem/poem.css"><link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-color: #46dfd7;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/images/background/GEM36.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Leon的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">二、图像变换</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> Resources</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/social/"><i class="fa-fw fas fa-users"></i><span> Social</span></a></li><li><a class="site-page child" href="/study/"><i class="fa-fw fas fa-book"></i><span> Study</span></a></li><li><a class="site-page child" href="/tools/"><i class="fa-fw fas fa-wrench"></i><span> Tools</span></a></li><li><a class="site-page child" href="/forums/"><i class="fa-fw fas fa-earth-americas"></i><span> Forums</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-envelope"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">二、图像变换</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-10-31T06:04:25.000Z" title="Created 2024-10-31 14:04:25">2024-10-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">5.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>22mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>什么是变换？</p>
+<p>信号变换的本质：空间变换。透过不同角度去更简洁观察和认识信号。将信号放到不同空间观察，如傅里叶变换。</p>
+<p>什么是图像变换？</p>
+<p>通过一定规则将图像由一个空间（空间域）转变到另一个空间（空间域或频率域）</p>
+<h1 id="几何变换"><a href="#几何变换" class="headerlink" title="几何变换"></a>几何变换</h1><p>几何变换：用数学建模的方法描述图像位置、大小、形状等变化。</p>
+<h2 id="平移变换"><a href="#平移变换" class="headerlink" title="平移变换"></a>平移变换</h2><p>定义：将图像整体移动到新位置。</p>
+<script type="math/tex; mode=display">
+(x', y') = (x + t_x, y + t_y)</script><script type="math/tex; mode=display">
+\begin{bmatrix}
+ x' \\
+ y'
+ \end{bmatrix}
+ =
+ \begin{bmatrix}
+ 1 & 0 & t_x \\
+ 0 & 1 & t_y \\
+ 0 & 0 & 1
+ \end{bmatrix}
+ \begin{bmatrix}
+ x \\
+ y \\
+ 1
+ \end{bmatrix}</script><h2 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h2><p>定义：指定角度旋转图像</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+x' &= x \cdot \cos(\theta) - y \cdot \sin(\theta) \\
+y' &= x \cdot \sin(\theta) + y \cdot \cos(\theta)
+\end{align*}</script><script type="math/tex; mode=display">
+\begin{bmatrix}
+  x' \\
+  y'
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \cos(\theta) & -\sin(\theta) & 0 \\
+  \sin(\theta) & \cos(\theta) & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  x \\
+  y \\
+  1
+  \end{bmatrix}</script><ul>
+<li>用于校正图像方向或创建旋转效果。</li>
+</ul>
+<h2 id="缩放"><a href="#缩放" class="headerlink" title="缩放"></a>缩放</h2><p>定义：增大或缩小图像的尺寸。</p>
+<script type="math/tex; mode=display">
+(x', y') = (sx \cdot x, sy \cdot y)</script><script type="math/tex; mode=display">
+\begin{bmatrix}
+  x' \\
+  y'
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  s_x & 0 & 0 \\
+  0 & s_y & 0 \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  x \\
+  y \\
+  1
+  \end{bmatrix}</script><h2 id="仿射变换"><a href="#仿射变换" class="headerlink" title="仿射变换"></a>仿射变换</h2><p>定义：一种二维坐标到二维坐标间的线性变换，允许同时进行平移、旋转和缩放。可保持二维图形的平直性和平行性。</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+  x' \\
+  y' \\
+  1
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  a & b & t_x \\
+  c & d & t_y \\
+  0 & 0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  x \\
+  y \\
+  1
+  \end{bmatrix}</script><p>缩放因子：a、d</p>
+<p>旋转因子：b、c</p>
+<p>平移因子：$t_x$、$t_y$</p>
+<p>仿射变换矩阵有6个参数，因此6个自由度。</p>
+<ul>
+<li><p>直线保持性：保持直线和平行关系</p>
+</li>
+<li><p>顶点保持：变换的过程是将每个顶点的坐标进行矩阵运算，而不是改变顶点的数量。</p>
+</li>
+<li><p>在变换过程中，三角形的形状可能发生了变化（如缩放、旋转或倾斜），它仍然保持三角形的结构。</p>
+</li>
+</ul>
+<h2 id="透视变换"><a href="#透视变换" class="headerlink" title="透视变换"></a>透视变换</h2><p>定义：一种平面映射</p>
+<script type="math/tex; mode=display">
+P'_h = M \cdot P_h = 
+\begin{bmatrix}
+x' \\
+y' \\
+w'
+\end{bmatrix}
+=
+\begin{bmatrix}
+m_{11} + m_{12} + m_{13} \\
+m_{21} + m_{22} + m_{23} \\
+m_{31} + m_{32} + m_{33}
+\end{bmatrix}
+\begin{bmatrix}
+  x \\
+  y \\
+  1
+  \end{bmatrix}
+\\
+=
+\begin{bmatrix}
+m_{11} \cdot x + m_{12} \cdot y + m_{13} \\
+m_{21} \cdot x + m_{22} \cdot y + m_{23} \\
+m_{31} \cdot x + m_{32} \cdot y + m_{33}
+\end{bmatrix}</script><ol>
+<li><p>平移参数</p>
+<p>$m_{13}$：在 x 方向的平移</p>
+<p>$m_{23}$：在 y 方向的平移</p>
+</li>
+<li><p>旋转和缩放参数</p>
+<p>$m_{11}$:影响 x 轴方向的缩放和旋转</p>
+<p>$m_{12}$:影响 x 轴与 y 轴之间的角度</p>
+<p>$m_{21}$:影响 y 轴方向的缩放和旋转</p>
+<p>$m_{22}$:影响 y 轴的缩放</p>
+</li>
+<li><p>投影和深度参数</p>
+<p>$m<em>{31}$、$m</em>{32}$:控制深度和透视效果</p>
+<p>$m_{33}$:通常用于齐次坐标的归一化（可设为1）</p>
+</li>
+</ol>
+<p>在透视变换中，所有9个参数并不都是独立的，因为我们通常假设图像的齐次坐标形式（使用一个额外的维度来处理平移和缩放），$m_{33}$由其他8个参数算出。</p>
+<h1 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h1><p>几何变换后，可能会出现空白像素，插值用于计算这些像素的值。</p>
+<ul>
+<li><p>最近邻插值: 选择最近的像素值，简单但可能产生锯齿。</p>
+</li>
+<li><p>双线性插值: 使用周围四个像素的加权平均，效果更好。</p>
+</li>
+<li><p>立方插值: 使用更复杂的算法，提供更平滑的结果。</p>
+</li>
+<li><p>样条插值：使用低阶多项式（如三次样条）在每对数据点之间进行插值。</p>
+<ul>
+<li><p>优点：在图像变换时提供高平滑性和良好的保边效果。</p>
+</li>
+<li><p>缺点：实现较复杂，计算量大。</p>
+</li>
+</ul>
+</li>
+<li><p>卷积插值：将卷积核与信号或图像进行卷积，以生成插值结果。</p>
+</li>
+</ul>
+<p>具体步骤如下：</p>
+<ol>
+<li>将卷积核放置在信号的每个数据点上。</li>
+<li>计算卷积，得到插值后的数据点。</li>
+</ol>
+<p>优点</p>
+<ul>
+<li><strong>平滑效果好</strong>：通过卷积核，能够有效地平滑数据，减少噪声。</li>
+<li><strong>灵活性</strong>：可以根据需求选择不同的卷积核，适应不同的应用场景。</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li><strong>计算复杂度高</strong>：卷积操作可能比简单插值方法（如线性或最近邻插值）计算量大。</li>
+<li><strong>边缘效应</strong>：在图像处理中，可能会在边缘部分产生模糊或不连续现象。</li>
+</ul>
+<h1 id="图像的离散傅里叶变换"><a href="#图像的离散傅里叶变换" class="headerlink" title="图像的离散傅里叶变换"></a>图像的离散傅里叶变换</h1><h2 id="傅里叶变换"><a href="#傅里叶变换" class="headerlink" title="傅里叶变换"></a>傅里叶变换</h2><p>傅里叶变换是一种将信号从时间域（或空间域）转换到频域的数学工具。</p>
+<ul>
+<li><p>周期信号—-&gt;傅里叶级数</p>
+<p>将周期函数表示为一系列正弦和余弦函数（即三角函数）的线性组合</p>
+<script type="math/tex; mode=display">
+f(x) = a_0 + \sum_{n=1}^{\infty} \left( a_n \cos\frac{2\pi nx}{T} + b_n \sin\frac{2\pi nx}{T} \right)  \\\\</script><script type="math/tex; mode=display">
+常数项(直流分量)  a_0 = \frac{1}{T} \int_{x_0}^{x_0 + T} f(x) \, dx</script><script type="math/tex; mode=display">
+余弦系数 a_n = \frac{2}{T} \int_{x_0}^{x_0 + T} f(x) \cos \frac{2\pi nx}{T} \, dx</script><script type="math/tex; mode=display">
+正弦系数 b_n = \frac{2}{T} \int_{x_0}^{x_0 + T} f(x) \sin\frac{2\pi nx}{T} \, dx</script><p>傅里叶级数主要用于信号处理、振动分析、声学、电机控制、图像处理等领域。它能将复杂的周期信号分解为一系列简化的正弦和余弦成分，方便分析不同频率成分对信号的贡献。</p>
+</li>
+<li><p>非周期信号——&gt;傅里叶变换</p>
+<script type="math/tex; mode=display">
+F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-j \omega t} dt</script></li>
+</ul>
+<h2 id="一维离散傅里叶变换"><a href="#一维离散傅里叶变换" class="headerlink" title="一维离散傅里叶变换"></a>一维离散傅里叶变换</h2><h3 id="1D-DFT"><a href="#1D-DFT" class="headerlink" title="1D-DFT"></a>1D-DFT</h3><p>一维离散傅里叶变换将离散有限长信号 $f<a href="n = 0, 1, \ldots, N-1">n</a>$ 转换为其频域表示$F[k]$</p>
+<script type="math/tex; mode=display">
+F[k] = \sum_{n=0}^{N-1} f[n] e^{-j \frac{2\pi}{N} kn} \\
+ = \sum_{n=0}^{N-1} f(n) W_N^{nk} \\</script><script type="math/tex; mode=display">旋转因子 W_N = e^{-j \frac{2\pi}{N}}</script><p>复数旋转因子$W_N^{nk} = e^{-j \frac{2\pi}{N} nk}$：</p>
+<ul>
+<li><strong>旋转因子</strong>：$W_N^{nk}$表示在复平面上，因子$W_N$的 $nk$ 次幂，给出了<mark>频率成分 k对时间点 n 的旋转</mark>。这种旋转是进行频域分析的基础。 </li>
+<li><strong>频域信息</strong>：通过对$f(n)$ 进行 DFT，可以得到信号的频率成分，$F(k)$ 提供了信号在频域上的表现。</li>
+</ul>
+<h3 id="DFT-的归一化"><a href="#DFT-的归一化" class="headerlink" title="DFT 的归一化"></a>DFT 的归一化</h3><p>通常在 DFT 的公式中，我们会看到一个归一化因子$\frac{1}{\sqrt{N}}$，具体形式为：</p>
+<p>$F(k) = \frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} f(n) W_N^{nk}$</p>
+<p>原因:</p>
+<ul>
+<li><strong>幅度的均衡</strong>：使用归一化因子可以使得 DFT 的幅度在频域上得到均衡，这样在进行逆变换时，幅度的恢复更加简单和直观。</li>
+<li><strong>与逆变换一致</strong>：在逆离散傅里叶变换（IDFT）中，通常会有一个 $\sqrt{N}$ 的因子，以确保变换的一致性。通过在 DFT 中引入 $\frac{1}{\sqrt{N}}$，可以使得反变换的形式与变换的形式一致。</li>
+</ul>
+<h3 id="1D-IDFT"><a href="#1D-IDFT" class="headerlink" title="1D-IDFT"></a>1D-IDFT</h3><p>一维逆离散傅里叶变换用于从频域恢复到时域</p>
+<script type="math/tex; mode=display">
+f[n] = \frac{1}{N} \sum_{k=0}^{N-1} F[k] e^{j \frac{2\pi}{N} kn} \\
+= \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} F(k) W_N^{-nk},F(k)归一化后 \\</script><p>复数旋转因子$W_N^{nk} = e^{-j \frac{2\pi}{N} nk}$的负次幂：</p>
+<ul>
+<li><strong>相位反转</strong>：在 IDFT 中使用 $W_N^{-nk}$ 是因为需要将频域信号的相位反转，以恢复原始的时域信息。</li>
+<li><strong>复平面旋转方向</strong>：在 DFT 中，我们用 $W_N^{nk} = e^{-j \frac{2\pi}{N} nk}$ 进行正向变换，而 IDFT 使用 $W_N^{-nk} = e^{j \frac{2\pi}{N} nk}$ 进行逆向旋转，恢复原始信号。</li>
+</ul>
+<h3 id="矩阵形式"><a href="#矩阵形式" class="headerlink" title="矩阵形式"></a>矩阵形式</h3><p>DFT矩阵$U$(变换矩阵)是$N \times N$方阵：</p>
+<script type="math/tex; mode=display">
+U = \begin{bmatrix}
+1 & 1 & 1 & \cdots & 1 \\
+1 & W_N & W_N^2 & \cdots & W_N^{N-1} \\
+1 & W_N^2 & W_N^4 & \cdots & W_N^{2(N-1)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & W_N^{N-1} & W_N^{2(N-1)} & \cdots & W_N^{(N-1)(N-1)}
+\end{bmatrix}</script><script type="math/tex; mode=display">
+f = \begin{bmatrix}
+f(0) & f(1) & f(2) & \dots & f(N-1)
+\end{bmatrix}^T \\
+F = U \cdot f \\
+= \begin{bmatrix}
+F(0) \\
+F(1) \\
+F(2) \\
+\vdots \\
+F(N-1)
+\end{bmatrix} \\
+= \begin{bmatrix}
+1 & 1 & 1 & \cdots & 1 \\
+1 & W_N & W_N^2 & \cdots & W_N^{N-1} \\
+1 & W_N^2 & W_N^4 & \cdots & W_N^{2(N-1)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & W_N^{N-1} & W_N^{2(N-1)} & \cdots & W_N^{(N-1)(N-1)}
+\end{bmatrix}
+ \cdot 
+\begin{bmatrix}
+f(0) \\
+f(1) \\
+f(2) \\
+\vdots \\
+f(N-1)
+\end{bmatrix}</script><p>我们可以将 DFT 看作一个线性变换，其中矩阵 $U$ 将时域信号 $f$ 转换到频域信号 $F$。</p>
+<h4 id="变换矩阵U"><a href="#变换矩阵U" class="headerlink" title="变换矩阵U"></a>变换矩阵U</h4><ul>
+<li><p>正交性</p>
+<p>行和列是正交的,所以1D-DFT也称为正交变换</p>
+</li>
+<li><p>单位性</p>
+<p>$U U^T = U^T U = I$</p>
+</li>
+<li><p>可逆性</p>
+<p>$U^{-1} = U^T \cdot N$</p>
+</li>
+</ul>
+<h2 id="二维离散傅里叶变换"><a href="#二维离散傅里叶变换" class="headerlink" title="二维离散傅里叶变换"></a>二维离散傅里叶变换</h2><p>二维离散傅里叶变换（2D-DFT）用于对二维信号（如图像）进行频域分析。</p>
+<h3 id="2D-DFT"><a href="#2D-DFT" class="headerlink" title="2D-DFT"></a>2D-DFT</h3><p>对于一个 $M \times N$ 的二维信号 $f(m, n)( m = 0, 1, \ldots, M-1 ),( n = 0, 1, \ldots, N-1 )$，其二维离散傅里叶变换 $F(k, l)$ 定义为：</p>
+<script type="math/tex; mode=display">
+F[k, l] = \sum_{m=0}^{M-1} \sum_{n=0}^{N-1} f(m, n) W_{M}^{mk} W_{N}^{nl} ,\\
+W_{M} = e^{-j \frac{2\pi}{M}}, \\
+W_{N} = e^{-j \frac{2\pi}{N}}, \\
+k = 0, 1, \ldots, M-1, \\
+l = 0, 1, \ldots, N-1.</script><p>归一化后：</p>
+<script type="math/tex; mode=display">
+F(k, l) = \frac{1}{\sqrt{MN}} \sum_{m=0}^{M-1} \sum_{n=0}^{N-1} f(m, n) W_{M}^{mk} W_{N}^{nl}</script><h3 id="表示形式"><a href="#表示形式" class="headerlink" title="表示形式"></a>表示形式</h3><ol>
+<li><p>矩阵形式</p>
+<p>$F = U_M \cdot f \cdot U_N^T \<br>$</p>
+<p>$F$ 是频域表示的矩阵。<br>$f$ 是时域信号的矩阵 $M \times N$ 。<br>$U_M$ 是 $M \times M$ 的 DFT 矩阵。<br>$U_N$ 是 $N \times N$ 的 DFT 矩阵。</p>
+</li>
+<li><p>复数形式</p>
+<script type="math/tex; mode=display">
+F(k, l) = \frac{1}{\sqrt{MN}} \sum_{m=0}^{M-1} \sum_{n=0}^{N-1} f(m, n) W_{M}^{mk} W_{N}^{nl} \\
+= R(k, l) + jI(k, l)</script></li>
+<li><p>指数形式</p>
+<script type="math/tex; mode=display">
+F(k, l) = \frac{1}{\sqrt{MN}} \sum_{m=0}^{M-1} \sum_{n=0}^{N-1} f(m, n) e^{-j \left( \frac{2\pi}{M} mk + \frac{2\pi}{N} nl \right)} \\
+= |F(k, l)| \cdot e^{j \cdot \phi(k, l)}</script><ul>
+<li><p>频谱：</p>
+<p>$|F(k, l)| = \sqrt{R^2 + I^2}$</p>
+</li>
+<li><p>相位：</p>
+<p>$\phi(k, l) = \tan^{-1} \left( \frac{I}{R} \right)$</p>
+</li>
+<li><p>功率谱：</p>
+<p>$P(k, l) = |F(k, l)|^2$</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><h4 id="变换核的可分离性"><a href="#变换核的可分离性" class="headerlink" title="变换核的可分离性"></a>变换核的可分离性</h4><p>变换核：$e^{-j \left( \frac{2\pi}{M} mk + \frac{2\pi}{N} nl \right)}$</p>
+<p>2D-DFT 的变换核可分离性意味着可以将 2D-DFT 变换分解为两个独立的 1D-DFT 变换:</p>
+<ol>
+<li><p><strong>行方向的 1D-DFT</strong>：对每一行进行一维 DFT。</p>
+</li>
+<li><p><strong>列方向的 1D-DFT</strong>：对每一列进行一维 DFT。</p>
+</li>
+</ol>
+<script type="math/tex; mode=display">
+F(k, l) = \frac{1}{\sqrt{M}} \sum_{m=0}^{M-1} \left(\frac{1}{\sqrt{N}} \sum_{n=0}^{N-1} f(m, n) e^{-j \frac{2\pi}{N} nl} \right) e^{-j \frac{2\pi}{M} mk}</script><p><em>优点</em>：</p>
+<ul>
+<li><strong>减少计算复杂度</strong>：直接计算 2D-DFT 的计算复杂度是 $O(M^2 N^2)$，但利用可分离性可以将计算复杂度降至 $O(MN \cdot (\log M + \log N))$。</li>
+</ul>
+<h4 id="移位特性"><a href="#移位特性" class="headerlink" title="移位特性"></a>移位特性</h4><p>空间域中信号的平移会影响频谱的相位，但不会改变幅度。</p>
+<ul>
+<li><p>空间移位：</p>
+<script type="math/tex; mode=display">
+f(x-x_0, y-y_0) {<->} F(k, l)W_{M}^{x_0k} W_{N}^{y_0l}</script></li>
+<li><p>频域移位：</p>
+<script type="math/tex; mode=display">
+f(x, y) W_{M}^{-xk_0} W_{N}^{-yl_0} {<->} F(k-k_0, l-l_0)</script></li>
+</ul>
+<h4 id="频谱中心化"><a href="#频谱中心化" class="headerlink" title="频谱中心化"></a>频谱中心化</h4><p>将频率的零点移动到图像中心，以便更容易分析低频和高频信息。</p>
+<script type="math/tex; mode=display">
+f(x, y) \cdot (-1)^{M/2+N/2} <-> F(k-N/2, l-M/2)</script><p><img src="/images/图像处理/2.png" alt=""></p>
+<p><mark>频谱中心化后，低频成分位于图像的中心，高频成分在图像的边缘。</mark></p>
+<h4 id="旋转不变性"><a href="#旋转不变性" class="headerlink" title="旋转不变性"></a>旋转不变性</h4><p>当图像在空间域中旋转时，其频谱会对应地旋转相同的角度，但幅度保持不变。这意味着傅里叶变换对旋转具有不变性，常用于分析旋转不变特征。</p>
+<p><img src="/images/图像处理/3.png" alt=""></p>
+<h4 id="卷积定理"><a href="#卷积定理" class="headerlink" title="卷积定理"></a>卷积定理</h4><ul>
+<li><p>空间域中的卷积对应于频域中的乘积：</p>
+<script type="math/tex; mode=display">
+f(x, y) * h(x, y) <=>  F(k, l) \cdot H(k, l)</script></li>
+<li><p>频域中的卷积对应于空间域中的乘积：</p>
+<script type="math/tex; mode=display">
+f(x, y) \cdot h(x, y) <=> F(k, l) * H(k, l)</script></li>
+</ul>
+<h4 id="周期性"><a href="#周期性" class="headerlink" title="周期性"></a>周期性</h4><p>2D-DFT 具有周期性，即频谱在两个维度上是周期的。对于大小为 $M \times N$ 的图像，频谱在两个维度上均以 $M$ 和 $N$ 为周期重复。</p>
+<h4 id="共轭对称性"><a href="#共轭对称性" class="headerlink" title="共轭对称性"></a>共轭对称性</h4><p>对于实值的输入图像，其二维傅里叶变换具有共轭对称性：</p>
+<script type="math/tex; mode=display">
+F(k, l) = F^*(-k, -l)</script><p>这意味着频谱中心对称点上的值是复共轭关系。共轭对称性可用于简化频谱计算。</p>
+<h3 id="数字图像的平均值"><a href="#数字图像的平均值" class="headerlink" title="数字图像的平均值"></a>数字图像的平均值</h3><p>图像的平均值（或称为灰度均值）是图像亮度的一个整体度量，用于衡量图像像素值的平均亮度。计算图像的平均值可以帮助我们了解图像的整体光照情况、对比度以及是否存在偏暗或过亮的情况。</p>
+<script type="math/tex; mode=display">
+\bar{f} = \frac{1}{M \times N} \sum_{x=0}^{M-1} \sum_{y=0}^{N-1} f(x, y) \\
+= \frac{1}{\sqrt{MN}}F(0,0)</script><p>M 是图像的行数（高度）。 N  是图像的列数（宽度）。</p>
+<h4 id="作用："><a href="#作用：" class="headerlink" title="作用："></a>作用：</h4><ul>
+<li><strong>亮度分析</strong>：通过平均值可以判断图像是否偏亮或偏暗。如果平均值接近 255，图像偏亮；接近 0 则图像偏暗。 </li>
+<li><strong>图像对比度调整</strong>：调整图像亮度时可以使用平均值作为基准。 </li>
+<li><strong>图像处理</strong>：图像平均值用于直方图均衡化、图像分割和滤波等操作中。</li>
+</ul>
+<h2 id="DFT缺点"><a href="#DFT缺点" class="headerlink" title="DFT缺点"></a>DFT缺点</h2><ul>
+<li><strong>复数运算复杂度高</strong>：DFT 会产生复数频谱，而实际图像多为实数值，这导致计算复杂度增加。 </li>
+<li><strong>边界效应</strong>：在 DFT 中，信号在区间边界处是周期性的，导致边界之间的频率特性可能不真实。</li>
+<li><strong>能量集中</strong>：DFT的能量分布不够集中，而在图像中，重要信息往往集中在低频区域。</li>
+</ul>
+<h1 id="图像的离散余弦变换-Discrete-Cosine-Transform-DCT"><a href="#图像的离散余弦变换-Discrete-Cosine-Transform-DCT" class="headerlink" title="图像的离散余弦变换(Discrete Cosine Transform, DCT)"></a>图像的离散余弦变换(Discrete Cosine Transform, DCT)</h1><p>DFT是复数运算，运算量大，不便实时处理。$F(k, l)= R(k, l) + jI(k, l)$,对函数进行构造使其变成偶函数，偶函数的2D-DFT仅含实部（余弦项），即DCT。</p>
+<p>离散余弦变换（DCT）是一种广泛应用于图像处理和压缩的变换，特别是在 JPEG 图像压缩标准中。DCT 通过将图像从空间域转换到频域，帮助减少冗余信息，从而提高压缩效率。</p>
+<h2 id="1D-DCT"><a href="#1D-DCT" class="headerlink" title="1D-DCT"></a>1D-DCT</h2><p>对于长度为 $N$ 的实数序列 $f(n)$，</p>
+<script type="math/tex; mode=display">
+F(k) = \alpha(k) \sum_{n=0}^{N-1} f(n) \cos \left( \frac{\pi (2n+1) k}{2N} \right) \\
+k = 0, 1, \dots, N-1 \\
+\alpha(k) = 
+\begin{cases}
+\sqrt{\frac{1}{N}}, & k = 0 \\
+\sqrt{\frac{2}{N}}, & k \neq 0
+\end{cases}</script><p>归一化系数：$\alpha(k)$，</p>
+<p>变换核：$\cos \left( \frac{\pi (2n+1) k}{2N} \right)$</p>
+<p>将输入信号 $f(n)$ 转换为频域信号 $F(k)$。其中低频成分集中在前面，高频成分位于后面，这有助于压缩过程中将高频部分截断或量化处理。</p>
+<h2 id="二维离散余弦变换"><a href="#二维离散余弦变换" class="headerlink" title="二维离散余弦变换"></a>二维离散余弦变换</h2><h3 id="2D-DCT"><a href="#2D-DCT" class="headerlink" title="2D-DCT"></a>2D-DCT</h3><p>对于大小为 $M \times N$ 的图像 $f(x, y)$，</p>
+<script type="math/tex; mode=display">
+F(u, v) = \alpha(u) \alpha(v) \sum_{x=0}^{M-1} \sum_{y=0}^{N-1} f(x, y) \cos \left( \frac{\pi (2x+1) u}{2M} \right) \cos \left( \frac{\pi (2y+1) v}{2N} \right) \\
+u = 0, 1, \dots, M-1 \\
+v = 0, 1, \dots, N-1 \\
+\alpha(u) = 
+\begin{cases}
+\sqrt{\frac{1}{M}}, & u = 0 \\
+\sqrt{\frac{2}{M}}, & u \neq 0
+\end{cases} \\
+\alpha(v) = 
+\begin{cases}
+\sqrt{\frac{1}{N}}, & v = 0 \\
+\sqrt{\frac{2}{N}}, & v \neq 0
+\end{cases}</script><p>归一化系数：$\alpha(u)$，$\alpha(v)$</p>
+<p>低频成分集中在左上角，而高频成分集中在右下角。</p>
+<h3 id="2D-IDCT"><a href="#2D-IDCT" class="headerlink" title="2D-IDCT"></a>2D-IDCT</h3><script type="math/tex; mode=display">
+f(x, y) = \frac{1}{4} \sum_{k=0}^{M-1} \sum_{l=0}^{N-1} F(u, v) \cos\left(\frac{\pi}{M} \left(m + \frac{1}{2}\right) k\right) \cos\left(\frac{\pi}{N} \left(n + \frac{1}{2}\right) l\right)</script><h3 id="2D-DCT矩阵表示"><a href="#2D-DCT矩阵表示" class="headerlink" title="2D-DCT矩阵表示"></a>2D-DCT矩阵表示</h3><script type="math/tex; mode=display">
+F = C \cdot f \cdot C^T \\
+C_{k, n} = \begin{cases}
+\sqrt{\frac{1}{N}} & \text{if } k = 0 \\
+\sqrt{\frac{2}{N}} \cos\left(\frac{\pi}{N} \left(n + \frac{1}{2}\right) k\right) & \text{if } k > 0
+\end{cases} \\</script><script type="math/tex; mode=display">
+C = \sqrt{\frac{2}{N}} \cdot \begin{bmatrix}
+\sqrt{\frac{1}{2}} & \sqrt{\frac{1}{2}}  & \cdots & \sqrt{\frac{N}{2}} \\
+\cos\left(\frac{\pi}{N}(1)(0 + \frac{1}{2})\right) & \cos\left(\frac{\pi}{N}(1)(1 + \frac{1}{2})\right) & \cdots & \cos\left(\frac{\pi}{N}(1)(N-1 + \frac{1}{2})\right) \\
+\cos\left(\frac{\pi}{N}(2)(0 + \frac{1}{2})\right) & \cos\left(\frac{\pi}{N}(2)(1 + \frac{1}{2})\right) & \cdots & \cos\left(\frac{\pi}{N}(2)(N-1 + \frac{1}{2})\right) \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\cos\left(\frac{\pi}{N}(N-1)(0 + \frac{1}{2})\right) & \cos\left(\frac{\pi}{N}(N-1)(1 + \frac{1}{2})\right) & \cdots & \cos\left(\frac{\pi}{N}(N-1)(N-1 + \frac{1}{2})\right)
+\end{bmatrix}</script><p><img src="/images/图像处理/4.png" alt=""></p>
+<p><img src="/images/图像处理/5.png" alt=""></p>
+<h1 id="图像的离散小波变换"><a href="#图像的离散小波变换" class="headerlink" title="图像的离散小波变换"></a>图像的离散小波变换</h1><h2 id="经典傅里叶变换"><a href="#经典傅里叶变换" class="headerlink" title="经典傅里叶变换"></a>经典傅里叶变换</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>傅里叶变换是一种将信号从时域转换到频域的数学工具。通过将信号表示为不同频率的正弦波的叠加，傅里叶变换能够分析信号的频率成分。</p>
+<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><ol>
+<li><p><strong>绝对可积性（Absolute Integrability）</strong> </p>
+<p>信号 $f(t)$ 必须在全域内绝对可积，即满足以下条件：<br>$\int_{-\infty}^{\infty} |f(t)| \, dt &lt; \infty$</p>
+<p>信号的能量不能无限大。如果 $f(t)$ 是绝对可积的，傅里叶变换能够聚集于有限的频率范围内。</p>
+</li>
+<li><p><strong>有限能量（Finite Energy Condition）</strong> </p>
+<p>信号 $f(t)$ 必须是有限能量信号，即满足：<br>$\int_{-\infty}^{\infty} |f(t)|^2 , dt &lt; \infty$</p>
+<p>确保信号在时域中的能量是有限的。对于具有有限能量的信号，通常使用 <strong>傅里叶积分</strong> 而不是傅里叶级数。</p>
+</li>
+<li><p><strong>Dirichlet 条件（Dirichlet Conditions）</strong> </p>
+<p>傅里叶变换常用的充分条件，满足以下 3 个条件之一的信号可以被傅里叶变换： </p>
+<ol>
+<li><p>在一个周期内，信号 $f(t)$ 必须是 <strong>绝对可积</strong> 的。 </p>
+</li>
+<li><p>在每个有限区间内，信号只有有限个 <strong>极值点</strong> 和 <strong>不连续点</strong>。 </p>
+</li>
+<li><p>信号在区间内的 <strong>有限跳变</strong>，即信号的间断点（不连续）在区间中是有限的。</p>
+</li>
+</ol>
+<p>保证傅里叶变换能够有效地处理信号中的不连续性，而不导致结果发散。</p>
+</li>
+</ol>
+<h3 id="数学表达"><a href="#数学表达" class="headerlink" title="数学表达"></a>数学表达</h3><h4 id="连续信号"><a href="#连续信号" class="headerlink" title="连续信号"></a>连续信号</h4><script type="math/tex; mode=display">
+F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-j\omega t} dt</script><p>$f(t)$:时域信号; $F(\omega)$:频域信号,原函数$f(t)$的傅里叶正变换; $\omega$:角频率.</p>
+<script type="math/tex; mode=display">
+f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} F(\omega) e^{j\omega t} \, d\omega</script><h4 id="离散信号"><a href="#离散信号" class="headerlink" title="离散信号"></a>离散信号</h4><script type="math/tex; mode=display">
+X[k] = \sum_{n=0}^{N-1} x[n] e^{-j\frac{2\pi}{N}kn}</script><script type="math/tex; mode=display">
+x[n] = \frac{1}{N} \sum_{k=0}^{N-1} X[k] e^{j\frac{2\pi}{N}kn}</script><h2 id="加窗傅里叶变换-Windowed-Fourier-Transform-WFT"><a href="#加窗傅里叶变换-Windowed-Fourier-Transform-WFT" class="headerlink" title="加窗傅里叶变换(Windowed Fourier Transform, WFT)"></a>加窗傅里叶变换(Windowed Fourier Transform, WFT)</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>傅里叶变换不能表述信号的时变性。加窗傅里叶变换用一个有限区间（即窗口）外恒等于零的光滑函数✖原函数f(t)，再进行傅里叶变换。</p>
+<p>傅里叶变换适合分析<strong>平稳信号</strong>的频率特性，但对于<strong>非平稳信号</strong>（如频率随时间变化的信号）则效果不佳。为了解决这一问题，引入<strong>加窗函数</strong>来截取信号的局部信息，再进行傅里叶变换，从而实现局部频谱分析。</p>
+<p>加入<strong>时间窗函数</strong>，用于分析信号的<em>局部频率特性</em>。它可以捕捉到信号的时间-频率信息，更适合处理<strong>非平稳信号</strong>。</p>
+<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>时域信号$f(t)$在某一时间位置 $\tau$ 上进行 WFT：</p>
+<script type="math/tex; mode=display">
+F(\tau, \omega) = \int_{-\infty}^{\infty} f(t) g(t - \tau) e^{-j\omega t} \, dt</script><p>其中，</p>
+<p>$g(x)$为<strong>窗函数</strong>，一般选择为高斯窗、汉宁窗或矩形窗等;</p>
+<p>$\tau$表示窗函数在时间轴上的移动位置;</p>
+<p>$F(\tau, \omega)$ 是信号在<strong>频率$\omega$</strong> 和<strong>时间$\tau$</strong> 上的频谱分布。</p>
+<script type="math/tex; mode=display">
+f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} F(\tau, \omega) g(t - \tau) e^{j\omega t} \, d\tau d\omega</script><h3 id="窗函数"><a href="#窗函数" class="headerlink" title="窗函数"></a>窗函数</h3><p>窗函数 $g(t - \tau)$ 可以将信号在时间轴上截断为一个局部区域，仅保留窗口内的信号进行傅里叶变换。</p>
+<ul>
+<li><strong>矩形窗</strong>：适用于简单分割，但频域分辨率差。但容易产生频谱泄漏（spectral leakage）现象，导致频率成分混叠。</li>
+<li><strong>汉宁窗</strong>：减小频谱泄漏，适用于平滑过渡。在平滑过渡时有效，但对于快速变化的信号可能不适用，尤其是在高频部分。</li>
+<li><strong>高斯窗</strong>：具有最优的时间-频率分辨率，适合精确分析。提供较好的时频平衡，但计算复杂度较高。</li>
+</ul>
+<p>宽度选择：</p>
+<ul>
+<li><strong>窄窗</strong>：提供较好的<strong>时间分辨率</strong>，但频率分辨率低。</li>
+<li><strong>宽窗</strong>：提供较好的<strong>频率分辨率</strong>，但时间分辨率低。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><strong>窄窗函数</strong>（小窗口宽度）能够提供较好的时间分辨率，但频率分辨率较差。 </li>
+<li><strong>宽窗函数</strong>（大窗口宽度）能够提供较好的频率分辨率，但时间分辨率较差。</li>
+<li>窗函数一旦选定，大小形状固定不变，不能自适应反映信号突变，而信号突变很大程度反映目标的特征信息。</li>
+</ul>
+<h2 id="小波变换"><a href="#小波变换" class="headerlink" title="小波变换"></a>小波变换</h2><h3 id="背景-1"><a href="#背景-1" class="headerlink" title="背景"></a>背景</h3><p>傅里叶变换通过正弦波的线性组合表示信号，但它的<strong>固定分辨率</strong>会导致对非平稳信号的分析不足。傅里叶变换不能有效描述信号的局部频率变化，小波变换则通过<strong>伸缩和平移</strong>的方式来分析不同频率成分的细节。<br>小波变换中的<strong>小波函数</strong>提供了高时间分辨率（在高频段）和高频率分辨率（在低频段）的优势，使得它特别适合处理快速变化的信号。</p>
+<p>傅立叶变换是把信号波分解成不同频率的正弦波的叠加和，而对于小波变换就是把一个信号分解成一系列的小波。</p>
+<h3 id="小波-Wavelet"><a href="#小波-Wavelet" class="headerlink" title="小波(Wavelet)"></a>小波(Wavelet)</h3><ul>
+<li>小波函数 $\psi(t)$ 是一个快速衰减或具有紧支集的函数，小区域、长度有限、值为0的波形。 </li>
+<li><strong>零均值条件</strong>：即 $\int_{-\infty}^{+\infty} \psi(t) \, dt = 0$。</li>
+</ul>
+<p>通过对小波函数进行平移和缩放，能够得到用于不同尺度和位置的局部信号分析的基函数。最终达到高频处时间细分，低频处频率细分，能自动适应时频信号分析的要求，可聚焦到信号的任意细节。</p>
+<p><img src="/home/leon/Pictures/Marktext/2024-11-06-00-14-10-image.png" alt=""></p>
+<h3 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h3><h4 id="一维连续小波变换（CWT）"><a href="#一维连续小波变换（CWT）" class="headerlink" title="一维连续小波变换（CWT）"></a>一维连续小波变换（CWT）</h4><p>对于信号$f(t)$，</p>
+<script type="math/tex; mode=display">
+W(a, b) = \int_{-\infty}^{+\infty} f(t) \psi_{a, b}^*(t) \, dt</script><p>其中，</p>
+<p>$\psi_{a, b}(t) = \frac{1}{\sqrt{|a|}} \psi \left( \frac{t - b}{a} \right)$ 是对小波函数 $\psi(t)$ 进行伸缩（尺度 $a$）和平移（位置 $b$）的结果。</p>
+<p>$a$ 控制小波的<strong>尺度</strong>（或频率），$b$ 控制小波的<strong>位置</strong>。</p>
+<p>$W(a, b)$ 是信号在尺度 $a$ 和位置 $b$ 的小波变换系数。</p>
+<h4 id="一维离散小波变换（DWT）"><a href="#一维离散小波变换（DWT）" class="headerlink" title="一维离散小波变换（DWT）"></a>一维离散小波变换（DWT）</h4><p>对于离散信号$f(n)$，</p>
+<script type="math/tex; mode=display">
+W(j, k) = \sum_{n} f(n) \psi_{j, k}^*(n)</script><p>其中，</p>
+<p>$\psi_{j, k}(n) = \frac{1}{\sqrt{2^j}} \psi \left( \frac{n - k \cdot 2^j}{2^j} \right)$ 表示第 $j$ 个尺度、第 $k$ 个平移的小波基函数。</p>
+<p>$j$ 表示尺度（控制频率分辨率），$k$ 表示时间位置（控制时间分辨率）。</p>
+<h4 id="二维连续小波变换"><a href="#二维连续小波变换" class="headerlink" title="二维连续小波变换"></a>二维连续小波变换</h4></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://ShaoHLeon.github.io">Leon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://shaohleon.github.io/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/">http://shaohleon.github.io/2024/10/31/图像处理/二、图像变换/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></div><div class="post-share"><div class="social-share" data-image="/images/background/GEM16.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/2024/10/31/Blog/Hexo%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98(%E6%9B%B4%E6%96%B0%E4%B8%AD)/" title="Hexo遇到的问题"><img class="cover" src="/images/background/GEM30.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Hexo遇到的问题</div></div></a><a class="next-post pull-right" href="/2024/10/31/Math/%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" title="傅里叶变换"><img class="cover" src="/images/background/GEM29.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next</div><div class="next_info">傅里叶变换</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a href="/2024/10/30/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%80%E3%80%81%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/" title="一、数字图像处理基础"><img class="cover" src="/images/background/GEM24.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">一、数字图像处理基础</div></div></a><a href="/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强"><img class="cover" src="/images/background/GEM30.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">三、图像增强</div></div></a><a href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学"><img class="cover" src="/images/background/GEM15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2025-03-23</div><div class="title">四、数字形态学</div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="/images/background/GEM36.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Leon</div><div class="author-info-description">相见即缘分</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ShaoHLeon"><i class="fab fa-github"></i><span>🛴前往小家...</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/ShaoHLeon" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://space.bilibili.com/1293939883" target="_blank" title="Bilibili"><i class="fab fa-bilibili" style="color: #00A1D6;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog.,Designed to share.</div></div><div class="card-widget" id="card-poem"><div id="poem_sentence"></div><div id="poem_info"><div id="poem_dynasty"></div><div id="poem_author"></div></div></div><script src="https://cdn.jsdelivr.net/npm/js-heo@1.0.11/poem/jinrishici.js" charset="utf-8"></script><script type="text/javascript">jinrishici.load(function(result) {
+var sentence = document.querySelector("#poem_sentence")
+var author = document.querySelector("#poem_author")
+var dynasty = document.querySelector("#poem_dynasty")
+
+var sentenceText = result.data.content
+sentenceText = sentenceText.substr(0, sentenceText.length - 1);
+sentence.innerHTML = sentenceText
+dynasty.innerHTML = result.data.origin.dynasty
+author.innerHTML = result.data.origin.author + '《' + result.data.origin.title + '》'
+});</script><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%A0%E4%BD%95%E5%8F%98%E6%8D%A2"><span class="toc-number">2.</span> <span class="toc-text">几何变换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B3%E7%A7%BB%E5%8F%98%E6%8D%A2"><span class="toc-number">2.1.</span> <span class="toc-text">平移变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%8B%E8%BD%AC"><span class="toc-number">2.2.</span> <span class="toc-text">旋转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%A9%E6%94%BE"><span class="toc-number">2.3.</span> <span class="toc-text">缩放</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2"><span class="toc-number">2.4.</span> <span class="toc-text">仿射变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%8F%E8%A7%86%E5%8F%98%E6%8D%A2"><span class="toc-number">2.5.</span> <span class="toc-text">透视变换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%80%BC"><span class="toc-number">3.</span> <span class="toc-text">插值</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E7%A6%BB%E6%95%A3%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">4.</span> <span class="toc-text">图像的离散傅里叶变换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">4.1.</span> <span class="toc-text">傅里叶变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E7%BB%B4%E7%A6%BB%E6%95%A3%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">4.2.</span> <span class="toc-text">一维离散傅里叶变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1D-DFT"><span class="toc-number">4.2.1.</span> <span class="toc-text">1D-DFT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DFT-%E7%9A%84%E5%BD%92%E4%B8%80%E5%8C%96"><span class="toc-number">4.2.2.</span> <span class="toc-text">DFT 的归一化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1D-IDFT"><span class="toc-number">4.2.3.</span> <span class="toc-text">1D-IDFT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F"><span class="toc-number">4.2.4.</span> <span class="toc-text">矩阵形式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5U"><span class="toc-number">4.2.4.1.</span> <span class="toc-text">变换矩阵U</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E7%A6%BB%E6%95%A3%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">4.3.</span> <span class="toc-text">二维离散傅里叶变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2D-DFT"><span class="toc-number">4.3.1.</span> <span class="toc-text">2D-DFT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%A4%BA%E5%BD%A2%E5%BC%8F"><span class="toc-number">4.3.2.</span> <span class="toc-text">表示形式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%B4%A8"><span class="toc-number">4.3.3.</span> <span class="toc-text">性质</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%98%E6%8D%A2%E6%A0%B8%E7%9A%84%E5%8F%AF%E5%88%86%E7%A6%BB%E6%80%A7"><span class="toc-number">4.3.3.1.</span> <span class="toc-text">变换核的可分离性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%BB%E4%BD%8D%E7%89%B9%E6%80%A7"><span class="toc-number">4.3.3.2.</span> <span class="toc-text">移位特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%91%E8%B0%B1%E4%B8%AD%E5%BF%83%E5%8C%96"><span class="toc-number">4.3.3.3.</span> <span class="toc-text">频谱中心化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%8B%E8%BD%AC%E4%B8%8D%E5%8F%98%E6%80%A7"><span class="toc-number">4.3.3.4.</span> <span class="toc-text">旋转不变性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E5%AE%9A%E7%90%86"><span class="toc-number">4.3.3.5.</span> <span class="toc-text">卷积定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%A8%E6%9C%9F%E6%80%A7"><span class="toc-number">4.3.3.6.</span> <span class="toc-text">周期性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B1%E8%BD%AD%E5%AF%B9%E7%A7%B0%E6%80%A7"><span class="toc-number">4.3.3.7.</span> <span class="toc-text">共轭对称性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E7%9A%84%E5%B9%B3%E5%9D%87%E5%80%BC"><span class="toc-number">4.3.4.</span> <span class="toc-text">数字图像的平均值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%EF%BC%9A"><span class="toc-number">4.3.4.1.</span> <span class="toc-text">作用：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DFT%E7%BC%BA%E7%82%B9"><span class="toc-number">4.4.</span> <span class="toc-text">DFT缺点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E7%A6%BB%E6%95%A3%E4%BD%99%E5%BC%A6%E5%8F%98%E6%8D%A2-Discrete-Cosine-Transform-DCT"><span class="toc-number">5.</span> <span class="toc-text">图像的离散余弦变换(Discrete Cosine Transform, DCT)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1D-DCT"><span class="toc-number">5.1.</span> <span class="toc-text">1D-DCT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E7%A6%BB%E6%95%A3%E4%BD%99%E5%BC%A6%E5%8F%98%E6%8D%A2"><span class="toc-number">5.2.</span> <span class="toc-text">二维离散余弦变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2D-DCT"><span class="toc-number">5.2.1.</span> <span class="toc-text">2D-DCT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2D-IDCT"><span class="toc-number">5.2.2.</span> <span class="toc-text">2D-IDCT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2D-DCT%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA"><span class="toc-number">5.2.3.</span> <span class="toc-text">2D-DCT矩阵表示</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E7%A6%BB%E6%95%A3%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2"><span class="toc-number">6.</span> <span class="toc-text">图像的离散小波变换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%8F%E5%85%B8%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="toc-number">6.1.</span> <span class="toc-text">经典傅里叶变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">6.1.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6"><span class="toc-number">6.1.2.</span> <span class="toc-text">条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE"><span class="toc-number">6.1.3.</span> <span class="toc-text">数学表达</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E4%BF%A1%E5%8F%B7"><span class="toc-number">6.1.3.1.</span> <span class="toc-text">连续信号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A6%BB%E6%95%A3%E4%BF%A1%E5%8F%B7"><span class="toc-number">6.1.3.2.</span> <span class="toc-text">离散信号</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A0%E7%AA%97%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2-Windowed-Fourier-Transform-WFT"><span class="toc-number">6.2.</span> <span class="toc-text">加窗傅里叶变换(Windowed Fourier Transform, WFT)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">6.2.1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">6.2.2.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AA%97%E5%87%BD%E6%95%B0"><span class="toc-number">6.2.3.</span> <span class="toc-text">窗函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">6.2.4.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2"><span class="toc-number">6.3.</span> <span class="toc-text">小波变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%8C%E6%99%AF-1"><span class="toc-number">6.3.1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E6%B3%A2-Wavelet"><span class="toc-number">6.3.2.</span> <span class="toc-text">小波(Wavelet)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">6.3.3.</span> <span class="toc-text">定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E7%BB%B4%E8%BF%9E%E7%BB%AD%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2%EF%BC%88CWT%EF%BC%89"><span class="toc-number">6.3.3.1.</span> <span class="toc-text">一维连续小波变换（CWT）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E7%BB%B4%E7%A6%BB%E6%95%A3%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2%EF%BC%88DWT%EF%BC%89"><span class="toc-number">6.3.3.2.</span> <span class="toc-text">一维离散小波变换（DWT）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E7%BB%B4%E8%BF%9E%E7%BB%AD%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2"><span class="toc-number">6.3.3.3.</span> <span class="toc-text">二维连续小波变换</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden;"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%;"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/15/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BF%86HTML/" title="如何记忆HTML"><img src="/../images/background/%E9%82%93%E7%B4%AB%E6%A3%8B2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何记忆HTML"/></a><div class="content"><a class="title" href="/2024/10/15/%E5%A6%82%E4%BD%95%E8%AE%B0%E5%BF%86HTML/" title="如何记忆HTML">如何记忆HTML</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写"><img src="/images/background/GEM15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见英文缩写"/></a><div class="content"><a class="title" href="/2024/12/16/%E5%B8%B8%E8%A7%81%E8%8B%B1%E6%96%87%E7%BC%A9%E5%86%99/" title="常见英文缩写">常见英文缩写</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强"><img src="/images/background/GEM30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="三、图像增强"/></a><div class="content"><a class="title" href="/2024/11/06/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%B8%89%E3%80%81%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" title="三、图像增强">三、图像增强</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换"><img src="/images/background/GEM16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="二、图像变换"/></a><div class="content"><a class="title" href="/2024/10/31/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E4%BA%8C%E3%80%81%E5%9B%BE%E5%83%8F%E5%8F%98%E6%8D%A2/" title="二、图像变换">二、图像变换</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学"><img src="/images/background/GEM15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="四、数字形态学"/></a><div class="content"><a class="title" href="/2024/11/09/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/%E5%9B%9B%E3%80%81%E6%95%B0%E5%AD%97%E5%BD%A2%E6%80%81%E5%AD%A6/" title="四、数字形态学">四、数字形态学</a><time datetime="2025-03-23T03:01:14.424Z" title="Updated 2025-03-23 11:01:14">2025-03-23</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Leon</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">I wish you to become your own sun, no need to rely on who's light.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+      
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script><script src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,155,155" opacity="0.7" zIndex="-1" count="55" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__slideInRight');
+    arr[i].setAttribute('data-wow-duration', '1.5s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script><script async="async">var arr = document.getElementsByClassName('site-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__animated');
+    arr[i].setAttribute('data-wow-duration', '3s');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://cdn.cbd.int/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
